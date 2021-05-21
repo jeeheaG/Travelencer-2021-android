@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "Travelencer_Android_2021"

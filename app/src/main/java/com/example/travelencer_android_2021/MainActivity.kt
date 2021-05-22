@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 
+// 메인 액티비티
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,7 +16,6 @@ class MainActivity : AppCompatActivity() {
             // LoginActivity 넘어가기
             var intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 }

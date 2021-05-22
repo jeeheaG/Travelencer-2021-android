@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/imgBack"
         android:layout_width="51dp"
         android:layout_height="34dp"
         android:src="@drawable/ic_double_arrow"/>
@@ -74,6 +75,7 @@
             android:autoLink="web"
             android:layout_marginBottom="20dp"/>
         <Button
+            android:id="@+id/btnRegister"
             android:layout_width="150dp"
             android:layout_height="45dp"
             android:background="@drawable/btn_shape"

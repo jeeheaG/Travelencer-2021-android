@@ -5,16 +5,29 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
+// 로그인 액티비티
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 로그인 액티비티와 레이아웃 연결
         setContentView(R.layout.activity_login)
 
-        // 로그인 버튼 누르면
+        // 뒤로가기 이미지 클릭
+        imgBack.setOnClickListener {
+            finish()
+        }
+
+        // <로그인> 버튼 누르면
         btnLogin.setOnClickListener {
             // MainActivity로 넘어가기
             var intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        // <회원가입> 버튼 누르면
+        btnRegister.setOnClickListener {
+            // RegisterActivity로 넘어가기
+            var intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
             finish()
         }

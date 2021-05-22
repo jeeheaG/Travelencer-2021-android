@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FeedFilterFragment"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="51dp"
+        android:layout_height="34dp"
+        android:src="@drawable/ic_double_arrow"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="지역"
+        android:textSize="30sp"
+        android:textColor="#046EEE"
+        android:fontFamily="@font/hcmalang"
+        android:gravity="center"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:background="@drawable/btn_shape"
+            android:text="피드 보기"
+            android:textSize="25sp"
+            android:textColor="#046EEE"
+            android:fontFamily="@font/hcmalang"
+            android:layout_marginBottom="50dp"/>
+    </LinearLayout>
+
+</LinearLayout>

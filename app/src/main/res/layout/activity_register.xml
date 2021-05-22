@@ -55,13 +55,6 @@
         <EditText
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:hint="비밀번호"
-            android:gravity="center"
-            android:background="#FFFAE3"
-            android:layout_marginBottom="20dp"/>
-        <EditText
-            android:layout_width="350dp"
-            android:layout_height="50dp"
             android:hint="비밀번호 재입력"
             android:gravity="center"
             android:background="#FFFAE3"

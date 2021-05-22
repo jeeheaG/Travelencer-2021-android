@@ -21,6 +21,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center">
+        <View
+            android:layout_width="130dp"
+            android:layout_height="3dp"
+            android:background="#707070"
+            android:layout_marginTop="2dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1"
         android:gravity="center">
@@ -71,6 +82,7 @@
             android:layout_height="wrap_content"
             android:checked="false"
             android:textSize="15sp"
+            android:fontFamily="@font/hcsantteut"
             android:text="서비스 이용 약관 및 개인정보 보호정책 동의"
             android:layout_marginBottom="20dp"/>
 

@@ -29,7 +29,6 @@ class LoginActivity : AppCompatActivity() {
             // RegisterActivity로 넘어가기
             var intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
     }

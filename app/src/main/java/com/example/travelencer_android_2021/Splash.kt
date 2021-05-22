@@ -9,9 +9,9 @@ class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 로그인 액티비티로 이동
-        //val intent = Intent(this@SplashActivity, LoginActivity::class.java)
-        //startActivity(intent)
-        //finish()
+        // 메인 액티비티로 이동
+        val intent = Intent(this@Splash, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

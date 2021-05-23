@@ -9,7 +9,7 @@ class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // MainActivity로 넘어가기
+        // MainActivity로 이동하기
         var intent = Intent(this@Splash, MainActivity::class.java)
         startActivity(intent)
         finish()

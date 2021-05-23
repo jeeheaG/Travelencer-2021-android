@@ -2,7 +2,7 @@ package com.example.travelencer_android_2021
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_pp.*
 
 // 개인정보 보호정책 액티비티
 class PPActivity : AppCompatActivity() {

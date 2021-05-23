@@ -16,14 +16,21 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        // <로그인> 버튼 누르면
+        // <로그인> 버튼 클릭
         btnLogin.setOnClickListener {
             finish()
         }
 
-        // <회원가입> 버튼 누르면
+        // <비밀번호 찾기> 텍스트뷰 클릭
+        tvPasswordFind.setOnClickListener {
+            // PasswordFindActivity로 이동하기
+            var intent = Intent(this@LoginActivity, PasswordFindActivity::class.java)
+            startActivity(intent)
+        }
+
+        // <회원가입> 버튼 클릭
         btnRegister.setOnClickListener {
-            // RegisterActivity로 넘어가기
+            // RegisterActivity로 이동하기
             var intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }

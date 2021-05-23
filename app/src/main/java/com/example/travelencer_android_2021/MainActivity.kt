@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 
-// 메인 액티비티
+// 홈 액티비티
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         // <로그인 & 회원가입> 버튼 클릭
         btnLoingAndRegister.setOnClickListener {
-            // LoginActivity 넘어가기
+            // LoginActivity로 이동하기
             var intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }

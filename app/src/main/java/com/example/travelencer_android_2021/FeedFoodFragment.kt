@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_feed_food.*
 
 // 여행 피드 - 맛집 탭
 class FeedFoodFragment : Fragment() {

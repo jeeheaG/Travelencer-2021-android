@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 
-// 여행 피드 프레그먼트
+// 여행 피드 프레그먼트(여행 피드 필터 결과)
 // 사진, 코스, 맛집, 관광지 탭
 class FeedFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {

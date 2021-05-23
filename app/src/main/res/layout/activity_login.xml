@@ -60,6 +60,7 @@
             android:fontFamily="@font/hcmalang"
             android:layout_marginBottom="20dp"/>
         <TextView
+            android:id="@+id/tvPasswordFind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="비밀 번호 찾기"

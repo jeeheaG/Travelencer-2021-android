@@ -17,5 +17,12 @@ class MainActivity : AppCompatActivity() {
             var intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
+
+        // 설정 이미지 클릭
+        imgSetting.setOnClickListener {
+
+        }
+
     }
+
 }

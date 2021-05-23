@@ -18,9 +18,6 @@ class LoginActivity : AppCompatActivity() {
 
         // <로그인> 버튼 누르면
         btnLogin.setOnClickListener {
-            // MainActivity로 넘어가기
-            var intent = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intent)
             finish()
         }
 

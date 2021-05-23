@@ -38,8 +38,8 @@
         android:gravity="center"
         android:orientation="vertical">
         <ImageView
-            android:layout_width="55dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="55dp"
             android:src="@drawable/ic_user_gray"
             android:layout_marginBottom="10dp"/>
         <Button
@@ -133,6 +133,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvTOS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="서비스 이용 약관"
@@ -142,6 +143,7 @@
             android:linksClickable="true"
             android:autoLink="web"/>
         <TextView
+            android:id="@+id/tvPP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="개인정보 보호정책"

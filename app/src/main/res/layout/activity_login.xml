@@ -69,6 +69,11 @@
             android:gravity="center"
             android:linksClickable="true"
             android:autoLink="web" />
+        <View
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:background="#707070"
+            android:layout_marginTop="1dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -84,7 +89,12 @@
             android:fontFamily="@font/hcsantteut"
             android:gravity="center"
             android:linksClickable="true"
-            android:autoLink="web"
+            android:autoLink="web" />
+        <View
+            android:layout_width="130dp"
+            android:layout_height="1dp"
+            android:background="#707070"
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="20dp"/>
         <Button
             android:id="@+id/btnRegister"

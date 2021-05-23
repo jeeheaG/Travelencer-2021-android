@@ -5,10 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.fragment_feed_filter.view.*
 
-class FeedFilterFragment : Fragment() {
+// 여행 피드 - 사진 탭
+class FeedPhotoFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -17,12 +16,7 @@ class FeedFilterFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_feed_filter, container, false)
-
-        // 뒤로가기 이미지 클릭
-        view.imgBack.setOnClickListener {
-            
-        }
+        val view =  inflater.inflate(R.layout.fragment_feed_photo, container, false)
 
         return view
     }

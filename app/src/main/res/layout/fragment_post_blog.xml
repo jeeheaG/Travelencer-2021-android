@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/postBlogFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.travelencer_android_2021.PostBlogFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PostBlog Fragment입니다"
+        android:textSize="50dp"/>
+
+</RelativeLayout>

@@ -24,7 +24,7 @@ class FeedFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_feed, container, false)
 
         // 어댑터 생성
-        val feedAdapter = FeedAdapter((activity as MainActivity).supportFragmentManager)
+        val feedAdapter = FeedAdapter((activity as NaviActivity).supportFragmentManager)
         // 프레그먼트, 탭 타이틀 넣기
         feedAdapter.addFragment(FeedPhotoFragment(), "사진")
         feedAdapter.addFragment(FeedCourseFragment(), "코스")

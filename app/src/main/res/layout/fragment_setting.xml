@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FeedFilterFragment"
+    android:id="@+id/settingFragment"
+    tools:context="com.example.travelencer_android_2021.SettingFragment"
     android:orientation="vertical">
+    <!--tools:context=".FeedFilterFragment"-->
 
     <ImageView
         android:id="@+id/imgBack"

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_graph"
+    app:startDestination="@id/feedFragment">
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.travelencer_android_2021.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/placeMainFragment"
+        android:name="com.example.travelencer_android_2021.PlaceMainFragment"
+        android:label="fragment_place_main"
+        tools:layout="@layout/fragment_place_main" />
+    <fragment
+        android:id="@+id/postBlogFragment"
+        android:name="com.example.travelencer_android_2021.PostBlogFragment"
+        android:label="fragment_post_blog"
+        tools:layout="@layout/fragment_post_blog" />
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.example.travelencer_android_2021.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" />
+</navigation>

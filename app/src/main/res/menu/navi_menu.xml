@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:title="홈"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/feedFragment"
+        android:title="여행 피드"
+        android:icon="@drawable/ic_navi_feed"/>
+    <item
+        android:id="@+id/placeMainFragment"
+        android:title="여행지 검색"
+        android:icon="@drawable/ic_navi_search"/>
+    <item
+        android:id="@+id/postBlogFragment"
+        android:title="나의 여행 일지"
+        android:icon="@drawable/ic_navi_user"/>
+    <item
+        android:id="@+id/settingFragment"
+        android:title="설정"
+        android:icon="@drawable/ic_navi_setting"/>
+</menu>

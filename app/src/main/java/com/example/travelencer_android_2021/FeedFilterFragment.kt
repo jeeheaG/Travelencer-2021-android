@@ -19,11 +19,6 @@ class FeedFilterFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_feed_filter, container, false)
 
-        // 뒤로가기 이미지 클릭
-        view.imgBack.setOnClickListener {
-            
-        }
-
         return view
     }
 

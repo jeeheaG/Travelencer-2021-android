@@ -76,7 +76,8 @@
             android:text="수정 완료"
             android:textSize="25sp"
             android:textColor="#046EEE"
-            android:fontFamily="@font/hcmalang"/>
+            android:fontFamily="@font/hcmalang"
+            android:layout_marginBottom="3dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -93,7 +94,8 @@
             android:textSize="25sp"
             android:textColor="#046EEE"
             android:fontFamily="@font/hcmalang"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="3dp"/>
         <Button
             android:layout_width="150dp"
             android:layout_height="45dp"
@@ -102,14 +104,14 @@
             android:textSize="25sp"
             android:textColor="#046EEE"
             android:fontFamily="@font/hcmalang"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="3dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

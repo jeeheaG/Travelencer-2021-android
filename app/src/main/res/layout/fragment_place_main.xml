@@ -8,12 +8,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.travelencer_android_2021.PlaceMainFragment">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_double_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tvSearchMain"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PlaceMain Fragment입니다"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="35dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="50dp"/>
+        android:text="검색"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/hcmalang"
+        android:textStyle="bold"
+        android:textSize="30sp"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/tvSearchMain"
+        app:layout_constraintStart_toStartOf="@+id/tvSearchMain"
+        app:layout_constraintTop_toBottomOf="@+id/tvSearchMain" />
+
+    <TextView
+        android:id="@+id/tvPlaceSecond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/hcsantteut"
+        android:text="d수원"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <TextView
+        android:id="@+id/tvPlaceFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/hcsantteut"
+        android:text="d경기도"
+        android:textColor="@color/black"
+        android:textSize="23sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceSecond" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaceMain"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceFirst" >
+    </androidx.recyclerview.widget.RecyclerView>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView2"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:src="@drawable/dummy_haewoojae"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/rvPlaceMain" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

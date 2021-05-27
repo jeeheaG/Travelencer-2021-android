@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.travelencer_android_2021.databinding.FragmentPlaceMainBinding
 
+//
 class PlaceMainFragment : Fragment() {
     private var mBinding : FragmentPlaceMainBinding? = null
 

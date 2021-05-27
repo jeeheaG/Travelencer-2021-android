@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clPlaceItem"
+        android:layout_width="330dp"
+        android:layout_height="210dp"
+        android:layout_marginVertical="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivPlaceMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/view_round"
+            android:scaleType="centerCrop"
+            android:src="@drawable/dummy_haewoojae"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvPlaceMain" />
+
+        <TextView
+            android:id="@+id/tvPlaceItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="수원 화성"
+            android:textSize="30dp"
+            android:fontFamily="@font/hcsantteut"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/clPlaceItem"
+            app:layout_constraintBottom_toTopOf="@+id/tvPlaceItemExplain"/>
+
+        <TextView
+            android:id="@+id/tvPlaceItemLoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="경기도 수원시"
+            android:textSize="20dp"
+            android:fontFamily="@font/hcsantteut"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@+id/tvPlaceItemName"
+            app:layout_constraintBottom_toTopOf="@+id/tvPlaceItemExplain"/>
+
+        <TextView
+            android:id="@+id/tvPlaceItemExplain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/hcsantteut"
+            android:text="수원 화성의 수원의 대표적인 관광지로.."
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/clPlaceItem"
+            app:layout_constraintHorizontal_bias="0.304"
+            app:layout_constraintStart_toStartOf="@+id/tvPlaceItemName" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.travelencer_android_2021
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,25 +22,25 @@ class SettingFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_setting, container, false)
+        //val view = inflater.inflate(R.layout.fragment_setting, container, false)
 
         val binding = FragmentSettingBinding.inflate(inflater, container, false)
         mBinding = binding
 
         // 뒤로가기 이미지 클릭
-        view.imgBack.setOnClickListener {
+        binding.imgBack.setOnClickListener {
 
         }
 
         // <서비스 이용 약관> 텍스트뷰 클릭
-        view.tvTOS.setOnClickListener {
+        binding.tvTOS.setOnClickListener {
             // TOSActivity로 이동하기
             var intent = Intent(activity, TOSActivity::class.java)
             startActivity(intent)
         }
 
         // <개인정보 보호정책> 텍스트뷰 클릭
-        view.tvPP.setOnClickListener {
+        binding.tvPP.setOnClickListener {
             // PPActivity로 이동하기
             var intent = Intent(activity, PPActivity::class.java)
             startActivity(intent)

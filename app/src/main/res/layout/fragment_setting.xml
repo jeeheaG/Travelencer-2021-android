@@ -143,9 +143,7 @@
             android:text="서비스 이용 약관"
             android:textSize="15sp"
             android:fontFamily="@font/hcsantteut"
-            android:gravity="center"
-            android:linksClickable="true"
-            android:autoLink="web"/>
+            android:gravity="center"/>
         <TextView
             android:id="@+id/tvPP"
             android:layout_width="match_parent"
@@ -153,9 +151,7 @@
             android:text="개인정보 보호정책"
             android:textSize="15sp"
             android:fontFamily="@font/hcsantteut"
-            android:gravity="center"
-            android:linksClickable="true"
-            android:autoLink="web"/>
+            android:gravity="center"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

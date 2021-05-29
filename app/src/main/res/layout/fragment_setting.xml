@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="설정"
         android:textSize="30sp"
-        android:textColor="#046EEE"
+        android:textColor="@color/blue"
         android:fontFamily="@font/hcmalang"
         android:gravity="center" />
     <LinearLayout
@@ -51,7 +51,7 @@
             android:background="@drawable/btn_shape"
             android:layout_margin="10dp"
             android:textSize="18sp"
-            android:textColor="#046EEE"
+            android:textColor="@color/blue"
             android:fontFamily="@font/hcmalang"
             android:text="프로필 사진 변경"
             android:layout_marginBottom="20dp"/>
@@ -60,14 +60,14 @@
             android:layout_height="50dp"
             android:hint="nickname"
             android:gravity="center"
-            android:background="#FFFAE3"
+            android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="계정 소개글"
             android:gravity="center"
-            android:background="#FFFAE3"
+            android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <Button
             android:layout_width="150dp"
@@ -75,7 +75,7 @@
             android:background="@drawable/btn_shape"
             android:text="수정 완료"
             android:textSize="25sp"
-            android:textColor="#046EEE"
+            android:textColor="@color/blue"
             android:fontFamily="@font/hcmalang"
             android:layout_marginBottom="3dp"/>
     </LinearLayout>
@@ -92,7 +92,7 @@
             android:background="@drawable/btn_shape"
             android:text="로그아웃"
             android:textSize="25sp"
-            android:textColor="#046EEE"
+            android:textColor="@color/blue"
             android:fontFamily="@font/hcmalang"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="3dp"/>
@@ -102,7 +102,7 @@
             android:background="@drawable/btn_shape"
             android:text="챗봇 문의"
             android:textSize="25sp"
-            android:textColor="#046EEE"
+            android:textColor="@color/blue"
             android:fontFamily="@font/hcmalang"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="3dp"/>
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_weight="1"
-                android:background="#707070"/>
+                android:background="@color/gray"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_weight="1"
-                android:background="#707070"/>
+                android:background="@color/gray"/>
         </LinearLayout>
 
         <TextView

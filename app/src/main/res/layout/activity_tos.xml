@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:text="서비스 이용약관"
         android:textSize="30sp"
-        android:textColor="#046EEE"
+        android:textColor="@color/blue"
         android:fontFamily="@font/hcmalang"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"/>

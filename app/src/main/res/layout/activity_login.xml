@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="로그인"
         android:textSize="30sp"
-        android:textColor="#046EEE"
+        android:textColor="@color/blue"
         android:fontFamily="@font/hcmalang"
         android:gravity="center"/>
 
@@ -25,7 +25,7 @@
         <View
             android:layout_width="100dp"
             android:layout_height="2dp"
-            android:background="#707070"
+            android:background="@color/gray"
             android:layout_marginTop="2dp"/>
     </LinearLayout>
 
@@ -40,12 +40,12 @@
             android:layout_height="50dp"
             android:hint="이메일 아이디"
             android:gravity="center"
-            android:background="#FFFAE3"
+            android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:background="#FFFAE3"
+            android:background="@color/lightyellow"
             android:hint="비밀번호"
             android:gravity="center"
             android:layout_marginBottom="20dp" />
@@ -56,7 +56,7 @@
             android:background="@drawable/btn_shape"
             android:text="로그인"
             android:textSize="25sp"
-            android:textColor="#046EEE"
+            android:textColor="@color/blue"
             android:fontFamily="@font/hcmalang"
             android:layout_marginBottom="20dp"/>
         <TextView
@@ -93,7 +93,7 @@
         <View
             android:layout_width="130dp"
             android:layout_height="1dp"
-            android:background="#707070"
+            android:background="@color/gray"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="20dp"/>
         <Button
@@ -103,7 +103,7 @@
             android:background="@drawable/btn_shape"
             android:text="회원가입"
             android:textSize="25sp"
-            android:textColor="#046EEE"
+            android:textColor="@color/blue"
             android:fontFamily="@font/hcmalang"
             android:layout_marginBottom="50dp"/>
     </LinearLayout>

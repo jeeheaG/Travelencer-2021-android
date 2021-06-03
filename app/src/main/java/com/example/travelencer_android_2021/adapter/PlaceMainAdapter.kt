@@ -9,9 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelPlaceMain
-import kotlinx.android.synthetic.main.list_item_place_main.view.*
 
-//TODO : 설명글 앞부분 일부만 잘라야 함
 class PlaceMainAdapter(val placeList: ArrayList<ModelPlaceMain>): RecyclerView.Adapter<PlaceMainAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceMainAdapter.CustomViewHolder {
@@ -20,7 +18,7 @@ class PlaceMainAdapter(val placeList: ArrayList<ModelPlaceMain>): RecyclerView.A
             itemView.setOnClickListener {
                 val curPosition: Int = adapterPosition
                 val place: ModelPlaceMain = placeList.get(curPosition)
-                Toast.makeText(parent.context, "이름:${place.name}, 위치:${place.loc}, 설명:${place.explain}", Toast.LENGTH_SHORT)
+                Toast.makeText(parent.context, "이름:${place.name}, 위치:${place.loc}, 설명:${place.explain}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -29,7 +27,7 @@ class PlaceMainAdapter(val placeList: ArrayList<ModelPlaceMain>): RecyclerView.A
         holder.img.setImageResource(placeList.get(position).img)
         holder.name.text = placeList.get(position).name
         holder.loc.text = placeList.get(position).loc
-        holder.explain.text = placeList.get(position).explain
+        holder.explain.text = placeList.get(position).explain.substring(0,20).plus("...") //설명부분 문자열 자르고 ...붙이기
     }
 
     override fun getItemCount(): Int {

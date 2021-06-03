@@ -6,6 +6,7 @@
         android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/feedFragment"
+        android:enabled="true"
         android:title="여행 피드"
         android:icon="@drawable/ic_navi_feed"/>
     <item

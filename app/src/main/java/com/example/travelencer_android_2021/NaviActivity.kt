@@ -15,7 +15,7 @@ private const val TAG_POST_BLOG = "post_blog_fragment"
 private const val TAG_SETTING = "setting_fragment"
 
 class NaviActivity : AppCompatActivity() {
-
+//j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2j2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navi)

@@ -5,26 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NaviActivity"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:orientation="vertical">
+<!--    android:weightSum="1"-->
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/navi_host"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+<!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:id="@+id/navi_host"-->
+<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        app:defaultNavHost="true"-->
+<!--        app:navGraph="@navigation/navi_graph"/>-->
+
+    <FrameLayout
+        android:id="@+id/flContainer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/navi_graph"/>
+        android:layout_height="match_parent"
+        android:layout_weight="9"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        app:itemBackground="@color/white"
         app:menu="@menu/navi_menu"
         app:itemIconTint="@drawable/menu_selector_color"
         app:itemTextColor="@drawable/menu_selector_color"
-        />
-
+        android:layout_weight="1" />
+//android:background="@color/white", weight
 </LinearLayout>

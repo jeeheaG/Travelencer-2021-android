@@ -22,7 +22,7 @@ class FeedPhotoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view =  inflater.inflate(R.layout.fragment_feed_photo, container, false)
-
+        
         val rcFeedPhoto = view.findViewById<RecyclerView>(R.id.rcFeedPhoto)
 
         rcFeedPhoto.layoutManager = GridLayoutManager(activity, 3)
@@ -39,6 +39,7 @@ class FeedPhotoFragment : Fragment() {
         feedPhototAdapter.items.add(ModelFeedPhoto(R.drawable.mm2, "8"))
         feedPhototAdapter.items.add(ModelFeedPhoto(R.drawable.mm2, "9"))
         feedPhototAdapter.items.add(ModelFeedPhoto(R.drawable.mm2, "10"))
+        feedPhototAdapter.items.add(ModelFeedPhoto(R.drawable.mm2, "11"))
 
         return view
     }

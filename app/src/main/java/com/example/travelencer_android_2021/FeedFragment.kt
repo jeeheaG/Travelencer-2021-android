@@ -36,7 +36,5 @@ class FeedFragment : Fragment() {
 
         return view
     }
-
-    companion object {
-    }
+    
 }

@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_feed_sights.*
 
 // 여행 피드 - 관광지 탭
 class FeedSightsFragment : Fragment() {

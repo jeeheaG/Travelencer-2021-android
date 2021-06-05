@@ -1,4 +1,4 @@
-package com.example.travelencer_android_2021
+package com.example.travelencer_android_2021.adapter
 
 import android.util.Log
 import androidx.fragment.app.Fragment

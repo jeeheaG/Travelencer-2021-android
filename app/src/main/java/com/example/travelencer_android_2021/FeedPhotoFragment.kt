@@ -21,7 +21,4 @@ class FeedPhotoFragment : Fragment() {
 
         return view
     }
-
-    companion object {
-    }
 }

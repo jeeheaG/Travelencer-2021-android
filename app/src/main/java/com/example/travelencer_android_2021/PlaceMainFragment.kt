@@ -15,9 +15,8 @@ class PlaceMainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_place_main, container, false) //setContentView행위를 프래그먼트버전으로 한 것
 
-
+        //더미 데이터 목록
         val placeList = arrayListOf(
-            //더미 데이터 목록
             ModelPlaceMain(R.drawable.dummy_haewoojae, "해우재", "경기도 수원시", "해우재는 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ"),
                 ModelPlaceMain(R.drawable.dummy_haewoojae, "수원 화성", "경기도 수원시", "화성는 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ"),
                 ModelPlaceMain(R.drawable.dummy_haewoojae, "무슨산", "경기도 수원시", "가가가가가 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ"),
@@ -43,7 +42,6 @@ class PlaceMainFragment : Fragment() {
                 ModelPlaceMain(R.drawable.dummy_haewoojae, "해우재", "경기도 수원시", "해우재는 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ"),
                 ModelPlaceMain(R.drawable.dummy_haewoojae, "해우재", "경기도 수원시", "해우재는 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ"),
                 ModelPlaceMain(R.drawable.dummy_haewoojae, "마지막", "경기도 수원시", "해우재는 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ")
-
                 )
 
 

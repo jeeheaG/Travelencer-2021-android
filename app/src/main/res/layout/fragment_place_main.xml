@@ -42,12 +42,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tvSearchMain" />
 
     <TextView
-        android:id="@+id/tvPlaceSecond"
+        android:id="@+id/tvPlaceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:fontFamily="@font/hcsantteut"
-        android:text="d수원"
+        android:text="수원"
         android:textColor="@color/black"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,17 +55,17 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <TextView
-        android:id="@+id/tvPlaceFirst"
+        android:id="@+id/tvPlaceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:fontFamily="@font/hcsantteut"
-        android:text="d경기도"
+        android:text="경기도"
         android:textColor="@color/black"
         android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceSecond" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceSmall" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaceMain"
@@ -75,17 +75,8 @@
         android:paddingBottom="210dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceFirst" >
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceLarge" >
     </androidx.recyclerview.widget.RecyclerView>
-
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView2"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:src="@drawable/dummy_haewoojae"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/rvPlaceMain" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

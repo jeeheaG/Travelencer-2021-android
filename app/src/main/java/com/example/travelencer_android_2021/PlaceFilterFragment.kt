@@ -9,16 +9,21 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import kotlinx.android.synthetic.main.fragment_place_filter.*
+import com.example.travelencer_android_2021.databinding.FragmentPlaceFilterBinding
 //TODO : 스피너 목록도 관광API로 가져올 수 있지 않았나?
+//뷰바인딩 사용
 
 private const val TAG_PLACE_FILTER = "place_filter_fragment"
 private const val TAG_PLACE_MAIN = "place_main_fragment"
 
 class PlaceFilterFragment : Fragment() {
+    private var _binding: FragmentPlaceFilterBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_place_filter, container, false)
+        _binding = FragmentPlaceFilterBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         //이 화면으로 오면 필터 설정이 해제됨
         val pref = activity?.getSharedPreferences("pref", 0)
         val edit = pref?.edit()
@@ -34,9 +39,8 @@ class PlaceFilterFragment : Fragment() {
         val PlaceLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
         val PlaceSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
 
-        val spinPL = view.findViewById<Spinner>(R.id.spinPlaceLarge)
-        spinPL.adapter = PlaceLargeAdapter
-        spinPL.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinPlaceLarge.adapter = PlaceLargeAdapter
+        binding.spinPlaceLarge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position!=0){
                     Toast.makeText(activity, placeLargeItemList[position], Toast.LENGTH_SHORT).show()
@@ -48,9 +52,8 @@ class PlaceFilterFragment : Fragment() {
             }
         }
 
-        val spinPS = view.findViewById<Spinner>(R.id.spinPlaceSmall)
-        spinPS.adapter = PlaceSmallAdapter
-        spinPS.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinPlaceSmall.adapter = PlaceSmallAdapter
+        binding.spinPlaceSmall.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position!=0){
                     Toast.makeText(activity, placeSmallItemList[position], Toast.LENGTH_SHORT).show()
@@ -67,8 +70,8 @@ class PlaceFilterFragment : Fragment() {
         // sharedPreferences 의 filtered값 true로 변경
         // preantFragmentManager에 접근해서 현재 placeFilter 프래그먼트 remove, placeMain 프래그먼트 add
         // TODO : 이후 지역정보도 sharedPreferences로 넘기면 될 듯
-        val btnSearch = view.findViewById<Button>(R.id.btnSearch)
-        btnSearch.setOnClickListener {
+
+        binding.btnSearch.setOnClickListener {
             Toast.makeText(activity, "btnSearch onClicked", Toast.LENGTH_SHORT).show()
 
             edit?.putBoolean("filtered", true)

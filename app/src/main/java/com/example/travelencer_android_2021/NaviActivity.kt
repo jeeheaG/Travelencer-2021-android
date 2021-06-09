@@ -7,9 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_navi.*
-import java.sql.Types.NULL
-
 //TODO : home부분 연결, 필터링 한 후 필터 안띄우게 작업하고 코드 정리하기
+
 //private const val TAG_HOME = "home_activity"
 private const val TAG_FEED = "feed_fragment"
 private const val TAG_PLACE_FILTER = "place_filter_fragment"

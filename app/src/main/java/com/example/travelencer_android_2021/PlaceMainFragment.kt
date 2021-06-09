@@ -8,12 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.PlaceMainAdapter
+import com.example.travelencer_android_2021.databinding.FragmentPlaceMainBinding
 import com.example.travelencer_android_2021.model.ModelPlaceMain
-import kotlinx.android.synthetic.main.fragment_place_main.*
+//뷰바인딩 사용
 
 class PlaceMainFragment : Fragment() {
+    private var _binding: FragmentPlaceMainBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_place_main, container, false) //setContentView행위를 프래그먼트버전으로 한 것
+        //val view = inflater.inflate(R.layout.fragment_place_main, container, false) //setContentView행위를 프래그먼트버전으로 한 것
+        _binding = FragmentPlaceMainBinding.inflate(inflater, container, false)
+        val view = binding.root
+
 
         //더미 데이터 목록
         val placeList = arrayListOf(
@@ -44,21 +51,17 @@ class PlaceMainFragment : Fragment() {
                 ModelPlaceMain(R.drawable.dummy_haewoojae, "마지막", "경기도 수원시", "해우재는 경기도 수원의 특색있는 관광지로 주목받고 있는 어쩌구 라랄라라라ㅏ")
                 )
 
+        binding.rvPlaceMain.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) //프래그먼트이므로 this대신 activity
+        binding.rvPlaceMain.setHasFixedSize(true)
 
-        val rvView = view.findViewById<RecyclerView>(R.id.rvPlaceMain)
-
-        rvView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) //프래그먼트이므로 this대신 activity
-        rvView.setHasFixedSize(true)
-
-        rvView.adapter = PlaceMainAdapter(placeList)
-
-//id로 왜 접근이 안될까
-//        rvPlaceMain.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) //프래그먼트이므로 this대신 activity
-//        rvPlaceMain.setHasFixedSize(true)
-//
-//        rvPlaceMain.adapter = PlaceMainAdapter(placeList)
+        binding.rvPlaceMain.adapter = PlaceMainAdapter(placeList)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

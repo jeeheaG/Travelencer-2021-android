@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".AddPlaceActivity"></activity>
+        <activity android:name=".PNCActivity"></activity>
+        <activity android:name=".PlaceDetailActivity" />
+        <activity android:name=".AddPlaceActivity" />
         <activity android:name=".NaviActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

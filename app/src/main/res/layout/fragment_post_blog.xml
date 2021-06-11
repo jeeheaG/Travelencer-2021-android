@@ -46,8 +46,8 @@
 
     <ImageView
         android:id="@+id/ivPostBlogProfile"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/dummy_haewoojae"
@@ -88,26 +88,46 @@
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_margin="10dp"
+        android:layout_marginBottom="146dp"
         android:background="@drawable/btn_shape"
         android:drawableRight="@drawable/ic_squares_small"
-        android:paddingBottom="2dp"
-        android:paddingStart="5dp"
-        android:paddingRight="10dp"
         android:fontFamily="@font/hcmalang"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="2dp"
         android:text="프로필"
         android:textColor="@color/blue"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBookmarkList" />
+        app:layout_constraintBottom_toTopOf="@+id/rvPostBlogPostList"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+<!--    TODO : padding bottom조절로 아랫부분 안 잘리게-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPostBlogPostList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:paddingBottom="185dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPostBlogBio" />
+
+    <Button
+        android:id="@+id/btnPostBlogWrite"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_shape_stroke"
+        android:drawableRight="@drawable/ic_pencil_small"
+        android:fontFamily="@font/hcmalang"
+        android:paddingHorizontal="10dp"
+        android:text="일지쓰기"
+        android:textColor="@color/blue"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

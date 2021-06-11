@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlaceDetailActivity">
+<!--TODO : 리사이클러 뷰 두개 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_double_arrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivPlaceDetailBookmark"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_bookmark_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPlaceDetailPhotoList"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+
+            <TextView
+                android:id="@+id/tvPlaceDetailPhotoNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="1 / 5"
+                android:textColor="@color/gray"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/rvPlaceDetailPhotoList"
+                app:layout_constraintStart_toStartOf="@+id/rvPlaceDetailPhotoList"
+                app:layout_constraintTop_toBottomOf="@+id/rvPlaceDetailPhotoList" />
+
+            <TextView
+                android:id="@+id/tvPlaceDetailPlaceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="수원 화성"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPhotoNumber" />
+
+            <TextView
+                android:id="@+id/tvPlaceDetailPlaceLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="경기도 수원시"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvPlaceDetailPlaceName"
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailPlaceName"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceName" />
+
+            <!--    TODO : 별점, Explain왜 margin적용 안되지??-->
+
+            <TextView
+                android:id="@+id/tvPlaceDetailExplain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="25dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 멋진 전경과.."
+                android:textColor="@color/gray"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceLocation" />
+
+            <!--    TODO : 지도 API-->
+
+            <TextView
+                android:id="@+id/tvPlaceDetailRecentPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="이 장소의 최근 게시물"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailExplain" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPlaceDetailRecentPostList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailRecentPost"/>
+
+            <TextView
+                android:id="@+id/tvPlaceDetailPNC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="장단점 한마디"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvPlaceDetailRecentPostList" />
+
+            <ImageView
+                android:id="@+id/ivPlaceDetailPNCItem1"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/ic_check_mark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPNC"/>
+
+            <TextView
+                android:id="@+id/tvPlaceDetailPNCItem1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="수원 화성의 수원의 대표적인 관광지"
+                android:textColor="@color/gray"
+                android:textSize="20sp"
+                android:fontFamily="@font/hcsantteut"
+                app:layout_constraintStart_toEndOf="@+id/ivPlaceDetailPNCItem1"
+                app:layout_constraintTop_toTopOf="@+id/ivPlaceDetailPNCItem1"
+                app:layout_constraintBottom_toBottomOf="@+id/ivPlaceDetailPNCItem1" />
+
+            <ImageView
+                android:id="@+id/ivPlaceDetailPNCItem2"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/ic_check_mark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivPlaceDetailPNCItem1"/>
+
+            <TextView
+                android:id="@+id/tvPlaceDetailPNCItem2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="자리 잡고 있는 어쩌구는 멋진 전경"
+                android:textColor="@color/gray"
+                android:textSize="20sp"
+                android:fontFamily="@font/hcsantteut"
+                app:layout_constraintStart_toEndOf="@+id/ivPlaceDetailPNCItem2"
+                app:layout_constraintTop_toTopOf="@+id/ivPlaceDetailPNCItem2"
+                app:layout_constraintBottom_toBottomOf="@+id/ivPlaceDetailPNCItem2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

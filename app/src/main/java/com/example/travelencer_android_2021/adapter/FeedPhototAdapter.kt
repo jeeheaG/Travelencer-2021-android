@@ -9,6 +9,7 @@ import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelFeedPhoto
 import kotlinx.android.synthetic.main.list_item_feed_photo.view.*
 
+// 여행 피드 - 사진 탭
 class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
     // ModelFeedPhoto 배열
     var items = ArrayList<ModelFeedPhoto>()

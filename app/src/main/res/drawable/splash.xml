@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/background_dark" />
+    <item android:drawable="@android:color/black" />
     <!--
+    <item android:drawable="@drawable/배경" />
+
     <item>
         <bitmap
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/앱 로고"
             android:gravity="center"/>
     </item>
     -->

@@ -54,7 +54,7 @@ class PlaceMainFragment : Fragment() {
         binding.rvPlaceMain.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) //프래그먼트이므로 this대신 activity
         binding.rvPlaceMain.setHasFixedSize(true)
 
-        binding.rvPlaceMain.adapter = PlaceMainAdapter(placeList)
+        binding.rvPlaceMain.adapter = activity?.let { PlaceMainAdapter(placeList, it) }
 
         return view
     }

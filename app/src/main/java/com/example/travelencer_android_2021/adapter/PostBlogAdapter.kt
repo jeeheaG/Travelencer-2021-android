@@ -1,7 +1,5 @@
 package com.example.travelencer_android_2021.adapter
 
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelPostBlog
-import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
 
 class PostBlogAdapter(val postList: ArrayList<ModelPostBlog>) : RecyclerView.Adapter<PostBlogAdapter.CustomViewHolder>() {
 
@@ -43,8 +40,8 @@ class PostBlogAdapter(val postList: ArrayList<ModelPostBlog>) : RecyclerView.Ada
             val title = itemView.findViewById<TextView>(R.id.tvPostBlogTitle)
             val date = itemView.findViewById<TextView>(R.id.tvPostBlogDate)
             val icon = itemView.findViewById<ImageView>(R.id.ivPostBlogLocationIcon)
-            val placeName = itemView.findViewById<TextView>(R.id.tvPostBlogPlaceName)
-            val location = itemView.findViewById<TextView>(R.id.tvPostBlogLocation)
+            val placeName = itemView.findViewById<TextView>(R.id.tvPostDetailPlaceName)
+            val location = itemView.findViewById<TextView>(R.id.tvPostDetailLocation)
             val writing = itemView.findViewById<TextView>(R.id.tvPostBlogWriting)
             val rvPhoto = itemView.findViewById<RecyclerView>(R.id.rvPostBlogPhotoList)
 

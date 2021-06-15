@@ -80,11 +80,21 @@
                 app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailPlaceName"
                 app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceName" />
 
-            <!--    TODO : 별점, Explain왜 margin적용 안되지??-->
+            <RatingBar
+                android:id="@+id/rbPlaceDetailRating"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize="0.5"
+                android:isIndicator="true"
+                app:layout_constraintEnd_toEndOf="@+id/tvPlaceDetailPlaceLocation"
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailPlaceLocation"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceLocation" />
 
             <TextView
                 android:id="@+id/tvPlaceDetailExplain"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="25dp"
                 android:fontFamily="@font/hcsantteut"
@@ -93,7 +103,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceLocation" />
+                app:layout_constraintTop_toBottomOf="@+id/rbPlaceDetailRating" />
 
             <!--    TODO : 지도 API-->
 

@@ -4,7 +4,6 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -43,11 +42,11 @@ class PlaceDetailRecentPostAdapter(val postList: ArrayList<ModelPlaceDetailRecen
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title = itemView.findViewById<TextView>(R.id.tvPlaceDetailRecentPostTitle)
         val nickname = itemView.findViewById<TextView>(R.id.tvPlaceDetailRecentPostNickname)
-        val profileImg = itemView.findViewById<ImageView>(R.id.ivPlaceDetailPostRecentProfileImg)
+        val profileImg = itemView.findViewById<ImageView>(R.id.ivPostDetailProfileImg)
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         fun setProfileImgRound(){
-            val profileImg = itemView.findViewById<ImageView>(R.id.ivPlaceDetailPostRecentProfileImg)
+            val profileImg = itemView.findViewById<ImageView>(R.id.ivPostDetailProfileImg)
 
             profileImg.background = ShapeDrawable(OvalShape())
             profileImg.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용

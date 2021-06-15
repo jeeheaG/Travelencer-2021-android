@@ -3,13 +3,16 @@ package com.example.travelencer_android_2021
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.PlaceDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PlaceDetailRecentPostAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPlaceDetailBinding
 import com.example.travelencer_android_2021.model.ModelPlaceDetailPhoto
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
+import kotlinx.android.synthetic.main.activity_place_detail.*
 
 //뷰바인딩 사용
 
@@ -26,6 +29,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 ModelPlaceDetailPhoto(R.drawable.dummy_hwasung),
                 ModelPlaceDetailPhoto(R.drawable.dummy_haewoojae),
                 ModelPlaceDetailPhoto(R.drawable.dummy_haewoojae),
+                ModelPlaceDetailPhoto(R.drawable.dummy_hwasung),
                 ModelPlaceDetailPhoto(R.drawable.dummy_hwasung),
                 ModelPlaceDetailPhoto(R.drawable.dummy_hwasung)
         )
@@ -45,9 +49,36 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         binding.rvPlaceDetailPhotoList.adapter = PlaceDetailPhotoAdapter(photoList)
         binding.rvPlaceDetailRecentPostList.adapter = PlaceDetailRecentPostAdapter(recentPostList)
+        
+        //TODO : bookmarked 값 서버에서 데이터 받아와서 쓰기
+        var bookmarked = false
+        binding.ivPlaceDetailBookmark.setOnClickListener{
+            if(!bookmarked){
+                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                bookmarked = true
+                Toast.makeText(this, "즐겨찾기 되었습니다", Toast.LENGTH_SHORT).show()
+            }
+            else if(bookmarked){
+                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_line)
+                bookmarked = false
+                Toast.makeText(this, "즐겨찾기 해제 되었습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
 
-        //TODO:리사이클러뷰에서 현재 포지션 받아와서 출력
-        binding.tvPlaceDetailPhotoNumber.text = "1 / ".plus(photoList.size.toString())
+        // 사진 한장씩 넘어감
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(binding.rvPlaceDetailPhotoList)
+
+        // 사진 번호 표시
+        binding.tvPlaceDetailPhotoNumber.text = "1 / ".plus(photoList.size)
+        binding.rvPlaceDetailPhotoList.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val curPhotoNum = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                val photoCounter = "${curPhotoNum+1} / ${photoList.size}"
+                binding.tvPlaceDetailPhotoNumber.text = photoCounter
+            }
+        })
 
         binding.ivPlaceDetailPNCMore.setOnClickListener{
             val intent = Intent(this, PNCActivity::class.java)

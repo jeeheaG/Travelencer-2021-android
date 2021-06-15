@@ -60,7 +60,7 @@ class PostBlogFragment : Fragment() {
         binding.rvPostBlogPostList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.rvPostBlogPostList.setHasFixedSize(true)
 
-        binding.rvPostBlogPostList.adapter = activity?.let { PostBlogAdapter(postList) }
+        binding.rvPostBlogPostList.adapter = activity?.let { PostBlogAdapter(postList, it) }
 
         binding.ivPostBlogProfile.background = ShapeDrawable(OvalShape())
         binding.ivPostBlogProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용

@@ -1,5 +1,7 @@
 package com.example.travelencer_android_2021.adapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +10,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.travelencer_android_2021.PostDetailActivity
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelPostBlog
 
-class PostBlogAdapter(val postList: ArrayList<ModelPostBlog>) : RecyclerView.Adapter<PostBlogAdapter.CustomViewHolder>() {
+class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private val mContext: Context) : RecyclerView.Adapter<PostBlogAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostBlogAdapter.CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_post_blog, parent, false)
@@ -19,7 +22,7 @@ class PostBlogAdapter(val postList: ArrayList<ModelPostBlog>) : RecyclerView.Ada
             itemView.setOnClickListener{
                 val curPosition: Int = adapterPosition
                 if(curPosition != RecyclerView.NO_POSITION){ // TODO : index=-1 왜 얘만 이런 현상이 . . .
-                    val post: ModelPostBlog = postList.get(curPosition)
+                    val post: ModelPostBlog = postList[curPosition]
                     Toast.makeText(parent.context, "제목 : ${post.title}, 날짜 : ${post.date}", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -28,6 +31,11 @@ class PostBlogAdapter(val postList: ArrayList<ModelPostBlog>) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: PostBlogAdapter.CustomViewHolder, position: Int) {
         holder.bind(postList[position])
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent(mContext, PostDetailActivity::class.java)
+            mContext.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

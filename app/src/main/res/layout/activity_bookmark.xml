@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO : 사진 모서리 둥글게-->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/placeMainFragment"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.travelencer_android_2021.PlaceMainFragment">
+    tools:context=".BookmarkActivity">
 
     <ImageView
         android:id="@+id/ivBack"
@@ -26,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="검색"
+        android:text="내 즐겨찾기"
         android:textColor="@color/blue"
         android:fontFamily="@font/hcmalang"
         android:textStyle="bold"
@@ -34,7 +31,7 @@
 
     <View
         android:id="@+id/vLine"
-        android:layout_width="60dp"
+        android:layout_width="188dp"
         android:layout_height="3dp"
         android:layout_marginTop="2dp"
         android:background="@color/gray"
@@ -42,42 +39,14 @@
         app:layout_constraintStart_toStartOf="@+id/tvBookmark"
         app:layout_constraintTop_toBottomOf="@+id/tvBookmark" />
 
-    <TextView
-        android:id="@+id/tvPlaceSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:fontFamily="@font/hcsantteut"
-        android:text="수원"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vLine" />
-
-    <TextView
-        android:id="@+id/tvPlaceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:fontFamily="@font/hcsantteut"
-        android:text="경기도"
-        android:textColor="@color/black"
-        android:textSize="23sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceSmall" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPlaceMain"
+        android:id="@+id/rvBookmarkList"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:paddingBottom="210dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlaceLarge" >
-    </androidx.recyclerview.widget.RecyclerView>
-
+        app:layout_constraintTop_toBottomOf="@+id/vLine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

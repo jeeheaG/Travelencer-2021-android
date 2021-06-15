@@ -47,7 +47,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvPostBlogTitle" />
 
         <TextView
-            android:id="@+id/tvPostBlogPlaceName"
+            android:id="@+id/tvPostDetailPlaceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -60,7 +60,7 @@
             app:layout_constraintTop_toTopOf="@+id/ivPostBlogLocationIcon" />
 
         <TextView
-            android:id="@+id/tvPostBlogLocation"
+            android:id="@+id/tvPostDetailLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -68,9 +68,9 @@
             android:text="경기도 수원시"
             android:textColor="@color/blue"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvPostBlogPlaceName"
-            app:layout_constraintStart_toEndOf="@+id/tvPostBlogPlaceName"
-            app:layout_constraintTop_toTopOf="@+id/tvPostBlogPlaceName" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvPostDetailPlaceName"
+            app:layout_constraintStart_toEndOf="@+id/tvPostDetailPlaceName"
+            app:layout_constraintTop_toTopOf="@+id/tvPostDetailPlaceName" />
 
         <TextView
             android:id="@+id/tvPostBlogWriting"

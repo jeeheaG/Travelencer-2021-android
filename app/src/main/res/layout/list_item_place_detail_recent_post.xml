@@ -36,11 +36,11 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivPlaceDetailPostRecentProfileImg"
+            app:layout_constraintEnd_toStartOf="@+id/ivPostDetailProfileImg"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/ivPlaceDetailPostRecentProfileImg"
+            android:id="@+id/ivPostDetailProfileImg"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginEnd="20dp"

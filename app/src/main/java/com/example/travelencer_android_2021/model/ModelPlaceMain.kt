@@ -4,4 +4,5 @@ class ModelPlaceMain(
         val img: Int,
         val name: String,
         val loc: String,
-        val explain: String)
+        val explain: String
+        )

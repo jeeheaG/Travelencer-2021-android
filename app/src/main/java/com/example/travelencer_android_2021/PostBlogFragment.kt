@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
@@ -25,9 +26,6 @@ class PostBlogFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        binding.ivPostBlogProfile.background = ShapeDrawable(OvalShape())
-        binding.ivPostBlogProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
 
         val photoList = arrayListOf(
                 ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
@@ -63,6 +61,14 @@ class PostBlogFragment : Fragment() {
         binding.rvPostBlogPostList.setHasFixedSize(true)
 
         binding.rvPostBlogPostList.adapter = activity?.let { PostBlogAdapter(postList) }
+
+        binding.ivPostBlogProfile.background = ShapeDrawable(OvalShape())
+        binding.ivPostBlogProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
+
+        binding.btnBookmarkList.setOnClickListener{
+            val intent = Intent(activity, BookmarkActivity::class.java)
+            startActivity(intent)
+        }
 
         return view
     }

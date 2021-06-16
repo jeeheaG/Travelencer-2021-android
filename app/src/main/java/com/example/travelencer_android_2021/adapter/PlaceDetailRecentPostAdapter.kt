@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
 
-class PlaceDetailRecentPostAdapter(val postList: ArrayList<ModelPlaceDetailRecentPost>) : RecyclerView.Adapter<PlaceDetailRecentPostAdapter.CustomViewHolder>() {
+class PlaceDetailRecentPostAdapter(private val postList: ArrayList<ModelPlaceDetailRecentPost>) : RecyclerView.Adapter<PlaceDetailRecentPostAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_place_detail_recent_post, parent, false)

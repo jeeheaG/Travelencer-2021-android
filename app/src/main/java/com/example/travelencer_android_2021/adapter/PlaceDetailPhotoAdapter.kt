@@ -6,17 +6,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.R
-import com.example.travelencer_android_2021.model.ModelPlaceDetailPhoto
-import kotlinx.android.synthetic.main.list_item_place_detail_photo.view.*
+import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 
-class PlaceDetailPhotoAdapter(val photoList: ArrayList<ModelPlaceDetailPhoto>) : RecyclerView.Adapter<PlaceDetailPhotoAdapter.CustomViewHolder>() {
+class PlaceDetailPhotoAdapter(private val photoList: ArrayList<ModelCasePhotoOnly>) : RecyclerView.Adapter<PlaceDetailPhotoAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceDetailPhotoAdapter.CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_place_detail_photo, parent, false)
         return CustomViewHolder(view).apply{
             itemView.setOnClickListener{
                 val curPosition: Int = adapterPosition
-                val place: ModelPlaceDetailPhoto = photoList[curPosition]
+                val place: ModelCasePhotoOnly = photoList[curPosition]
                 //토스트 등..
             }
         }

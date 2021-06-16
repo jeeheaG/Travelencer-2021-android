@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.PlaceDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PlaceDetailRecentPostAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPlaceDetailBinding
-import com.example.travelencer_android_2021.model.ModelPlaceDetailPhoto
+import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
 import kotlinx.android.synthetic.main.activity_place_detail.*
 
@@ -26,12 +26,12 @@ class PlaceDetailActivity : AppCompatActivity() {
         setContentView(view)
 
         val photoList = arrayListOf(
-                ModelPlaceDetailPhoto(R.drawable.dummy_hwasung),
-                ModelPlaceDetailPhoto(R.drawable.dummy_haewoojae),
-                ModelPlaceDetailPhoto(R.drawable.dummy_haewoojae),
-                ModelPlaceDetailPhoto(R.drawable.dummy_hwasung),
-                ModelPlaceDetailPhoto(R.drawable.dummy_hwasung),
-                ModelPlaceDetailPhoto(R.drawable.dummy_hwasung)
+                ModelCasePhotoOnly(R.drawable.dummy_hwasung),
+                ModelCasePhotoOnly(R.drawable.dummy_haewoojae),
+                ModelCasePhotoOnly(R.drawable.dummy_haewoojae),
+                ModelCasePhotoOnly(R.drawable.dummy_hwasung),
+                ModelCasePhotoOnly(R.drawable.dummy_hwasung),
+                ModelCasePhotoOnly(R.drawable.dummy_hwasung)
         )
         val recentPostList = arrayListOf(
                 ModelPlaceDetailRecentPost("날 좋은 날 화성 나들이", "jeehea", R.drawable.dummy_haewoojae),

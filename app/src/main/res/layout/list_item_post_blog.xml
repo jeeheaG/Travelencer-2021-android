@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
-            android:id="@+id/ivPostBlogLocationIcon"
+            android:id="@+id/ivPostDetailPlaceIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="10dp"
@@ -55,12 +55,12 @@
             android:text="해우재"
             android:textColor="@color/black"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivPostBlogLocationIcon"
-            app:layout_constraintStart_toEndOf="@+id/ivPostBlogLocationIcon"
-            app:layout_constraintTop_toTopOf="@+id/ivPostBlogLocationIcon" />
+            app:layout_constraintBottom_toBottomOf="@+id/ivPostDetailPlaceIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivPostDetailPlaceIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivPostDetailPlaceIcon" />
 
         <TextView
-            android:id="@+id/tvPostDetailLocation"
+            android:id="@+id/tvPostDetailPlaceLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -83,7 +83,7 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivPostBlogLocationIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/ivPostDetailPlaceIcon" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPostBlogPhotoList"
@@ -93,7 +93,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPostBlogWriting" />
-<!--        android:orientation="horizontal"-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

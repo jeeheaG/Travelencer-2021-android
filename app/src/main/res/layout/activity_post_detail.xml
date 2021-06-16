@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".PostDetailActivity">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +65,7 @@
                 android:id="@+id/tvPostDetailWriteDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/hcsantteut"
                 android:text="작성일 2020 02 20"
@@ -78,7 +78,7 @@
                 android:id="@+id/tvPostDetailTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/hcsantteut"
                 android:text="날 좋은 날 화성 나들이"
                 android:textColor="@color/black"
@@ -102,25 +102,26 @@
                 android:id="@+id/rvPostDetailPlaceList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvPostDetailPeriod" />
 
-            <!--    TODO : 코스, 사진 채우기-->
+            <!--    TODO : 코스 경우의 수-->
             <LinearLayout
                 android:id="@+id/llPostDetailCourse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
                 app:layout_constraintTop_toBottomOf="@+id/rvPostDetailPlaceList"
-                android:orientation="horizontal" />
+                android:orientation="vertical" />
 
-            <LinearLayout
-                android:id="@+id/llPostDetailPhotoList"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPostDetailPhotoList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/llPostDetailCourse"
-                android:orientation="vertical"/>
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/llPostDetailCourse" />
 
             <TextView
                 android:id="@+id/tvPostDetailWriting"
@@ -131,9 +132,10 @@
                 android:text="오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 어쩌구 저쩌구 글이 이렇게 쭉쭉"
                 android:textColor="@color/gray"
                 android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/llPostDetailPhotoList" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvPostDetailPhotoList" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

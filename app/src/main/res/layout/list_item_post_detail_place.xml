@@ -8,16 +8,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivPostBlogLocationIcon"
+            android:id="@+id/ivPostDetailPlaceIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginStart="10dp"
             android:src="@drawable/ic_location_yellow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,15 +32,14 @@
             android:text="해우재"
             android:textColor="@color/black"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivPostBlogLocationIcon"
-            app:layout_constraintStart_toEndOf="@+id/ivPostBlogLocationIcon"
-            app:layout_constraintTop_toTopOf="@+id/ivPostBlogLocationIcon" />
+            app:layout_constraintBottom_toBottomOf="@+id/ivPostDetailPlaceIcon"
+            app:layout_constraintStart_toEndOf="@+id/ivPostDetailPlaceIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivPostDetailPlaceIcon" />
 
         <TextView
-            android:id="@+id/tvPostDetailLocation"
+            android:id="@+id/tvPostDetailPlaceLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:fontFamily="@font/hcsantteut"
             android:text="경기도 수원시"
             android:textColor="@color/blue"

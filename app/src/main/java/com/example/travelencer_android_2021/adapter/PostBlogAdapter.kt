@@ -47,9 +47,9 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
         fun bind(post: ModelPostBlog) {
             val title = itemView.findViewById<TextView>(R.id.tvPostBlogTitle)
             val date = itemView.findViewById<TextView>(R.id.tvPostBlogDate)
-            val icon = itemView.findViewById<ImageView>(R.id.ivPostBlogLocationIcon)
+            val icon = itemView.findViewById<ImageView>(R.id.ivPostDetailPlaceIcon)
             val placeName = itemView.findViewById<TextView>(R.id.tvPostDetailPlaceName)
-            val location = itemView.findViewById<TextView>(R.id.tvPostDetailLocation)
+            val location = itemView.findViewById<TextView>(R.id.tvPostDetailPlaceLocation)
             val writing = itemView.findViewById<TextView>(R.id.tvPostBlogWriting)
             val rvPhoto = itemView.findViewById<RecyclerView>(R.id.rvPostBlogPhotoList)
 

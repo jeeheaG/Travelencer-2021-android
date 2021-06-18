@@ -42,6 +42,7 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
         fun setItem(item: ArrayList<String>) {
             var layout = itemView.list_item_feed_course_layout
 
+            layout.removeAllViews()
             CourseMaker().makeCourse(item, layout, context)
             Log.d("mmm check", "배열 ${item[0]}")
 

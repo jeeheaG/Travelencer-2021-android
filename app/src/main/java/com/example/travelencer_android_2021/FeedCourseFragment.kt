@@ -29,7 +29,7 @@ class FeedCourseFragment : Fragment() {
         val layoutManager = LinearLayoutManager(activity)
         rcFeedCourse.layoutManager = layoutManager
         // 리아시클러뷰에 어댑터 달기
-        val feedCourseAdapter = context?.let { FeedCourseAdapter(it) }
+        val feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }
         rcFeedCourse.adapter = feedCourseAdapter
 
 

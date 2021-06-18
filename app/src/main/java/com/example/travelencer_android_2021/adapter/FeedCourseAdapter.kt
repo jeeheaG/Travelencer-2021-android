@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,17 +31,25 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
     override fun onBindViewHolder(holder: FeedCourseAdapter.ViewHolder, position: Int) {
         val item = items[position]
         holder.setItem(item)
+        Log.d("mmm check", "포지션 ${position}")
     }
 
     // 아이템 갯수 리턴
     override fun getItemCount() = items.size
 
-    // CourseMaker 클래스에 데이터 넣어주기
+    override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
+    }
+
+    // 코스 생성
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setItem(item: ArrayList<String>) {
             var layout = itemView.list_item_feed_course_layout
 
             CourseMaker().makeCourse(item, layout, context)
+            Log.d("mmm check", "배열 ${item[0]}")
+
+            Log.d("mmm size", "${getItemCount()}")
         }
     }
 }

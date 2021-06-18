@@ -45,6 +45,4 @@ class FeedFoodFragment : Fragment() {
         return view
     }
 
-    companion object {
-    }
 }

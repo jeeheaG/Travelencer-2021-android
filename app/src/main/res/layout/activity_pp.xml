@@ -5,8 +5,10 @@
 
     <ImageView
         android:id="@+id/imgBack"
-        android:layout_width="51dp"
+        android:layout_width="34dp"
         android:layout_height="34dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/ic_double_arrow"/>
 
     <LinearLayout
@@ -14,7 +16,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp">
         <View
             android:layout_width="match_parent"
@@ -39,6 +40,7 @@
         android:text="개인정보 보호정책"
         android:textSize="30sp"
         android:textColor="@color/blue"
+        android:textStyle="bold"
         android:fontFamily="@font/hcmalang"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"/>
@@ -49,6 +51,7 @@
         android:layout_margin="10dp"
         android:fontFamily="@font/hcsantteut"
         android:textSize="15sp"
+        android:textColor="@color/black"
         android:text="개인정보 보호정책을 이렇게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게
 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게"/>
 

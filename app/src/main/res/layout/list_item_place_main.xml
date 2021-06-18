@@ -26,6 +26,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvPlaceMain" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@drawable/list_item_place_main_gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/ivPlaceMain" />
+
         <TextView
             android:id="@+id/tvPlaceItemName"
             android:layout_width="wrap_content"

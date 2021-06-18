@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_feed_sights.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
+import com.example.travelencer_android_2021.adapter.FeedSightsAdapter
+import com.example.travelencer_android_2021.model.ModelFeedFood
+import com.example.travelencer_android_2021.model.ModelFeedSights
 
 // 여행 피드 - 관광지 탭
 class FeedSightsFragment : Fragment() {
@@ -20,6 +25,22 @@ class FeedSightsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view =  inflater.inflate(R.layout.fragment_feed_sights, container, false)
+
+        val rcFeedSights = view.findViewById<RecyclerView>(R.id.rcFeedSights)
+        // 리사이클러뷰 매니저 설정
+        val layoutManager = LinearLayoutManager(activity)
+        rcFeedSights.layoutManager = layoutManager
+        // 리아시클러뷰에 어댑터 달기
+        val feedSightsAdapter = FeedSightsAdapter()
+        rcFeedSights.adapter = feedSightsAdapter
+
+        feedSightsAdapter.items.add(ModelFeedSights("수원 화성", "고양시 수원시"))
+        feedSightsAdapter.items.add(ModelFeedSights("어디어디 마을", "어쩌구"))
+        feedSightsAdapter.items.add(ModelFeedSights("이런이런 공원", "저꺼고"))
+        feedSightsAdapter.items.add(ModelFeedSights("호수공원", "고양시 덕양구"))
+        feedSightsAdapter.items.add(ModelFeedSights("산길 공원", "저러저러"))
+        feedSightsAdapter.items.add(ModelFeedSights("밤가시마을", "이러쿵"))
+        feedSightsAdapter.items.add(ModelFeedSights("한강공원", "저러쿵"))
 
         return view
     }

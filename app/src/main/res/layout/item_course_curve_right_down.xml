@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivCourseCurveStraight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="-4dp"
+            android:paddingTop="-4dp"
+            android:src="@drawable/ic_course_line_vertical_resize"
+            app:layout_constraintBottom_toTopOf="@+id/ivCourseCurve"
+            app:layout_constraintEnd_toEndOf="@+id/ivCourseCurve" />
+
+        <TextView
+            android:id="@+id/tvCourseSpotName"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/hcsantteut"
+            android:text="임시지역명"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivCourseLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="-2dp"
+            android:src="@drawable/ic_course_line_horizontal_resize"
+            app:layout_constraintBottom_toBottomOf="@+id/ivCourseSpotCircle"
+            app:layout_constraintEnd_toStartOf="@+id/ivCourseSpotCircle"
+            app:layout_constraintTop_toTopOf="@+id/ivCourseSpotCircle" />
+
+        <ImageView
+            android:id="@+id/ivCourseSpotCircle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_course_circle_small_filled"
+            app:layout_constraintEnd_toEndOf="@+id/tvCourseSpotName"
+            app:layout_constraintStart_toStartOf="@+id/tvCourseSpotName"
+            app:layout_constraintTop_toBottomOf="@+id/tvCourseSpotName" />
+
+        <ImageView
+            android:id="@+id/ivCourseCurve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="-2dp"
+            android:paddingTop="-4dp"
+            android:src="@drawable/ic_course_curve_2_resize"
+            app:layout_constraintStart_toEndOf="@+id/ivCourseSpotCircle"
+            app:layout_constraintTop_toTopOf="@+id/ivCourseSpotCircle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

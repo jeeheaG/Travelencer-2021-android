@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".AddPlaceActivity"></activity>
+        <activity android:name=".PostDetailActivity"/>
+        <activity android:name=".BookmarkActivity" />
+        <activity android:name=".PNCActivity" />
+        <activity android:name=".PlaceDetailActivity" />
+        <activity android:name=".AddPlaceActivity" />
         <activity android:name=".NaviActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,12 +32,24 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".MainActivity" /> <!-- 홈 액티비티 -->
-        <activity android:name=".LoginActivity" /> <!-- 로그인 액티비티 -->
-        <activity android:name=".RegisterActivity" /> <!-- 회원가입 액티비티 -->
-        <activity android:name=".PasswordFindActivity" /> <!-- 비밀번호 찾기 액티비티 -->
-        <activity android:name=".PPActivity" /> <!-- 개인정보 보호정책 액티비티 -->
-        <activity android:name=".TOSActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="홈 액티비티" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="로그인 액티비티" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="회원가입 액티비티" />
+        <activity
+            android:name=".PasswordFindActivity"
+            android:label="비밀번호 찾기 액티비티" />
+        <activity
+            android:name=".PPActivity"
+            android:label="개인정보 보호정책 액티비티" />
+        <activity
+            android:name=".TOSActivity"
+            android:label="서비스 이용 약관 액티비티" />
     </application>
 
 </manifest>

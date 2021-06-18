@@ -7,36 +7,47 @@
     tools:context=".FeedFragment"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imgBack"
-        android:layout_width="51dp"
-        android:layout_height="34dp"
-        android:src="@drawable/ic_double_arrow"/>
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="지역"
-        android:textSize="30sp"
-        android:textColor="@color/blue"
-        android:fontFamily="@font/hcmalang"
-        android:gravity="center"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginBottom="25dp">
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_double_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="35dp"
+            android:fontFamily="@font/hcmalang"
+            android:text="지역"
+            android:textColor="@color/blue"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <View
             android:layout_width="60dp"
-            android:layout_height="2dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="2dp"
             android:background="@color/gray"
-            android:layout_marginTop="2dp"/>
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:text="수원"
-        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:textSize="40sp"
         android:fontFamily="@font/hcsantteut"
         android:gravity="center"
         android:layout_marginBottom="5dp"/>
@@ -44,7 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="경기도"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="23sp"
         android:fontFamily="@font/hcsantteut"
         android:gravity="center"
         android:layout_marginBottom="25dp"/>

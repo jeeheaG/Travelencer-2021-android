@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BookmarkActivity">
+<!--    TODO : 왜 화면 켜질 때 맨 위에서 시작 안하고 라시이클러뷰에서 시작하지?? -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_double_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvBookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="내 즐겨찾기"
+            android:textColor="@color/blue"
+            android:fontFamily="@font/hcmalang"
+            android:textStyle="bold"
+            android:textSize="30sp"/>
+
+        <View
+            android:id="@+id/vLine"
+            android:layout_width="188dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/gray"
+            app:layout_constraintEnd_toEndOf="@+id/tvBookmark"
+            app:layout_constraintStart_toStartOf="@+id/tvBookmark"
+            app:layout_constraintTop_toBottomOf="@+id/tvBookmark" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBookmarkList"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vLine" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

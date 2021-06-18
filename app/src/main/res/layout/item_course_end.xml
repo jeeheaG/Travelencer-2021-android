@@ -14,7 +14,8 @@
 
         <TextView
             android:id="@+id/tvCourseSpotName"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/hcsantteut"
@@ -26,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/ivCourseLine1"
+            android:id="@+id/ivCourseLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="-2dp"
@@ -44,16 +45,6 @@
             app:layout_constraintEnd_toEndOf="@+id/tvCourseSpotName"
             app:layout_constraintStart_toStartOf="@+id/tvCourseSpotName"
             app:layout_constraintTop_toBottomOf="@+id/tvCourseSpotName" />
-
-        <ImageView
-            android:id="@+id/ivCourseLine2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="-2dp"
-            android:src="@drawable/ic_course_line_horizontal_resize"
-            app:layout_constraintBottom_toBottomOf="@+id/ivCourseSpotCircle"
-            app:layout_constraintStart_toEndOf="@+id/ivCourseSpotCircle"
-            app:layout_constraintTop_toTopOf="@+id/ivCourseSpotCircle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

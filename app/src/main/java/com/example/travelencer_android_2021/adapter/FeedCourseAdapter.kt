@@ -37,10 +37,6 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
     // 아이템 갯수 리턴
     override fun getItemCount() = items.size
 
-    override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
-    }
-
     // 코스 생성
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setItem(item: ArrayList<String>) {

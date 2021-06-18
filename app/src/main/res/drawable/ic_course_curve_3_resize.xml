@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/ic_course_line_horizontal"
-        android:width="40dp"
-        android:height="3dp"
+        android:drawable="@drawable/ic_course_curve_3"
+        android:width="20dp"
+        android:height="17dp"
         />
 </layer-list>

@@ -1,7 +1,6 @@
 package com.example.travelencer_android_2021.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,7 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                Toast.makeText(parent.context, "클릭", Toast.LENGTH_SHORT).show()
+                Toast.makeText(parent.context, "${position} 클릭", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -31,7 +30,6 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
     override fun onBindViewHolder(holder: FeedCourseAdapter.ViewHolder, position: Int) {
         val item = items[position]
         holder.setItem(item)
-        Log.d("mmm check", "포지션 ${position}")
     }
 
     // 아이템 갯수 리턴
@@ -44,9 +42,6 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
 
             layout.removeAllViews()
             CourseMaker().makeCourse(item, layout, context)
-            Log.d("mmm check", "배열 ${item[0]}")
-
-            Log.d("mmm size", "${getItemCount()}")
         }
     }
 }

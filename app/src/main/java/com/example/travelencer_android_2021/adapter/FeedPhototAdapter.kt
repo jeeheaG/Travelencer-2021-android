@@ -1,11 +1,9 @@
 package com.example.travelencer_android_2021.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +32,7 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                Toast.makeText(parent.context, "${items[position].str}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(parent.context, "${position} 클릭", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -7,18 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
 import com.example.travelencer_android_2021.adapter.FeedSightsAdapter
-import com.example.travelencer_android_2021.model.ModelFeedFood
 import com.example.travelencer_android_2021.model.ModelFeedSights
 
 // 여행 피드 - 관광지 탭
 class FeedSightsFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +38,4 @@ class FeedSightsFragment : Fragment() {
         return view
     }
 
-    companion object {
-    }
 }

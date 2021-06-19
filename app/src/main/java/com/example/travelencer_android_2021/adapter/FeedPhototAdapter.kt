@@ -1,10 +1,16 @@
 package com.example.travelencer_android_2021.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelFeedPhoto
 import kotlinx.android.synthetic.main.list_item_feed_photo.view.*
@@ -18,11 +24,14 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedPhototAdapter.ViewHolder {
         // list_item_feed_photo.xml 파일과 연결
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_feed_photo, parent, false)
+        val imgFeedPhoto = itemView.findViewById<ImageView>(R.id.imgFeedPhoto)
 
-        // 사진 리사이징?????
-//        var width = parent.resources.displayMetrics.widthPixels / 3
-//        var imgView = ImageView(parent.context)
-//        imgView.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
+        // 사진 리사이징
+        var width = parent.resources.displayMetrics.widthPixels / 3             // 사용자 화면의 가로 길이 / 3
+
+        // 이미지뷰의 가로, 세로 크기 지정(정사각형)
+        imgFeedPhoto.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
+
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
                 Toast.makeText(parent.context, "${items[position].str}", Toast.LENGTH_SHORT).show()
@@ -39,10 +48,14 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
     // 아이템 갯수 리턴
     override fun getItemCount() = items.size
 
-    // ModelFeedPhoto 클래스에 데이터 넣어주기
+    // ModelFeedPhoto 클래스의 데이터(사진) 로드하기
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setItem(item: ModelFeedPhoto) {
-            itemView.imgFeedSight.setImageResource(item.img)
+            Glide.with(itemView)
+                .load(item.imgUrl)
+                //.error(R.drawable.)                  // 오류 시 이미지
+                .apply(RequestOptions().centerCrop())
+                .into(itemView.imgFeedPhoto)
         }
     }
 }

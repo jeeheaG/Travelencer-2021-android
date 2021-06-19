@@ -51,7 +51,7 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
         fun setItem(item: ModelFeedPhoto) {
             Glide.with(itemView)
                 .load(item.imgUrl)
-                //.error(R.drawable.)                  // 오류 시 이미지
+                .error(R.drawable.ic_x_red)                  // 오류 시 이미지
                 .apply(RequestOptions().centerCrop())
                 .into(itemView.imgFeedPhoto)
         }

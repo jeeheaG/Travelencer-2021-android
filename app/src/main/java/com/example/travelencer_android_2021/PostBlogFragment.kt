@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.travelencer_android_2021.adapter.FeedAdapter
 import com.example.travelencer_android_2021.adapter.PostBlogAdapter
 import com.example.travelencer_android_2021.databinding.FragmentPostBlogBinding
 import com.example.travelencer_android_2021.model.ModelPostBlog
@@ -57,6 +58,11 @@ class PostBlogFragment : Fragment() {
                 ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList)
         )
 
+        // 프로필 먼저 보이기
+        binding.postViewPager.visibility = View.INVISIBLE
+        binding.rvPostBlogPostList.visibility = View.VISIBLE
+
+
         binding.rvPostBlogPostList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.rvPostBlogPostList.setHasFixedSize(true)
 
@@ -68,6 +74,36 @@ class PostBlogFragment : Fragment() {
         binding.btnBookmarkList.setOnClickListener{
             val intent = Intent(activity, BookmarkActivity::class.java)
             startActivity(intent)
+        }
+
+        // 게시쿨 어댑터 생성
+        val feedAdapter = FeedAdapter((activity as NaviActivity).supportFragmentManager)
+        // 프레그먼트, 탭 타이틀 넣기
+        feedAdapter.addFragment(PostPhotoFragment(), "사진")
+        feedAdapter.addFragment(PostCourseFragment(), "코스")
+        feedAdapter.addFragment(PostFoodFragment(), "맛집")
+        feedAdapter.addFragment(PostSightsFragment(), "관광지")
+        // 탭레이아웃에 뷰 페이저 달기
+        binding.postTabLayout.setupWithViewPager(binding.postViewPager)
+        binding.postViewPager.adapter = feedAdapter
+
+        // 토글 버튼
+        val btnToggle = binding.btnPostBlogToggle
+        btnToggle.setOnClickListener {
+            // 게시물
+            if (btnToggle.text == "프로필") {
+                btnToggle.text = "게시물"
+                btnToggle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_home_samll, 0)
+                binding.postViewPager.visibility = View.VISIBLE
+                binding.rvPostBlogPostList.visibility = View.INVISIBLE
+            }
+            // 프로필
+            else {
+                btnToggle.text = "프로필"
+                btnToggle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_squares_small, 0)
+                binding.postViewPager.visibility = View.INVISIBLE
+                binding.rvPostBlogPostList.visibility = View.VISIBLE
+            }
         }
 
         return view

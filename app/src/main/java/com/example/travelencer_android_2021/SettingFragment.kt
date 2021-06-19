@@ -1,12 +1,17 @@
 package com.example.travelencer_android_2021
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 
@@ -14,18 +19,21 @@ import kotlinx.android.synthetic.main.fragment_setting.view.*
 class SettingFragment : Fragment() {
     private var mBinding : FragmentSettingBinding? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         //val view = inflater.inflate(R.layout.fragment_setting, container, false)
 
         val binding = FragmentSettingBinding.inflate(inflater, container, false)
         mBinding = binding
+
+        // 동그란 이미지
+        val imgProfile = binding.imgProfile
+        imgProfile.background = ShapeDrawable(OvalShape()).apply {
+            paint.color = Color.WHITE
+        }
+
+        imgProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
 
         // 뒤로가기 이미지 클릭
         binding.imgBack.setOnClickListener {
@@ -55,6 +63,4 @@ class SettingFragment : Fragment() {
         super.onDestroyView()
     }
 
-    companion object {
-    }
 }

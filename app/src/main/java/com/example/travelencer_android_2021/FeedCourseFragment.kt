@@ -12,11 +12,6 @@ import com.example.travelencer_android_2021.adapter.FeedCourseAdapter
 
 // 여행 피드 - 코스 탭
 class FeedCourseFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

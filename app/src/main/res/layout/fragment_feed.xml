@@ -19,7 +19,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_collapseMode="parallax"
+                app:layout_collapseMode="none"
                 android:layout_marginBottom="25dp">
                 <ImageView
                     android:id="@+id/imgBack"

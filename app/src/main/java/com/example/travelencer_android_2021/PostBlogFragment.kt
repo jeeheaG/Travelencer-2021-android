@@ -96,6 +96,8 @@ class PostBlogFragment : Fragment() {
                 btnToggle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_home_samll, 0)
                 binding.postViewPager.visibility = View.VISIBLE
                 binding.rvPostBlogPostList.visibility = View.INVISIBLE
+
+                binding.postTabLayout.visibility = View.VISIBLE
             }
             // 프로필
             else {
@@ -103,6 +105,8 @@ class PostBlogFragment : Fragment() {
                 btnToggle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_squares_small, 0)
                 binding.postViewPager.visibility = View.INVISIBLE
                 binding.rvPostBlogPostList.visibility = View.VISIBLE
+
+                binding.postTabLayout.visibility = View.GONE
             }
         }
 

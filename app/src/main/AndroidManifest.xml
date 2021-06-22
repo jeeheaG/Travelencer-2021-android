@@ -2,18 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.travelencer_android_2021">
 
-    <uses-permission android:name="android.permission.INTERNET"/>   <!--외부에서 사진 가져오기-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!--내부에서 사진 가져오기-->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 외부에서 사진 가져오기 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".PostDetailActivity"/>
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".PostDetailActivity" />
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".PNCActivity" />
         <activity android:name=".PlaceDetailActivity" />
@@ -54,6 +54,9 @@
         <activity
             android:name=".TOSActivity"
             android:label="서비스 이용 약관 액티비티" />
+        <activity
+            android:name=".FeedCourseDetailActivity"
+            android:label="피드 - 코스 상세 액티비티"/>
     </application>
 
 </manifest>

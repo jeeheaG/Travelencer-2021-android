@@ -1,15 +1,18 @@
 package com.example.travelencer_android_2021.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.travelencer_android_2021.FeedCourseDetailActivity
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.course.CourseMaker
 import kotlinx.android.synthetic.main.list_item_feed_course.view.*
 
+// 여행 피드 - 코스 탭 어댑터
 class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourseAdapter.ViewHolder>() {
     // ArrayList<String> 배열
     var items = ArrayList<ArrayList<String>>()
@@ -21,6 +24,11 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
+                // 코스 정보 전달
+                val intent = Intent(context, FeedCourseDetailActivity::class.java)
+                intent.putExtra("course", items[position])
+                context.startActivity(intent)
+
                 Toast.makeText(parent.context, "${position} 클릭", Toast.LENGTH_SHORT).show()
             }
         }

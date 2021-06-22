@@ -9,6 +9,7 @@ import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelFeedSights
 import kotlinx.android.synthetic.main.list_item_feed_food.view.*
 
+// 여행 탭 - 관광지 탭 어댑터
 class FeedSightsAdapter : RecyclerView.Adapter<FeedSightsAdapter.ViewHolder>() {
     // ModelFeedSights 배열
     var items = ArrayList<ModelFeedSights>()

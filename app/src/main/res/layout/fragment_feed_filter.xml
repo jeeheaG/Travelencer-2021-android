@@ -1,57 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FeedFilterFragment"
-    android:orientation="vertical">
+    android:id="@+id/feedFilterFragment">
 
     <ImageView
-        android:id="@+id/imgBack"
-        android:layout_width="51dp"
+        android:id="@+id/btnBack"
+        android:layout_width="34dp"
         android:layout_height="34dp"
-        android:src="@drawable/ic_double_arrow"/>
+        android:src="@drawable/ic_double_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="10dp"/>
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tvSearch"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="지역"
-        android:textSize="30sp"
-        android:textColor="@color/blue"
+        android:layout_marginTop="35dp"
         android:fontFamily="@font/hcmalang"
-        android:gravity="center"/>
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:text="검색"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vLine"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/tvSearch"
+        app:layout_constraintStart_toStartOf="@+id/tvSearch"
+        app:layout_constraintTop_toBottomOf="@id/tvSearch" />
+
+    <TextView
+        android:id="@+id/tvPlaceSelect"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center">
-        <View
-            android:layout_width="60dp"
-            android:layout_height="3dp"
-            android:background="@color/gray"
-            android:layout_marginTop="2dp"/>
-    </LinearLayout>
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/hcmalang"
+        android:text="지역 범위 선택"
+        android:textColor="@color/blue"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vLine" />
+
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/llPlaceLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPlaceSelect"
+        android:orientation="horizontal"
         android:gravity="center">
-        <Button
-            android:id="@+id/btnFeed"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:background="@drawable/btn_shape"
-            android:text="피드 보기"
-            android:textSize="25sp"
-            android:textColor="@color/blue"
+
+        <TextView
+            android:id="@+id/tvPlaceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/hcmalang"
-            android:layout_marginBottom="50dp"/>
+            android:text="첫 번째 범위"
+            android:textColor="@color/blue"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/spinPlaceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:spinnerMode="dropdown" />
+
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/llPlaceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPlaceLarge"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvPlaceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hcmalang"
+            android:text="두 번째 범위"
+            android:textColor="@color/blue"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/spinPlaceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnShowFeed"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/btn_shape"
+        android:fontFamily="@font/hcmalang"
+        android:text="피드 보기"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

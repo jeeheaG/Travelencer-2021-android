@@ -16,6 +16,8 @@ import com.example.travelencer_android_2021.databinding.FragmentPlaceFilterBindi
 private const val TAG_PLACE_FILTER = "place_filter_fragment"
 private const val TAG_PLACE_MAIN = "place_main_fragment"
 
+private const val SP_PLACE_FILTERED: String = "placeFiltered"
+
 class PlaceFilterFragment : Fragment() {
     private var _binding: FragmentPlaceFilterBinding? = null
     private val binding get() = _binding!!
@@ -24,22 +26,15 @@ class PlaceFilterFragment : Fragment() {
         _binding = FragmentPlaceFilterBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        //이 화면으로 오면 필터 설정이 해제됨
-        val pref = activity?.getSharedPreferences("pref", 0)
-        val edit = pref?.edit()
-        edit?.putBoolean("filtered", false)
-        edit?.apply()
-        Log.d("로그 -filtered-1--", "filtered : ${pref?.getBoolean("filtered", true)}")
-
         //지역 아이템 목록 더미 데이터
         val placeLargeItemList: Array<String> = resources.getStringArray(R.array.place_large_item_list)
         val placeSmallItemList: Array<String> = resources.getStringArray(R.array.place_small_item_list)
 
-        //어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
-        val PlaceLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
-        val PlaceSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
+        //두 스피너 어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
+        val placeLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
+        val placeSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
 
-        binding.spinPlaceLarge.adapter = PlaceLargeAdapter
+        binding.spinPlaceLarge.adapter = placeLargeAdapter
         binding.spinPlaceLarge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position!=0){
@@ -52,7 +47,7 @@ class PlaceFilterFragment : Fragment() {
             }
         }
 
-        binding.spinPlaceSmall.adapter = PlaceSmallAdapter
+        binding.spinPlaceSmall.adapter = placeSmallAdapter
         binding.spinPlaceSmall.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position!=0){
@@ -66,17 +61,25 @@ class PlaceFilterFragment : Fragment() {
 
         }
 
+        //이 화면으로 오면 필터 설정이 해제됨
+        val pref = activity?.getSharedPreferences("pref", 0)
+        val edit = pref?.edit()
+        edit?.putBoolean(SP_PLACE_FILTERED, false)
+        edit?.apply()
+        Log.d("로그 -placeFiltered-1--", "placeFiltered : ${pref?.getBoolean(SP_PLACE_FILTERED, true)}")
+
+
         // 검색 버튼 눌렀을 때
-        // sharedPreferences 의 filtered값 true로 변경
+        // sharedPreferences 의 SF_PLACE_FILTERED값 true로 변경
         // preantFragmentManager에 접근해서 현재 placeFilter 프래그먼트 remove, placeMain 프래그먼트 add
         // TODO : 이후 지역정보도 sharedPreferences로 넘기면 될 듯
 
         binding.btnSearch.setOnClickListener {
             Toast.makeText(activity, "btnSearch onClicked", Toast.LENGTH_SHORT).show()
 
-            edit?.putBoolean("filtered", true)
+            edit?.putBoolean(SP_PLACE_FILTERED, true)
             edit?.apply()
-            Log.d("로그 -filtered-2--", "filtered : ${pref?.getBoolean("filtered", false)}")
+            Log.d("로그 -filtered-2--", "placeFiltered : ${pref?.getBoolean(SP_PLACE_FILTERED, false)}")
 
 
             val parentManager: FragmentManager = parentFragmentManager

@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +9,18 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.travelencer_android_2021.databinding.FragmentPlaceFilterBinding
-import kotlinx.android.synthetic.main.fragment_feed_filter.view.*
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.example.travelencer_android_2021.databinding.FragmentFeedFilterBinding
+
+private const val TAG_FEED_FILTER = "feed_filter_fragment"
+private const val TAG_FEED = "feed_fragment"
+
+private const val SP_FEED_FILTERED: String = "feedFiltered"
 
 // 여행 피드 - 필터
 class FeedFilterFragment : Fragment() {
-    private var _binding: FragmentPlaceFilterBinding? = null
+    private var _binding: FragmentFeedFilterBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,18 +32,18 @@ class FeedFilterFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         //val view = inflater.inflate(R.layout.fragment_feed_filter, container, false)
-        _binding = FragmentPlaceFilterBinding.inflate(inflater, container, false)
+        _binding = FragmentFeedFilterBinding.inflate(inflater, container, false)
         val view = binding.root
 
         //지역 아이템 목록 더미 데이터
         val placeLargeItemList: Array<String> = resources.getStringArray(R.array.place_large_item_list)
         val placeSmallItemList: Array<String> = resources.getStringArray(R.array.place_small_item_list)
 
-        //어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
-        val PlaceLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
-        val PlaceSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
+        //두 스피너 어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
+        val placeLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
+        val placeSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
 
-        binding.spinPlaceLarge.adapter = PlaceLargeAdapter
+        binding.spinPlaceLarge.adapter = placeLargeAdapter
         binding.spinPlaceLarge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position!=0){
@@ -46,7 +53,7 @@ class FeedFilterFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        binding.spinPlaceSmall.adapter = PlaceSmallAdapter
+        binding.spinPlaceSmall.adapter = placeSmallAdapter
         binding.spinPlaceSmall.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(position!=0){
@@ -56,21 +63,37 @@ class FeedFilterFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        //이 화면으로 오면 필터 설정이 해제됨
+        val pref = activity?.getSharedPreferences("pref", 0)
+        val edit = pref?.edit()
+        edit?.putBoolean(SP_FEED_FILTERED, false)
+        edit?.apply()
+        Log.d("로그 -feedFiltered-1--", "feedFiltered : ${pref?.getBoolean(SP_FEED_FILTERED, true)}")
+
+
         // 검색 버튼 눌렀을 때
-//        binding.btnSearch.setOnClickListener {
-//            val parentManager: FragmentManager = parentFragmentManager
-//            val pft: FragmentTransaction = parentManager.beginTransaction()
-//
-//            pft.add(R.id.flContainer, PlaceMainFragment(), TAG_PLACE_MAIN)
-//
-//            val placeFilter = parentManager.findFragmentByTag(TAG_PLACE_FILTER)
-//            val placeMain = parentManager.findFragmentByTag(TAG_PLACE_MAIN)
-//
-//            placeFilter?.let {pft.remove(it)}
-//
-//            pft.commitAllowingStateLoss()
-//        }
-//
+        // sharedPreferences 의 SF_FEED_FILTERED값 true로 변경
+        // preantFragmentManager에 접근해서 현재 feedFilter 프래그먼트 remove, feed 프래그먼트 add
+
+        binding.btnShowFeed.setOnClickListener {
+            edit?.putBoolean(SP_FEED_FILTERED, true)
+            edit?.apply()
+            Log.d("로그 -filtered-2--", "feedFiltered : ${pref?.getBoolean(SP_FEED_FILTERED, false)}")
+
+
+            val parentManager: FragmentManager = parentFragmentManager
+            val pft: FragmentTransaction = parentManager.beginTransaction()
+
+            pft.add(R.id.flContainer, FeedFragment(), TAG_FEED)
+
+            val feedFilter = parentManager.findFragmentByTag(TAG_FEED_FILTER)
+            //val feed = parentManager.findFragmentByTag(TAG_FEED)
+
+            feedFilter?.let {pft.remove(it)}
+
+            pft.commitAllowingStateLoss()
+        }
+
         return view
     }
 

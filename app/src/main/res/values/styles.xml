@@ -9,4 +9,9 @@
     <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
         <item name="tabBackground">@drawable/tab_background</item>
     </style>
+
+    <!--가로 코스 지역명 텍스트뷰-->
+    <style name="COURSE_TEXTVIEW">
+        <item name = "android:textSize">17sp</item>
+    </style>
 </resources>

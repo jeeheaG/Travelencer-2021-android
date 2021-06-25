@@ -21,10 +21,10 @@
             android:fontFamily="@font/hcsantteut"
             android:text="임시지역명"
             android:textColor="@color/black"
-            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/COURSE_TEXTVIEW" />
 
         <ImageView
             android:id="@+id/ivCourseLine1"

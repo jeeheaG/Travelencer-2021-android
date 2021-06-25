@@ -1,13 +1,8 @@
 package com.example.travelencer_android_2021
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
@@ -15,7 +10,6 @@ import android.graphics.drawable.shapes.OvalShape
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,8 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView

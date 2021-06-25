@@ -12,11 +12,6 @@ import com.example.travelencer_android_2021.model.ModelFeedFood
 
 // 여행 피드 - 맛집 탭
 class FeedFoodFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +40,4 @@ class FeedFoodFragment : Fragment() {
         return view
     }
 
-    companion object {
-    }
 }

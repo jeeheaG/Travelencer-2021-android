@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,110 +8,144 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.travelencer_android_2021.PostBlogFragment">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-    <androidx.core.widget.NestedScrollView
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                app:layout_collapseMode="none">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_double_arrow"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnBookmarkList"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/btn_shape_yellow"
+                    android:fontFamily="@font/hcmalang"
+                    android:text="북마크 목록"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvPostBlogNickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
+                    android:fontFamily="@font/hcmalang"
+                    android:text="nickname"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivPostBlogProfile"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/dummy_haewoojae"
+                    app:layout_constraintEnd_toEndOf="@+id/tvPostBlogNickname"
+                    app:layout_constraintStart_toStartOf="@+id/tvPostBlogNickname"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPostBlogNickname" />
+
+                <TextView
+                    android:id="@+id/tvPostBlogBio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/hcsantteut"
+                    android:text="소개글이 없습니다."
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toEndOf="@+id/ivPostBlogProfile"
+                    app:layout_constraintStart_toStartOf="@+id/ivPostBlogProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/ivPostBlogProfile" />
+
+                <Button
+                    android:id="@+id/btnPostBlogToggle"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/btn_shape"
+                    android:drawableRight="@drawable/ic_squares_small"
+                    android:fontFamily="@font/hcmalang"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="2dp"
+                    android:text="프로필"
+                    android:textColor="@color/blue"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvPostBlogBio"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/postTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="코스" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="맛집" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="관광지" />
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPostBlogPostList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:id="@+id/ivBack"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_double_arrow"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/postViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <Button
-                android:id="@+id/btnBookmarkList"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/btn_shape_yellow"
-                android:fontFamily="@font/hcmalang"
-                android:text="북마크 목록"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvPostBlogNickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
-                android:fontFamily="@font/hcmalang"
-                android:text="nickname"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/ivPostBlogProfile"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="10dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/dummy_haewoojae"
-                app:layout_constraintEnd_toEndOf="@+id/tvPostBlogNickname"
-                app:layout_constraintStart_toStartOf="@+id/tvPostBlogNickname"
-                app:layout_constraintTop_toBottomOf="@+id/tvPostBlogNickname" />
-
-            <TextView
-                android:id="@+id/tvPostBlogBio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/hcsantteut"
-                android:text="소개글이 없습니다."
-                android:textColor="@color/gray"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="@+id/ivPostBlogProfile"
-                app:layout_constraintStart_toStartOf="@+id/ivPostBlogProfile"
-                app:layout_constraintTop_toBottomOf="@+id/ivPostBlogProfile" />
-
-            <Button
-                android:id="@+id/btnPostBlogToggle"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_marginBottom="146dp"
-                android:background="@drawable/btn_shape"
-                android:drawableRight="@drawable/ic_squares_small"
-                android:fontFamily="@font/hcmalang"
-                android:paddingStart="5dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="2dp"
-                android:text="프로필"
-                android:textColor="@color/blue"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/rvPostBlogPostList"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPostBlogPostList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPostBlogBio" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-    </LinearLayout>
+    </FrameLayout>
 
     <Button
         android:id="@+id/btnPostBlogWrite"
@@ -126,8 +160,6 @@
         android:textColor="@color/blue"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_gravity="bottom|center"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

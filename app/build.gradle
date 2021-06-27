@@ -51,6 +51,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'     // 사진 가져오기
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0' // 사진 크롭하기
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"     // 코루틴
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

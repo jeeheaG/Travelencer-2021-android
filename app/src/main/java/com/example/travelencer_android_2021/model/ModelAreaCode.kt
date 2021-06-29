@@ -90,13 +90,12 @@ class FetxhXML(spinner : Array<Spinner>, context : Context) {
                         spinnerArray_String[option].add(item.areaName)
                     }
                 }
-                if (eventType == XmlPullParser.END_TAG) {}
 
                 eventType = xpp.next()
             }
             // 스피너에 데이터 연결
             withContext(Dispatchers.Main) {
-                val spinnerAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, spinnerArray_String[option])
+                val spinnerAdapter = ArrayAdapter(context, R.layout.simple_spinner_dropdown_item, spinnerArray_String[option])
                 spinnerArr[option].adapter = spinnerAdapter
 
                 val areaSpinnerAdapter = object : AdapterView.OnItemSelectedListener {

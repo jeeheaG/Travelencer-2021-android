@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
@@ -11,6 +12,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostDetailPhotoAdapter
@@ -64,6 +66,12 @@ class PostDetailActivity : AppCompatActivity() {
         val spotNameList = arrayListOf("이러쿵지역","저러쿵지역긴지역명도잘라서보여준다", "3지역", "마지막커브지역", "다섯번째지역", "여섯번째지역", "일곱", "888", "아홉번째", "10번", "11번", "12번", "13번", "14번", "15번", "16번", "17번")
 
         CourseMaker().makeCourse(spotNameList, binding.llPostDetailCourse, this)
+        // 코스 클릭하면 상세 코스 보이기
+        binding.llPostDetailCourse.setOnClickListener {
+            val intent = Intent(applicationContext, FeedCourseDetailActivity::class.java)
+            intent.putExtra("course", spotNameList)
+            startActivity(intent)
+        }
 
 //코스 출력 테스트용 코드
 //        for(i in 0..15){

@@ -71,6 +71,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btnSearchPlace"
             android:layout_width="360dp"
             android:layout_height="60dp"
             android:text="여행지 검색"
@@ -80,6 +81,7 @@
             android:background="@drawable/btn_shape"
             android:layout_marginBottom="25dp"/>
         <Button
+            android:id="@+id/btnFeed"
             android:layout_width="360dp"
             android:layout_height="60dp"
             android:text="여행 피드"
@@ -89,6 +91,7 @@
             android:background="@drawable/btn_shape"
             android:layout_marginBottom="25dp"/>
         <Button
+            android:id="@+id/btnMyPost"
             android:layout_width="360dp"
             android:layout_height="60dp"
             android:text="나의 여행 일지"

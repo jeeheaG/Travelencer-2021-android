@@ -20,8 +20,8 @@ class Splash : AppCompatActivity() {
         val mainExecutor : Executor = ContextCompat.getMainExecutor(this@Splash)
         backgroundExecutable.schedule({
             mainExecutor.execute {
-                // MainActivity 넘어가기
-                var intent = Intent(this@Splash, MainActivity::class.java)
+                // NaviActivity 넘어가기
+                var intent = Intent(this@Splash, NaviActivity::class.java)
                 startActivity(intent)
                 finish()
             }

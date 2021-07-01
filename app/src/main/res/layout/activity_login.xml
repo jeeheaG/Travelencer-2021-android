@@ -46,6 +46,7 @@
         android:orientation="vertical"
         android:layout_weight="1">
         <EditText
+            android:id="@+id/editId"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="이메일 아이디"
@@ -53,6 +54,7 @@
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/editPassWord"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:background="@color/lightyellow"

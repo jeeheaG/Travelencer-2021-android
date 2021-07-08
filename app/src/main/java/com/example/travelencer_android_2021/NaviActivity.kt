@@ -1,5 +1,7 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,13 +30,17 @@ class NaviActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navi)
 
+        // MainActivity 넘어가기
+        var intent = Intent(this@NaviActivity, MainActivity::class.java)
+        startActivityForResult(intent, 0)
+
         //처음 보여줄 프래그먼트 설정
         setFragment(TAG_FEED, FeedFragment())
 
         //네비게이션 클릭에 따라 프래그먼트 설정하는 함수 호출
         navi.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                //R.id.homeFragment -> setFragment(TAG_HOME, )
+                R.id.homeFragment -> startActivityForResult(intent, 0)
                 R.id.feedFragment -> setFragment(TAG_FEED, FeedFragment())
                 R.id.placeMainFragment -> setFragment(TAG_PLACE_MAIN, PlaceMainFragment())
                 R.id.postBlogFragment -> setFragment(TAG_POST_BLOG, PostBlogFragment())
@@ -204,6 +210,14 @@ class NaviActivity : AppCompatActivity() {
         edit.putBoolean(SP_PLACE_FILTERED, false)
         edit.putBoolean(SP_FEED_FILTERED, false)
         edit.apply()
+    }
+
+    // 메인 액티비티에서 선택한 버튼에 따라 프레그먼트 변경
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK)
+            navi.selectedItemId = data!!.getIntExtra("select", 0)
     }
 
 }

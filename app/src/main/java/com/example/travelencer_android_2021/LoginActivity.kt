@@ -3,6 +3,8 @@ package com.example.travelencer_android_2021
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -19,6 +21,10 @@ class LoginActivity : AppCompatActivity() {
 
         // <로그인> 버튼 클릭
         btnLogin.setOnClickListener {
+            val id = findViewById<EditText>(R.id.editId).text
+            val password = findViewById<EditText>(R.id.editPassWord).text
+
+            Toast.makeText(applicationContext, "아이디 : ${id}, 비밀번호 : ${password}", Toast.LENGTH_SHORT).show()
             finish()
         }
 

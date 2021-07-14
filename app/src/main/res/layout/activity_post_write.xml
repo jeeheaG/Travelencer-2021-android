@@ -23,7 +23,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvPostDetailNickname"
+                android:id="@+id/tvPostWriteNickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -32,12 +32,12 @@
                 android:textColor="@color/blue"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/ivPostDetailProfileImg"
-                app:layout_constraintEnd_toStartOf="@+id/ivPostDetailProfileImg"
-                app:layout_constraintTop_toTopOf="@+id/ivPostDetailProfileImg" />
+                app:layout_constraintBottom_toBottomOf="@+id/ivPostWriteProfileImg"
+                app:layout_constraintEnd_toStartOf="@+id/ivPostWriteProfileImg"
+                app:layout_constraintTop_toTopOf="@+id/ivPostWriteProfileImg" />
 
             <ImageView
-                android:id="@+id/ivPostDetailProfileImg"
+                android:id="@+id/ivPostWriteProfileImg"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_margin="10dp"
@@ -46,95 +46,205 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <Button
-                android:id="@+id/btnPostDetailEdit"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/btn_shape"
-                android:fontFamily="@font/hcmalang"
-                android:text="수정"
-                android:textColor="@color/blue"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/ivBack"
-                app:layout_constraintStart_toEndOf="@+id/ivBack"
-                app:layout_constraintTop_toTopOf="@+id/ivBack" />
-
             <TextView
-                android:id="@+id/tvPostDetailWriteDate"
+                android:id="@+id/tvPostWritePostDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/hcsantteut"
-                android:text="작성일 2020 02 20"
+                android:text="작성일 2020 00 00"
                 android:textColor="@color/gray"
                 android:textSize="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivBack" />
 
-            <TextView
-                android:id="@+id/tvPostDetailTitle"
+            <EditText
+                android:id="@+id/tvPostWriteTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/hcsantteut"
-                android:text="날 좋은 날 화성 나들이"
+                android:hint="제목을 입력하세요."
+                android:background="@android:color/transparent"
                 android:textColor="@color/black"
                 android:textSize="30sp"
-                app:layout_constraintStart_toStartOf="@+id/tvPostDetailWriteDate"
-                app:layout_constraintTop_toBottomOf="@+id/tvPostDetailWriteDate" />
+                app:layout_constraintStart_toStartOf="@+id/tvPostWritePostDate"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostWritePostDate" />
 
             <TextView
-                android:id="@+id/tvPostDetailPeriod"
+                android:id="@+id/tvPostWriteStartDateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/hcsantteut"
-                android:text="2020 02 20 - 2020 02 20"
+                android:text="여행 시작일"
                 android:textColor="@color/blue"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/tvPostDetailTitle"
-                app:layout_constraintTop_toBottomOf="@+id/tvPostDetailTitle" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPostDetailPlaceList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPostDetailPeriod" />
-
-            <!--    TODO : 코스 경우의 수-->
-            <LinearLayout
-                android:id="@+id/llPostDetailCourse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/rvPostDetailPlaceList"
-                android:orientation="vertical" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPostDetailPhotoList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/llPostDetailCourse" />
+                app:layout_constraintStart_toStartOf="@+id/tvPostWriteTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostWriteTitle" />
 
             <TextView
-                android:id="@+id/tvPostDetailWriting"
+                android:id="@+id/tvPostWriteStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="0000 00 00"
+                android:textColor="@color/gray"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPostWriteStartDateLabel"
+                app:layout_constraintStart_toEndOf="@+id/tvPostWriteStartDateLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvPostWriteStartDateLabel" />
+
+            <ImageButton
+                android:id="@+id/btnPostWriteStartDate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/btn_shape_small"
+                android:fontFamily="@font/hcmalang"
+                android:src="@drawable/ic_calendar_resize"
+                android:textColor="@color/blue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPostWriteStartDate"
+                app:layout_constraintStart_toEndOf="@+id/tvPostWriteStartDate"
+                app:layout_constraintTop_toTopOf="@+id/tvPostWriteStartDate" />
+
+            <TextView
+                android:id="@+id/tvPostWriteEndDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="여행 종료일"
+                android:textColor="@color/blue"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/tvPostWriteTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostWriteStartDateLabel" />
+
+            <TextView
+                android:id="@+id/tvPostWriteEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/hcsantteut"
+                android:text="0000 00 00"
+                android:textColor="@color/gray"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPostWriteEndDateLabel"
+                app:layout_constraintStart_toEndOf="@+id/tvPostWriteEndDateLabel"
+                app:layout_constraintTop_toTopOf="@+id/tvPostWriteEndDateLabel" />
+
+            <ImageButton
+                android:id="@+id/btnPostWriteEndDate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/btn_shape_small"
+                android:fontFamily="@font/hcmalang"
+                android:src="@drawable/ic_calendar_resize"
+                android:textColor="@color/blue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPostWriteEndDate"
+                app:layout_constraintStart_toEndOf="@+id/tvPostWriteEndDate"
+                app:layout_constraintTop_toTopOf="@+id/tvPostWriteEndDate" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPostWritePlaceList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostWriteEndDateLabel" />
+
+            <Button
+                android:id="@+id/btnPostWriteAddPlace"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_shape"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 추가"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvPostWritePlaceList" />
+
+            <LinearLayout
+                android:id="@+id/llPostWriteCourse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/btnPostWriteAddPlace" />
+            <Button
+                android:id="@+id/btnPostWriteAddCourse"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/btn_shape"
+                android:fontFamily="@font/hcmalang"
+                android:text="코스 추가"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llPostWriteCourse" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPostWritePhotoList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/btnPostWriteAddCourse" />
+
+            <Button
+                android:id="@+id/btnPostWriteAddPhoto"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/btn_shape"
+                android:fontFamily="@font/hcmalang"
+                android:text="사진 추가"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvPostWritePhotoList" />
+
+            <EditText
+                android:id="@+id/tvPostWriteWriting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:fontFamily="@font/hcsantteut"
-                android:text="오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 어쩌구 저쩌구 글이 이렇게 쭉쭉"
+                android:hint="글을 작성하세요."
+                android:background="@android:color/transparent"
                 android:textColor="@color/gray"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rvPostDetailPhotoList" />
+                app:layout_constraintTop_toBottomOf="@+id/btnPostWriteAddPhoto" />
 
+            <Button
+                android:id="@+id/btnPostWritePost"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_shape"
+                android:fontFamily="@font/hcmalang"
+                android:text="등록하기"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPostWriteWriting" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

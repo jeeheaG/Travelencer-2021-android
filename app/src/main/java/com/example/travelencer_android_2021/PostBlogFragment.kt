@@ -71,8 +71,13 @@ class PostBlogFragment : Fragment() {
         binding.ivPostBlogProfile.background = ShapeDrawable(OvalShape())
         binding.ivPostBlogProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
 
-        binding.btnBookmarkList.setOnClickListener{
+        binding.btnBookmarkList.setOnClickListener {
             val intent = Intent(activity, BookmarkActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnPostBlogWrite.setOnClickListener {
+            val intent = Intent(activity, PostWriteActivity::class.java)
             startActivity(intent)
         }
 

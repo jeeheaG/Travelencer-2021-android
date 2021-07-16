@@ -14,9 +14,12 @@ class AddPNCActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        //val _PostWritePlaceActivity: PostWritePlaceActivity = PostWritePlaceActivity._PostWritePlaceActivity
+
         binding.btnPlaceRegisterDone.setOnClickListener {
-            val intent = Intent(this, PostDetailActivity::class.java)
+            val intent = Intent(this, PostWriteActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.ivBack.setOnClickListener{

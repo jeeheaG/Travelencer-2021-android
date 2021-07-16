@@ -13,6 +13,8 @@ class PostWritePlaceSearchActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        //binding.
+
         binding.ivBack.setOnClickListener{
             finish()
         }

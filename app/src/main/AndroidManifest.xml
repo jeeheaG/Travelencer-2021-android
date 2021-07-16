@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PostWriteCourseActivity"></activity>
+        <activity android:name=".PostWriteCourseActivity"/>
         <activity android:name=".AddPNCActivity" />
         <activity android:name=".AddPlaceActivity" />
         <activity android:name=".PostWriteActivity" />
@@ -24,6 +24,8 @@
         <activity android:name=".PNCActivity" />
         <activity android:name=".PlaceDetailActivity" />
         <activity android:name=".PostWritePlaceActivity" />
+        <activity android:name=".PostWritePlaceSearchActivity" />
+
         <activity android:name=".NaviActivity">
 
             <!-- <intent-filter> -->

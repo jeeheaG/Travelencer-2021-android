@@ -35,40 +35,39 @@ class PlaceFilterFragment : Fragment() {
         // 스피너 설정
         FetxhXML(spinner, context as NaviActivity).fetchXML("http://api.visitkorea.or.kr/upload/manual/sample/areaCode_sample1.xml", 0)
 
-        //지역 아이템 목록 더미 데이터
-        val placeLargeItemList: Array<String> = resources.getStringArray(R.array.place_large_item_list)
-        val placeSmallItemList: Array<String> = resources.getStringArray(R.array.place_small_item_list)
-
-        //두 스피너 어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
-        val placeLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
-        val placeSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
-
-        binding.spinPlaceLarge.adapter = placeLargeAdapter
-        binding.spinPlaceLarge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(position!=0){
-                    Toast.makeText(activity, placeLargeItemList[position], Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //("Not yet implemented")
-            }
-        }
-
-        binding.spinPlaceSmall.adapter = placeSmallAdapter
-        binding.spinPlaceSmall.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(position!=0){
-                    Toast.makeText(activity, placeSmallItemList[position], Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //("Not yet implemented")
-            }
-
-        }
+//        //지역 아이템 목록 더미 데이터
+//        val placeLargeItemList: Array<String> = resources.getStringArray(R.array.place_large_item_list)
+//        val placeSmallItemList: Array<String> = resources.getStringArray(R.array.place_small_item_list)
+//
+//        //두 스피너 어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
+//        val placeLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
+//        val placeSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
+//
+//        binding.spinPlaceLarge.adapter = placeLargeAdapter
+//        binding.spinPlaceLarge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                if(position!=0){
+//                    Toast.makeText(activity, placeLargeItemList[position], Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                //("Not yet implemented")
+//            }
+//        }
+//
+//        binding.spinPlaceSmall.adapter = placeSmallAdapter
+//        binding.spinPlaceSmall.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                if(position!=0){
+//                    Toast.makeText(activity, placeSmallItemList[position], Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                //("Not yet implemented")
+//            }
+//        }
 
         //이 화면으로 오면 필터 설정이 해제됨
         val pref = activity?.getSharedPreferences("pref", 0)
@@ -88,7 +87,7 @@ class PlaceFilterFragment : Fragment() {
 
             edit?.putBoolean(SP_PLACE_FILTERED, true)
             edit?.apply()
-            Log.d("로그 -filtered-2--", "placeFiltered : ${pref?.getBoolean(SP_PLACE_FILTERED, false)}")
+//            Log.d("로그 -filtered-2--", "placeFiltered : ${pref?.getBoolean(SP_PLACE_FILTERED, false)}")
 
 
             val parentManager: FragmentManager = parentFragmentManager
@@ -97,14 +96,14 @@ class PlaceFilterFragment : Fragment() {
             pft.add(R.id.flContainer, PlaceMainFragment(), TAG_PLACE_MAIN)
 
             val placeFilter = parentManager.findFragmentByTag(TAG_PLACE_FILTER)
-            val placeMain = parentManager.findFragmentByTag(TAG_PLACE_MAIN)
-
-            Log.d("로그 at filter---", "parentManager에서 tag로 찾은 것들 값 확인. NULL인 건 반영x \n" +
-                    "feed : ${parentManager.findFragmentByTag("feed_fragment")}\n" +
-                    "placeFilter : ${placeFilter}\n" +
-                    "placeMain : ${placeMain}\n" +
-                    "postBlog : ${parentManager.findFragmentByTag("post_blog_fragment")}\n" +
-                    "setting : ${parentManager.findFragmentByTag("setting_fragment")}")
+//            val placeMain = parentManager.findFragmentByTag(TAG_PLACE_MAIN)
+//
+//            Log.d("로그 at filter---", "parentManager에서 tag로 찾은 것들 값 확인. NULL인 건 반영x \n" +
+//                    "feed : ${parentManager.findFragmentByTag("feed_fragment")}\n" +
+//                    "placeFilter : ${placeFilter}\n" +
+//                    "placeMain : ${placeMain}\n" +
+//                    "postBlog : ${parentManager.findFragmentByTag("post_blog_fragment")}\n" +
+//                    "setting : ${parentManager.findFragmentByTag("setting_fragment")}")
 
             placeFilter?.let {pft.remove(it)}
 

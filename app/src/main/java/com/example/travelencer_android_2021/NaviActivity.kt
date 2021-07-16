@@ -35,8 +35,7 @@ class NaviActivity : AppCompatActivity() {
         startActivityForResult(intent, 0)
 
         //처음 보여줄 프래그먼트 설정
-        //setFragment(TAG_FEED, FeedFragment())
-        setFragment(TAG_SETTING, SettingFragment())
+        setFragment(TAG_FEED, FeedFragment())
 
         //네비게이션 클릭에 따라 프래그먼트 설정하는 함수 호출
         navi.setOnNavigationItemSelectedListener { item ->

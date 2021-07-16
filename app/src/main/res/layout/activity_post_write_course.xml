@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostWriteCourseActivity">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_double_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvPostWriteCourseDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:fontFamily="@font/hcmalang"
+        android:text="방문 일시"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/llPostWriteCourseDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/tvPostWriteCourseDateTime"
+        app:layout_constraintStart_toStartOf="@+id/tvPostWriteCourseDateTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvPostWriteCourseDateTime">
+
+        <ImageButton
+            android:id="@+id/btnPostWriteCourseDate"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/btn_shape_small"
+            android:fontFamily="@font/hcmalang"
+            android:src="@drawable/ic_calendar_small"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPostWriteCourseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/hcsantteut"
+            android:text="2020 00 00"
+            android:textColor="@color/gray"
+            android:textSize="15sp" />
+
+        <ImageButton
+            android:id="@+id/btnPostWriteCourseTime"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/btn_shape_small"
+            android:fontFamily="@font/hcmalang"
+            android:src="@drawable/ic_clock_small"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPostWriteCourseTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/hcsantteut"
+            android:text="2020 00 00"
+            android:textColor="@color/gray"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvPostWriteCourseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:fontFamily="@font/hcmalang"
+        android:text="방문 장소명"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llPostWriteCourseDateTime" />
+
+    <EditText
+        android:id="@+id/etPostWriteCourseName"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:background="@color/lightgray"
+        android:hint="장소명을 입력하세요."
+        app:layout_constraintEnd_toEndOf="@+id/tvPostWriteCourseName"
+        app:layout_constraintStart_toStartOf="@+id/tvPostWriteCourseName"
+        app:layout_constraintTop_toBottomOf="@+id/tvPostWriteCourseName" />
+
+    <Button
+        android:id="@+id/btnPostWriteAddCourseSpot"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_shape"
+        android:fontFamily="@font/hcmalang"
+        android:text="코스 스팟 추가"
+        android:textColor="@color/blue"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPostWriteCourseName" />
+
+    <Button
+        android:id="@+id/btnPostWriteCourseDone"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn_shape"
+        android:fontFamily="@font/hcmalang"
+        android:text="입력 완료"
+        android:textColor="@color/blue"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

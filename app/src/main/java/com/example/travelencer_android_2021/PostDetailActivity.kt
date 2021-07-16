@@ -79,6 +79,10 @@ class PostDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
+
 //코스 출력 테스트용 코드
 //        for(i in 0..15){
 //            CourseMaker().makeCourse(ArrayList(spotNameList.subList(0,i+2)), binding.llPostDetailCourse, this)

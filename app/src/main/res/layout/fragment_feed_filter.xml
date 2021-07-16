@@ -9,7 +9,7 @@
     android:id="@+id/feedFilterFragment">
 
     <ImageView
-        android:id="@+id/btnBack"
+        android:id="@+id/ivBack"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:src="@drawable/ic_double_arrow"

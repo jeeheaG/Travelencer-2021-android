@@ -6,50 +6,207 @@
     android:layout_height="match_parent"
     tools:context=".AddPlaceActivity">
 
-    <ImageView
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_margin="10dp"
-        android:src="@drawable/ic_double_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="15dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@drawable/ic_double_arrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="10dp"/>
+ 
+            <TextView
+                android:id="@+id/tvPlaceRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 등록"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnPlaceSearch"
-            android:layout_width="370dp"
-            android:layout_height="60dp"
-            android:background="@drawable/btn_shape"
-            android:fontFamily="@font/hcmalang"
-            android:text="여행지 검색"
-            android:textColor="@color/blue"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            <View
+                android:id="@+id/vLine"
+                android:layout_width="200dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="@+id/tvPlaceRegister"
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceRegister"
+                app:layout_constraintTop_toBottomOf="@id/tvPlaceRegister" />
 
-        <Button
-            android:id="@+id/btnPlaceRegister"
-            android:layout_width="370dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="80dp"
-            android:background="@drawable/btn_shape"
-            android:fontFamily="@font/hcmalang"
-            android:text="여행지 등록"
-            android:textColor="@color/blue"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvPlaceRegisterPros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 이름"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegister" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/etPlaceRegisterName"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/lightyellow"
+                android:hint="이름을 입력하세요."
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterPros"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterPros" />
 
+            <TextView
+                android:id="@+id/tvPlaceRegisterExplain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 소개"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etPlaceRegisterName" />
 
+            <EditText
+                android:id="@+id/etPlaceRegisterExplain"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:background="@color/lightyellow"
+                android:hint="소개를 입력하세요."
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterPros"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterExplain" />
 
+            <TextView
+                android:id="@+id/tvPlaceRegisterAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 주소"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etPlaceRegisterExplain" />
+
+            <!--TODO : 주소 검색 api -->
+
+            <TextView
+                android:id="@+id/tvPlaceRegisterCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 분류"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterAddress" />
+
+            <RadioGroup
+                android:id="@+id/rgPlaceRegisterCategory"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterCategory"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterCategory">
+
+                <RadioButton
+                    android:id="@+id/rbtnPlaceRegisterCategoryFood"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/ic_food_small"
+                    android:fontFamily="@font/hcsantteut"
+                    android:text="맛집"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/rbtnPlaceRegisterCategorySights"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="40dp"
+                    android:text="관광지"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/hcsantteut"
+                    android:drawableRight="@drawable/ic_location_yellow_small" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvPlaceRegisterPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="여행지 사진"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rgPlaceRegisterCategory" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPlaceRegisterPhotoList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterPhoto" />
+
+            <Button
+                android:id="@+id/btnPlaceRegisterAddPhoto"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/btn_shape"
+                android:fontFamily="@font/hcmalang"
+                android:text="사진 추가"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rvPlaceRegisterPhotoList" />
+
+            <Button
+                android:id="@+id/btnPlaceRegisterNext"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginVertical="15dp"
+                android:background="@drawable/btn_shape"
+                android:fontFamily="@font/hcmalang"
+                android:text="다음으로"
+                android:textColor="@color/blue"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnPlaceRegisterAddPhoto" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

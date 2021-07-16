@@ -15,27 +15,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PostWriteActivity"></activity>
+        <activity android:name=".PostWriteCourseActivity"></activity>
+        <activity android:name=".AddPNCActivity" />
+        <activity android:name=".AddPlaceActivity" />
+        <activity android:name=".PostWriteActivity" />
         <activity android:name=".PostDetailActivity" />
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".PNCActivity" />
         <activity android:name=".PlaceDetailActivity" />
-        <activity android:name=".AddPlaceActivity" />
+        <activity android:name=".PostWritePlaceActivity" />
         <activity android:name=".NaviActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity> <!-- <activity android:name=".NaviActivity" /> &lt;!&ndash; 액션바 제거 &ndash;&gt; -->
         <activity
             android:name=".Splash"
             android:theme="@style/SplashTheme">
-             <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"

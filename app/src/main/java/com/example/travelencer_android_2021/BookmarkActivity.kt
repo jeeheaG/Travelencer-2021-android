@@ -35,5 +35,8 @@ class BookmarkActivity : AppCompatActivity() {
 
         binding.rvBookmarkList.adapter = PlaceMainAdapter(placeList, this)
 
+        binding.ivBack.setOnClickListener{
+            finish()
+        }
     }
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddPNCActivity">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_double_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvPlaceRegisterPNC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:fontFamily="@font/hcmalang"
+        android:text="이 여행지의 장단점은?"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvPlaceRegisterPros"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/hcmalang"
+        android:text="장점"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterPNC" />
+
+    <EditText
+        android:id="@+id/etPlaceRegisterPros"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/lightyellow"
+        android:hint="장점을 입력하세요."
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterPros"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterPros" />
+
+    <TextView
+        android:id="@+id/tvPlaceRegisterCons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/hcmalang"
+        android:text="단점"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPlaceRegisterPros" />
+
+    <EditText
+        android:id="@+id/etPlaceRegisterCons"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/lightyellow"
+        android:hint="단점을 입력하세요."
+        app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterCons"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterCons" />
+
+    <Button
+        android:id="@+id/btnPlaceRegisterDone"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginVertical="15dp"
+        android:background="@drawable/btn_shape"
+        android:fontFamily="@font/hcmalang"
+        android:text="등록하기"
+        android:textColor="@color/blue"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

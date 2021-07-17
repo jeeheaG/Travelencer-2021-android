@@ -4,9 +4,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.travelencer_android_2021.adapter.PostWriteCourseAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteCourseBinding
-import java.sql.Time
-import java.time.Clock
+import kotlinx.android.synthetic.main.activity_feed_course_detail.*
 import java.util.*
 
 class PostWriteCourseActivity : AppCompatActivity() {
@@ -26,15 +28,16 @@ class PostWriteCourseActivity : AppCompatActivity() {
         var hour = calendar.get(Calendar.HOUR)
         var minute = calendar.get(Calendar.MINUTE)
 
-
+        // 날짜 설정
         binding.btnPostWriteCourseDate.setOnClickListener {
             val dateListener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
                 binding.tvPostWriteCourseDate.text = "${y} ${m+1} ${d}"
-            }
+           }
             val datePicker = DatePickerDialog(this, dateListener, year, month, day)
             datePicker.show()
         }
 
+        // 시간 설정
         binding.btnPostWriteCourseTime.setOnClickListener {
             val timeListener = TimePickerDialog.OnTimeSetListener { view, h, m ->
                 var noon = "error"
@@ -53,10 +56,37 @@ class PostWriteCourseActivity : AppCompatActivity() {
             timePicker.show()
         }
 
+        // 리사이클러뷰 매니저 설정
+        val layoutManager = LinearLayoutManager(this@PostWriteCourseActivity)
+        binding.rcCourseSpot.layoutManager = layoutManager
+        // 리아시클러뷰에 어댑터 달기
+        val courseAdapter = PostWriteCourseAdapter()
+        binding.rcCourseSpot.adapter = courseAdapter
+
+        // <코스 스팟 추가> 버튼 클릭
+        binding.btnPostWriteAddCourseSpot.setOnClickListener {
+            if (binding.tvPostWriteCourseDate.text.contains("00") || binding.tvPostWriteCourseTime.text.contains("00") ||
+                    binding.etPostWriteCourseName.text.toString() == "") {
+                Toast.makeText(applicationContext, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            courseAdapter.courseName.add(binding.etPostWriteCourseName.text.toString())
+            val date = binding.tvPostWriteCourseDate.text.toString() + binding.tvPostWriteCourseTime.text.toString()
+            courseAdapter.courseDate.add(date)
+
+            // 데이터 변경 알림
+            courseAdapter.notifyDataSetChanged()
+
+            // 장소 지우기
+            binding.etPostWriteCourseName.setText("")
+        }
 
 
+        // 뒤로 가기 이미지
         binding.ivBack.setOnClickListener{
             finish()
         }
+
     }
 }

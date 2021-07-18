@@ -19,8 +19,8 @@ import kotlin.collections.ArrayList
 
 class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding
-    private val requestCodePlace = 100
-    private val requestCodeCourse = 200
+//    private val requestCodePlace = 100
+//    private val requestCodeCourse = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,18 +53,45 @@ class PostWriteActivity : AppCompatActivity() {
             endDatePicker.show()
         }
 
-/*        //입력 페이지들
-        binding.btnPostWriteAddPlace.setOnClickListener {
-            val intent = Intent(this, PostWritePlaceActivity::class.java)
-            startActivityForResult(intent, requestCodePlace)
+        //입력 페이지들
+        //place 입력
+        val placeAddResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                Log.d("로그pAddResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
+                val data = result.data
+                Log.d("로그pAddResultLauncher","data : ${data}")
+            }
+        }
+        val placeSearchResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                Log.d("로그pSearchResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
+                val data = result.data
+                Log.d("로그pSearchResultLauncher","data : ${data}")
+            }
         }
 
         val placeResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
-                Log.d("로그 postWrite의 Place입력받기", "result.resultCode == Activity.RESULT_OK")
-                val data
+                Log.d("로그 postWrite의 Place입력받기", "작동함 result.resultCode == Activity.RESULT_OK")
+                val howAddPlace = result.data?.getStringExtra("how")
+                when(howAddPlace) {
+                    "add" -> {
+                        val intent = Intent(this, AddPlaceActivity::class.java)
+                        placeAddResultLauncher.launch(intent)
+                    }
+                    "search" -> {
+                        val intent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                        placeSearchResultLauncher.launch(intent)
+                    }
+                }
             }
-        }*/
+        }
+
+        binding.btnPostWriteAddPlace.setOnClickListener {
+            val intent = Intent(this, PostWritePlaceActivity::class.java)
+            placeResultLauncher.launch(intent)
+//            startActivityForResult(intent, requestCodePlace)
+        }
 
         // <코스 추가> 버튼 클릭
         binding.btnPostWriteAddCourse.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -77,10 +78,12 @@ class PostWriteActivity : AppCompatActivity() {
         when (requestCode) {
             // <코스 추가> 결과 받아서 코스 설정하기
             102 -> {
-                val course = data!!.getStringArrayListExtra("course")   // 코스 정보 받기
-                binding.llPostWriteCourse.removeAllViews()                     // 이전 코스 지우기
-                CourseMaker().makeCourse(course!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
-            }
+                if (resultCode == Activity.RESULT_OK) {
+                    val course = data!!.getStringArrayListExtra("course")   // 코스 정보 받기
+                    binding.llPostWriteCourse.removeAllViews()                     // 이전 코스 지우기
+                    CourseMaker().makeCourse(course!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
+                }
+            } // 코스 추가 끝
         }
     }
 }

@@ -16,6 +16,7 @@ import kotlin.collections.ArrayList
 //TODO : 다른 액티비티로 이동해서 입력한 정보를 받아서 글 작성 화면으로 돌아올 때
 // 작성하던 글을 유지하면서 방금 받은 정보를 추가해서 띄우려면.. 작성하던 내용을 sharedPreference에 저장했다가 불러와야하나?
 // 아니면 onActivityResult?
+//아무 변경사항 테스트
 
 class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding

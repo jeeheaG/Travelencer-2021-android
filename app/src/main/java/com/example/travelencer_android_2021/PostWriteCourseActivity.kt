@@ -1,9 +1,12 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWriteCourseAdapter
@@ -80,6 +83,14 @@ class PostWriteCourseActivity : AppCompatActivity() {
 
             // 장소 지우기
             binding.etPostWriteCourseName.setText("")
+        }
+
+        // <입력 완료> 버튼 클릭
+        binding.btnPostWriteCourseDone.setOnClickListener {
+            val outIntent = Intent(applicationContext, PostWriteActivity::class.java)
+            outIntent.putStringArrayListExtra("course", courseAdapter.courseName)
+            setResult(Activity.RESULT_OK, outIntent)
+            finish()
         }
 
 

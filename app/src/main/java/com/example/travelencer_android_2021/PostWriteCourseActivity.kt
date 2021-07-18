@@ -1,9 +1,13 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWriteCourseAdapter
@@ -32,7 +36,7 @@ class PostWriteCourseActivity : AppCompatActivity() {
         binding.btnPostWriteCourseDate.setOnClickListener {
             val dateListener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
                 binding.tvPostWriteCourseDate.text = "${y} ${m+1} ${d}"
-           }
+            }
             val datePicker = DatePickerDialog(this, dateListener, year, month, day)
             datePicker.show()
         }
@@ -82,11 +86,34 @@ class PostWriteCourseActivity : AppCompatActivity() {
             binding.etPostWriteCourseName.setText("")
         }
 
-
-        // 뒤로 가기 이미지
-        binding.ivBack.setOnClickListener{
+        // <입력 완료> 버튼 클릭
+        binding.btnPostWriteCourseDone.setOnClickListener {
+            val outIntent = Intent(applicationContext, PostWriteActivity::class.java)
+            outIntent.putStringArrayListExtra("course", courseAdapter.courseName)
+            setResult(Activity.RESULT_OK, outIntent)
             finish()
         }
 
+
+        // 뒤로 가기 이미지
+        binding.ivBack.setOnClickListener{
+            // 코스 추가 취소 알림창 띄우기
+            var alert = AlertDialog.Builder(this@PostWriteCourseActivity)
+            alert.setTitle("취소 확인")
+            alert.setMessage("코스 추가를 취소하시겠습니까?")
+            // <네> 버튼 누르면
+            alert.setPositiveButton("네") { dialog, which ->
+                setResult(Activity.RESULT_CANCELED)
+                finish()
+            }
+            // <아니오> 버튼 누르면 아무 일도 없음
+            alert.setNegativeButton("아니오", null)
+            alert.show()
+        }
+
+    }
+
+    override fun onBackPressed() {
+        binding.ivBack.callOnClick()
     }
 }

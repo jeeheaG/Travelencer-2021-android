@@ -6,9 +6,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 //뷰바인딩 사용
 //TODO : 다른 액티비티로 이동해서 입력한 정보를 받아서 글 작성 화면으로 돌아올 때
@@ -62,12 +64,13 @@ class PostWriteActivity : AppCompatActivity() {
                 Log.d("로그 postWrite의 Place입력받기", "result.resultCode == Activity.RESULT_OK")
                 val data
             }
-        }
+        }*/
 
+        // <코스 추가> 버튼 클릭
         binding.btnPostWriteAddCourse.setOnClickListener {
             val intent = Intent(this, PostWriteCourseActivity::class.java)
-            startActivityForResult(intent)
-        }*/
+            startActivityForResult(intent, 102)
+        }
 
         //TODO : 사진 입력페이지
 
@@ -81,5 +84,20 @@ class PostWriteActivity : AppCompatActivity() {
             finish()
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            // <코스 추가> 결과 받아서 코스 설정하기
+            102 -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val course = data!!.getStringArrayListExtra("course")   // 코스 정보 받기
+                    binding.llPostWriteCourse.removeAllViews()                     // 이전 코스 지우기
+                    CourseMaker().makeCourse(course!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
+                }
+            } // 코스 추가 끝
+        }
     }
 }

@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.list_item_post_write_course.view.*
 class PostWriteCourseAdapter : RecyclerView.Adapter<PostWriteCourseAdapter.ViewHolder>() {
     val courseName = ArrayList<String>()    // 코스 이름
     val courseDate = ArrayList<String>()    // 코스 시간
+    var prevItem : View? = null             // 이전 아이템 뷰
 
     // 뷰홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostWriteCourseAdapter.ViewHolder {
@@ -56,7 +57,13 @@ class PostWriteCourseAdapter : RecyclerView.Adapter<PostWriteCourseAdapter.ViewH
 
             // 맨 첫 번째, 맨 마지막 아이템은 선 지우기
             if (position == 0) itemView.imgFirst.visibility = View.INVISIBLE
-            else if (position == itemCount-1) itemView.imgLast.visibility = View.INVISIBLE
+            // 현재 아이템의 마지막 선 지우기
+            itemView.imgLast.visibility = View.INVISIBLE
+
+            // 이전 아이템의 마지막 선 다시 보이기
+            if (prevItem != null) prevItem!!.imgLast.visibility = View.VISIBLE
+            prevItem = itemView
         }
     }
+
 }

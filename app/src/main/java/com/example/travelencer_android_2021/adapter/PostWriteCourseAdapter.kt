@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021.adapter
 
 import android.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import kotlinx.android.synthetic.main.list_item_post_write_course.view.*
 class PostWriteCourseAdapter : RecyclerView.Adapter<PostWriteCourseAdapter.ViewHolder>() {
     val courseName = ArrayList<String>()    // 코스 이름
     val courseDate = ArrayList<String>()    // 코스 시간
-    var prevItem : View? = null             // 이전 아이템 뷰
 
     // 뷰홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostWriteCourseAdapter.ViewHolder {
@@ -51,18 +51,17 @@ class PostWriteCourseAdapter : RecyclerView.Adapter<PostWriteCourseAdapter.ViewH
     // 데이터 넣어주기
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setItem(position: Int) {
+            // 데이터 넣기
             itemView.tvFoodName.text = courseName[position]
-
             itemView.tvDate.text = courseDate[position]
+
+            // 모든 선 보이게 초기화
+            itemView.imgFirst.visibility = View.VISIBLE
+            itemView.imgLast.visibility = View.VISIBLE
 
             // 맨 첫 번째, 맨 마지막 아이템은 선 지우기
             if (position == 0) itemView.imgFirst.visibility = View.INVISIBLE
-            // 현재 아이템의 마지막 선 지우기
-            itemView.imgLast.visibility = View.INVISIBLE
-
-            // 이전 아이템의 마지막 선 다시 보이기
-            if (prevItem != null) prevItem!!.imgLast.visibility = View.VISIBLE
-            prevItem = itemView
+            if (position == itemCount - 1) itemView.imgLast.visibility = View.INVISIBLE
         }
     }
 

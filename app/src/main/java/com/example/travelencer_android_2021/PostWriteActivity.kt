@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.travelencer_android_2021.course.CourseMaker
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,6 +19,8 @@ import kotlin.collections.ArrayList
 
 class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding
+    private val requestCodePlace = 100
+    private val requestCodeCourse = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,10 +53,18 @@ class PostWriteActivity : AppCompatActivity() {
             endDatePicker.show()
         }
 
+/*        //입력 페이지들
         binding.btnPostWriteAddPlace.setOnClickListener {
             val intent = Intent(this, PostWritePlaceActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, requestCodePlace)
         }
+
+        val placeResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                Log.d("로그 postWrite의 Place입력받기", "result.resultCode == Activity.RESULT_OK")
+                val data
+            }
+        }*/
 
         // <코스 추가> 버튼 클릭
         binding.btnPostWriteAddCourse.setOnClickListener {
@@ -61,10 +72,13 @@ class PostWriteActivity : AppCompatActivity() {
             startActivityForResult(intent, 102)
         }
 
+        //TODO : 사진 입력페이지
+
         binding.btnPostWritePost.setOnClickListener {
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
         }
+
 
         binding.ivBack.setOnClickListener{
             finish()

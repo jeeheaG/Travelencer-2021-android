@@ -8,6 +8,7 @@ import com.example.travelencer_android_2021.databinding.ActivityPostWritePlaceBi
 
 class PostWritePlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWritePlaceBinding
+    val finishPostWritePlace = "finish_post_write_place"
     //lateinit var _PostWritePlaceActivity: Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,14 @@ class PostWritePlaceActivity : AppCompatActivity() {
 
         binding.ivBack.setOnClickListener{
             finish()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == RESULT_OK){
+
         }
     }
 }

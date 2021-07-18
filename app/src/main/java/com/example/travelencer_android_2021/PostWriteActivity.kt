@@ -16,12 +16,11 @@ import kotlin.collections.ArrayList
 //TODO : 다른 액티비티로 이동해서 입력한 정보를 받아서 글 작성 화면으로 돌아올 때
 // 작성하던 글을 유지하면서 방금 받은 정보를 추가해서 띄우려면.. 작성하던 내용을 sharedPreference에 저장했다가 불러와야하나?
 // 아니면 onActivityResult?
-//아무 변경사항 테스트
 
 class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding
-    private val requestCodePlace = 100
-    private val requestCodeCourse = 200
+//    private val requestCodePlace = 100
+//    private val requestCodeCourse = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,18 +53,45 @@ class PostWriteActivity : AppCompatActivity() {
             endDatePicker.show()
         }
 
-/*        //입력 페이지들
-        binding.btnPostWriteAddPlace.setOnClickListener {
-            val intent = Intent(this, PostWritePlaceActivity::class.java)
-            startActivityForResult(intent, requestCodePlace)
+        //입력 페이지들
+        //place 입력
+        val placeAddResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                Log.d("로그pAddResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
+                val data = result.data
+                Log.d("로그pAddResultLauncher","data : ${data}")
+            }
+        }
+        val placeSearchResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                Log.d("로그pSearchResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
+                val data = result.data
+                Log.d("로그pSearchResultLauncher","data : ${data}")
+            }
         }
 
         val placeResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
-                Log.d("로그 postWrite의 Place입력받기", "result.resultCode == Activity.RESULT_OK")
-                val data
+                Log.d("로그 postWrite의 Place입력받기", "작동함 result.resultCode == Activity.RESULT_OK")
+                val howAddPlace = result.data?.getStringExtra("how")
+                when(howAddPlace) {
+                    "add" -> {
+                        val intent = Intent(this, AddPlaceActivity::class.java)
+                        placeAddResultLauncher.launch(intent)
+                    }
+                    "search" -> {
+                        val intent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                        placeSearchResultLauncher.launch(intent)
+                    }
+                }
             }
-        }*/
+        }
+
+        binding.btnPostWriteAddPlace.setOnClickListener {
+            val intent = Intent(this, PostWritePlaceActivity::class.java)
+            placeResultLauncher.launch(intent)
+//            startActivityForResult(intent, requestCodePlace)
+        }
 
         // <코스 추가> 버튼 클릭
         binding.btnPostWriteAddCourse.setOnClickListener {

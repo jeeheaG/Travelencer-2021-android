@@ -57,9 +57,10 @@ class PostWriteCourseAdapter : RecyclerView.Adapter<PostWriteCourseAdapter.ViewH
 
             // 맨 첫 번째, 맨 마지막 아이템은 선 지우기
             if (position == 0) itemView.imgFirst.visibility = View.INVISIBLE
-            else if (position == itemCount-1) itemView.imgLast.visibility = View.INVISIBLE
+            // 현재 아이템의 마지막 선 지우기
+            itemView.imgLast.visibility = View.INVISIBLE
 
-            // 이젠 아이템뷰의 선 다시 보이기
+            // 이전 아이템의 마지막 선 다시 보이기
             if (prevItem != null) prevItem!!.imgLast.visibility = View.VISIBLE
             prevItem = itemView
         }

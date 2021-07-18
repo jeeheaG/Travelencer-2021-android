@@ -35,7 +35,7 @@ class PostWriteCourseActivity : AppCompatActivity() {
         binding.btnPostWriteCourseDate.setOnClickListener {
             val dateListener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
                 binding.tvPostWriteCourseDate.text = "${y} ${m+1} ${d}"
-           }
+            }
             val datePicker = DatePickerDialog(this, dateListener, year, month, day)
             datePicker.show()
         }

@@ -3,6 +3,7 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
@@ -10,7 +11,7 @@ import android.graphics.drawable.shapes.OvalShape
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +23,11 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 private const val PICK_FROM_ALBUM = 0
+private const val IMAGE_CAPTURE = 1
 
 // 설정 프레그먼트
 class SettingFragment : Fragment() {
@@ -47,7 +51,14 @@ class SettingFragment : Fragment() {
 
         // <프로필 사진 변경> 버튼 클릭하면 갤러리에서 사진 가져오기
         binding.btnLoingAndRegister.setOnClickListener {
-            getFromAlbum()
+            val typeArr = arrayOf("사진 찍기", "기존 사진 선택")
+            AlertDialog.Builder(context).setItems(typeArr) { dialog, position ->
+                when (typeArr[position]) {
+                    "사진 찍기" -> takePhoto()
+                    "기존 사진 선택" -> getFromAlbum()
+                }
+            }.show()
+            //getFromAlbum()
         }
 
         // <수정 완료> 버튼 클릭
@@ -100,12 +111,20 @@ class SettingFragment : Fragment() {
         return mBinding?.root
     }
 
+    // 사진 찍기
+    fun takePhoto() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
+                startActivityForResult(takePictureIntent, IMAGE_CAPTURE)
+            }
+        }
+    }
+
     // 갤러리 이미지 선택해서 가져오기
     fun getFromAlbum() {
         val intent = Intent("android.intent.action.GET_CONTENT")
         intent.type = "image/*"     // 모든 이미지
         startActivityForResult(intent, PICK_FROM_ALBUM)
-        Log.d("mmm ddk", CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE.toString())
     }
 
     // 사진 크롭하기
@@ -119,18 +138,30 @@ class SettingFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // 이미지 잘 선택했으면
         when(requestCode) {
-            // 앨범에서 사진 가져오기
+            // 기존 사진 선택
             PICK_FROM_ALBUM -> {
+                if (resultCode == Activity.RESULT_OK && Build.VERSION.SDK_INT >= 19) {
+                    uri = data?.data    // 선택한 이미지의 주소
+                    // 사용자가 이미지를 선택했으면(null이 아니면) 크롭하기
+                    if (uri != null) cropImage(uri)
+                }
+            }
+            // 사진 찍기
+            IMAGE_CAPTURE -> {
+                // 올바르게 저장됐다면
                 if (resultCode == Activity.RESULT_OK) {
-                    if (Build.VERSION.SDK_INT >= 19) {
-                        uri = data?.data    // 선택한 이미지의 주소
-                        // 사용자가 이미지를 선택했으면(null이 아니면)
-                        if (uri != null) {
-                            cropImage(uri)
-                        }
+                    // 사진 받아오기
+                    val imageBitmap = data?.extras!!.get("data") as Bitmap
+                    if (imageBitmap != null) {
+                        // 비트맵을 uri 형태로 바꾸기
+                        val bytes = ByteArrayOutputStream()
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+                        val path = MediaStore.Images.Media.insertImage(context?.getContentResolver(), imageBitmap, "temp", null)
+                        uri = Uri.parse(path)
                     }
+                    // uri가 null이 아니면 크롭하기
+                    if (uri != null) cropImage(uri)
                 }
             }
             // 크롭해서 프로필 사진 설정하기

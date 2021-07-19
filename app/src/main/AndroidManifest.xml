@@ -44,27 +44,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="홈 액티비티" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="로그인 액티비티" />
-        <activity
-            android:name=".RegisterActivity"
-            android:label="회원가입 액티비티" />
-        <activity
-            android:name=".PasswordFindActivity"
-            android:label="비밀번호 찾기 액티비티" />
-        <activity
-            android:name=".PPActivity"
-            android:label="개인정보 보호정책 액티비티" />
-        <activity
-            android:name=".TOSActivity"
-            android:label="서비스 이용 약관 액티비티" />
-        <activity
-            android:name=".FeedCourseDetailActivity"
-            android:label="피드 - 코스 상세 액티비티" />
+        <activity android:name=".MainActivity" android:label="홈 액티비티" />
+        <activity android:name=".LoginActivity" android:label="로그인 액티비티" />
+        <activity android:name=".RegisterActivity" android:label="회원가입 액티비티" />
+        <activity android:name=".PasswordFindActivity" android:label="비밀번호 찾기 액티비티" />
+        <activity android:name=".PPActivity" android:label="개인정보 보호정책 액티비티" />
+        <activity android:name=".TOSActivity" android:label="서비스 이용 약관 액티비티" />
+        <activity android:name=".FeedCourseDetailActivity" android:label="피드 - 코스 상세 액티비티" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:label="크롭하기"

@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.R
-import com.example.travelencer_android_2021.model.ModelFeedFood
+import com.example.travelencer_android_2021.model.ModelCourseSpot
 import kotlinx.android.synthetic.main.list_item_feed_food.view.*
 
 // 여행 피드 - 맛집 탭 어댑터
 class FeedFoodAdapter : RecyclerView.Adapter<FeedFoodAdapter.ViewHolder>() {
-    // ModelFeedFood 배열
-    var items = ArrayList<ModelFeedFood>()
+    // ModelCourseSpot 배열
+    var items = ArrayList<ModelCourseSpot>()
 
     // 뷰홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedFoodAdapter.ViewHolder {
@@ -35,9 +35,9 @@ class FeedFoodAdapter : RecyclerView.Adapter<FeedFoodAdapter.ViewHolder>() {
     // 아이템 갯수 리턴
     override fun getItemCount() = items.size
 
-    // ModelFeedFood 클래스에 데이터 넣어주기
+    // ModelCourseSpot 클래스에 데이터 넣어주기
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun setItem(item: ModelFeedFood) {
+        fun setItem(item: ModelCourseSpot) {
             itemView.tvName.text = item.name
             itemView.tvLocation.text = item.location
         }

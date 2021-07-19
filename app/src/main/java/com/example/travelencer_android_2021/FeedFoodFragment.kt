@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
-import com.example.travelencer_android_2021.model.ModelFeedFood
+import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 여행 피드 - 맛집 탭
 class FeedFoodFragment : Fragment() {
@@ -27,15 +27,15 @@ class FeedFoodFragment : Fragment() {
         val feedFoodAdapter = FeedFoodAdapter()
         rcFeedFood.adapter = feedFoodAdapter
 
-        feedFoodAdapter.items.add(ModelFeedFood("마라마라탕", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("과일가게", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("명동 칼숙수", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("어쩌구 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("저쩌고 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("이러쿵 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("저러쿨 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("이런 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("저런 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("마라마라탕", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("과일가게", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("명동 칼숙수", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("어쩌구 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("저쩌고 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("이러쿵 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("저러쿨 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("이런 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("저런 식당", "고양시 덕양구"))
 
         return view
     }

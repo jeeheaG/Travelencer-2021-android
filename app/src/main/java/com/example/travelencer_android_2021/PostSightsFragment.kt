@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedSightsAdapter
-import com.example.travelencer_android_2021.model.ModelFeedSights
+import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 게시물 - 관광지 탭
 class PostSightsFragment : Fragment() {
@@ -27,12 +27,12 @@ class PostSightsFragment : Fragment() {
         val feedSightsAdapter = FeedSightsAdapter()
         rcFeedSights.adapter = feedSightsAdapter
 
-        feedSightsAdapter.items.add(ModelFeedSights("게시물 관광지", "고양시 수원시"))
-        feedSightsAdapter.items.add(ModelFeedSights("개미마을", "어쩌구"))
-        feedSightsAdapter.items.add(ModelFeedSights("어디어디동네", "저꺼고"))
-        feedSightsAdapter.items.add(ModelFeedSights("방바다", "고양시 덕양구"))
-        feedSightsAdapter.items.add(ModelFeedSights("하늘공원", "저러저러"))
-        feedSightsAdapter.items.add(ModelFeedSights("지나가던 마을", "이러쿵"))
+        feedSightsAdapter.items.add(ModelCourseSpot("게시물 관광지", "고양시 수원시"))
+        feedSightsAdapter.items.add(ModelCourseSpot("개미마을", "어쩌구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("어디어디동네", "저꺼고"))
+        feedSightsAdapter.items.add(ModelCourseSpot("방바다", "고양시 덕양구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("하늘공원", "저러저러"))
+        feedSightsAdapter.items.add(ModelCourseSpot("지나가던 마을", "이러쿵"))
 
         return view
     }

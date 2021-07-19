@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
-import com.example.travelencer_android_2021.model.ModelFeedFood
+import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 게시물 - 맛집 탭
 class PostFoodFragment : Fragment() {
@@ -27,11 +27,11 @@ class PostFoodFragment : Fragment() {
         val feedFoodAdapter = FeedFoodAdapter()
         rcFeedFood.adapter = feedFoodAdapter
 
-        feedFoodAdapter.items.add(ModelFeedFood("게시물 맛집", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("맛지1", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("맛집2", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("맛집3", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelFeedFood("맛있겠다", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("게시물 맛집", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("맛지1", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("맛집2", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("맛집3", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("맛있겠다", "고양시 덕양구"))
 
         return view
     }

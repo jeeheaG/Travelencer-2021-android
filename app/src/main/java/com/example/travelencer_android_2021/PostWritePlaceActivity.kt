@@ -8,14 +8,11 @@ import com.example.travelencer_android_2021.databinding.ActivityPostWritePlaceBi
 
 class PostWritePlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWritePlaceBinding
-    //val finishPostWritePlace = "finish_post_write_place"
-    //lateinit var _PostWritePlaceActivity: Activity
     private val howSearch = "search"
     private val howAdd = "add"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //_PostWritePlaceActivity = this
         binding = ActivityPostWritePlaceBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -23,15 +20,13 @@ class PostWritePlaceActivity : AppCompatActivity() {
         val intent = Intent(this, PostWriteActivity::class.java)
 
         binding.btnPlaceRegister.setOnClickListener {
-            //val intent = Intent(this, AddPlaceActivity::class.java)
-            intent.putExtra("how", howSearch)
+            intent.putExtra("how", howAdd)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
 
         binding.btnPlaceSearch.setOnClickListener {
-            //val intent = Intent(this, PostWritePlaceSearchActivity::class.java)
-            intent.putExtra("how", howAdd)
+            intent.putExtra("how", howSearch)
             setResult(Activity.RESULT_OK, intent)
             finish()
 
@@ -41,12 +36,4 @@ class PostWritePlaceActivity : AppCompatActivity() {
             finish()
         }
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if(resultCode == RESULT_OK){
-//
-//        }
-//    }
 }

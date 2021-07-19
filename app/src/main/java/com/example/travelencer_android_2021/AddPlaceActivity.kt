@@ -15,7 +15,7 @@ class AddPlaceActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.btnPlaceRegisterNext.setOnClickListener {
-            val intent = Intent(this, AddPNCActivity::class.java)
+            val intent = Intent(this, AddPlaceActivity::class.java)
             startActivity(intent)
         }
 

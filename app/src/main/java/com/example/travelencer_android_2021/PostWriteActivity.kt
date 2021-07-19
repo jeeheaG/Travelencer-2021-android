@@ -87,6 +87,15 @@ class PostWriteActivity : AppCompatActivity() {
             }
         }
 
+        // 코스 추가 버튼 클릭 시 동작
+        val addCourseResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                val course = result.data!!.getStringArrayListExtra("course")   // 코스 정보 받기
+                binding.llPostWriteCourse.removeAllViews()                            // 이전 코스 지우기
+                CourseMaker().makeCourse(course!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
+            }
+        }
+
         binding.btnPostWriteAddPlace.setOnClickListener {
             val intent = Intent(this, PostWritePlaceActivity::class.java)
             placeResultLauncher.launch(intent)
@@ -96,7 +105,7 @@ class PostWriteActivity : AppCompatActivity() {
         // <코스 추가> 버튼 클릭
         binding.btnPostWriteAddCourse.setOnClickListener {
             val intent = Intent(this, PostWriteCourseActivity::class.java)
-            startActivityForResult(intent, 102)
+            addCourseResultLauncher.launch(intent)
         }
 
         //TODO : 사진 입력페이지
@@ -111,20 +120,5 @@ class PostWriteActivity : AppCompatActivity() {
             finish()
         }
 
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            // <코스 추가> 결과 받아서 코스 설정하기
-            102 -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val course = data!!.getStringArrayListExtra("course")   // 코스 정보 받기
-                    binding.llPostWriteCourse.removeAllViews()                     // 이전 코스 지우기
-                    CourseMaker().makeCourse(course!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
-                }
-            } // 코스 추가 끝
-        }
     }
 }

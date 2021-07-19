@@ -40,6 +40,10 @@ class PostWriteCourseActivity : AppCompatActivity() {
             val datePicker = DatePickerDialog(this, dateListener, year, month, day)
             datePicker.show()
         }
+        // 텍스트뷰 누를 때도 날짜 설정
+        binding.tvPostWriteCourseDate.setOnClickListener {
+            binding.btnPostWriteCourseDate.callOnClick()
+        }
 
         // 시간 설정
         binding.btnPostWriteCourseTime.setOnClickListener {
@@ -59,6 +63,10 @@ class PostWriteCourseActivity : AppCompatActivity() {
             val timePicker = TimePickerDialog(this, timeListener, hour, minute, true)
             timePicker.show()
         }
+        // 텍스트뷰 누를 때도 시간 설정
+        binding.tvPostWriteCourseTime.setOnClickListener {
+            binding.btnPostWriteCourseTime.callOnClick()
+        }
 
         // 리사이클러뷰 매니저 설정
         val layoutManager = LinearLayoutManager(this@PostWriteCourseActivity)
@@ -69,8 +77,7 @@ class PostWriteCourseActivity : AppCompatActivity() {
 
         // <코스 스팟 추가> 버튼 클릭
         binding.btnPostWriteAddCourseSpot.setOnClickListener {
-            if (binding.tvPostWriteCourseDate.text.contains("00") || binding.tvPostWriteCourseTime.text.contains("00") ||
-                    binding.etPostWriteCourseName.text.toString() == "") {
+            if (binding.tvPostWriteCourseDate.text.contains("00") || binding.etPostWriteCourseName.text.toString() == "") {
                 Toast.makeText(applicationContext, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }

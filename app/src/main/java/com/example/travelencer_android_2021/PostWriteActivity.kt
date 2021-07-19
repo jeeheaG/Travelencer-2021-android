@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.util.Log
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
+import com.example.travelencer_android_2021.adapter.PostWritePlaceAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
+import com.example.travelencer_android_2021.model.ModelCourseSpot
 import java.util.*
-import kotlin.collections.ArrayList
 
 //뷰바인딩 사용
 //TODO : 다른 액티비티로 이동해서 입력한 정보를 받아서 글 작성 화면으로 돌아올 때
@@ -19,14 +22,15 @@ import kotlin.collections.ArrayList
 
 class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding
-//    private val requestCodePlace = 100
-//    private val requestCodeCourse = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        var placeName: String
+        var placeLoc: String
 
         //현재 날짜
         val calendar = Calendar.getInstance()
@@ -53,8 +57,14 @@ class PostWriteActivity : AppCompatActivity() {
             endDatePicker.show()
         }
 
+        binding.rvPostWritePlaceList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvPostWritePlaceList.setHasFixedSize(true)
+
+        var placeList = arrayListOf<ModelCourseSpot>()
+        //val feedFoodAdapter = FeedFoodAdapter()
+
         //입력 페이지들
-        //place 입력
+        //여행지 추가 부분
         val placeAddResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
                 Log.d("로그pAddResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
@@ -67,8 +77,16 @@ class PostWriteActivity : AppCompatActivity() {
                 Log.d("로그pSearchResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
                 val data = result.data
                 Log.d("로그pSearchResultLauncher","data : ${data}")
+                if (data != null) {
+                    placeName = data.getStringExtra("placeName").toString()
+                    placeLoc = data.getStringExtra("placeLoc").toString()
+                    placeList.add(ModelCourseSpot(placeName, placeLoc))
+                    binding.rvPostWritePlaceList.adapter = PostWritePlaceAdapter(placeList, this)
+                }
             }
         }
+
+
 
         val placeResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){

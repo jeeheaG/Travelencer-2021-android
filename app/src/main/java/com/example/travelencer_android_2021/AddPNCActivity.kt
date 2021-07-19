@@ -16,16 +16,22 @@ class AddPNCActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        val placeName = intent.getStringExtra("placeName")
+        val placeLoc = intent.getStringExtra("placeLoc")
+
         //val _PostWritePlaceActivity: PostWritePlaceActivity = PostWritePlaceActivity._PostWritePlaceActivity
 
         binding.btnPlaceRegisterDone.setOnClickListener {
-            val resultIntent = Intent()
-            resultIntent.putExtra(finishPostWritePlace, true)
+            val resultIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
+            //resultIntent.putExtra(finishPostWritePlace, true)
+            resultIntent.putExtra("placeName", placeName)
+            resultIntent.putExtra("placeLoc", placeLoc)
             setResult(Activity.RESULT_OK, resultIntent)
-
-            val intent = Intent(this, PostWriteActivity::class.java)
-            startActivity(intent)
             finish()
+
+//            val intent = Intent()
+//            startActivity(intent)
+//            finish()
         }
 
         binding.ivBack.setOnClickListener{

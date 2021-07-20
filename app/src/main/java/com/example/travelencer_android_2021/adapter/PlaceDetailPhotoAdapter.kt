@@ -15,7 +15,7 @@ class PlaceDetailPhotoAdapter(private val photoList: ArrayList<ModelCasePhotoOnl
         return CustomViewHolder(view).apply{
             itemView.setOnClickListener{
                 val curPosition: Int = adapterPosition
-                val place: ModelCasePhotoOnly = photoList[curPosition]
+                val photo: ModelCasePhotoOnly = photoList[curPosition]
                 //토스트 등..
             }
         }

@@ -3,34 +3,32 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
+import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
 import com.example.travelencer_android_2021.adapter.PostWritePlaceAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 import java.util.*
 
 //뷰바인딩 사용
-//TODO : 다른 액티비티로 이동해서 입력한 정보를 받아서 글 작성 화면으로 돌아올 때
-// 작성하던 글을 유지하면서 방금 받은 정보를 추가해서 띄우려면.. 작성하던 내용을 sharedPreference에 저장했다가 불러와야하나?
-// 아니면 onActivityResult?
 
 class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding
+    private val codePlaceName = "placeName"
+    private val codePlaceLoc = "placeLoc"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        var placeName: String
-        var placeLoc: String
 
         //현재 날짜
         val calendar = Calendar.getInstance()
@@ -57,49 +55,40 @@ class PostWriteActivity : AppCompatActivity() {
             endDatePicker.show()
         }
 
+        //여행지 목록 RecyclerView 설정
         binding.rvPostWritePlaceList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvPostWritePlaceList.setHasFixedSize(true)
 
-        var placeList = arrayListOf<ModelCourseSpot>()
-        //val feedFoodAdapter = FeedFoodAdapter()
+        //사진 목록 RecyclerView 설정
+        binding.rvPostWritePhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvPostWritePhotoList.setHasFixedSize(true)
 
-        //입력 페이지들
-        //여행지 추가 부분
-        val placeAddResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        //여행지 추가 부분 launcher 2개, 추가한 여행지 목록 리스트
+        var placeList = arrayListOf<ModelCourseSpot>()
+
+        val placeResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
-                Log.d("로그pAddResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
                 val data = result.data
-                Log.d("로그pAddResultLauncher","data : ${data}")
-            }
-        }
-        val placeSearchResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                Log.d("로그pSearchResultLauncher", "작동함 result.resultCode == Activity.RESULT_OK")
-                val data = result.data
-                Log.d("로그pSearchResultLauncher","data : ${data}")
                 if (data != null) {
-                    placeName = data.getStringExtra("placeName").toString()
-                    placeLoc = data.getStringExtra("placeLoc").toString()
+                    val placeName = data.getStringExtra(codePlaceName).toString()
+                    val placeLoc = data.getStringExtra(codePlaceLoc).toString()
                     placeList.add(ModelCourseSpot(placeName, placeLoc))
                     binding.rvPostWritePlaceList.adapter = PostWritePlaceAdapter(placeList, this)
                 }
             }
         }
 
-
-
-        val placeResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        val placeHowResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
-                Log.d("로그 postWrite의 Place입력받기", "작동함 result.resultCode == Activity.RESULT_OK")
                 val howAddPlace = result.data?.getStringExtra("how")
                 when(howAddPlace) {
                     "add" -> {
                         val intent = Intent(this, AddPlaceActivity::class.java)
-                        placeAddResultLauncher.launch(intent)
+                        placeResultLauncher.launch(intent)
                     }
                     "search" -> {
                         val intent = Intent(this, PostWritePlaceSearchActivity::class.java)
-                        placeSearchResultLauncher.launch(intent)
+                        placeResultLauncher.launch(intent)
                     }
                 }
             }
@@ -114,10 +103,34 @@ class PostWriteActivity : AppCompatActivity() {
             }
         }
 
+        // 사진 추가 launcher, 사진 목록 리스트
+        var photoList = arrayListOf<Uri>()
+
+        val addPhotoResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            val imageData = result.data
+            // 이미지를 한 개라도 선택했을 경우
+            if(result.resultCode == Activity.RESULT_OK && imageData != null){
+                val clipData = imageData.clipData
+                // 이미지를 한 개만 선택했을 경우
+                if(clipData == null){
+                    val uri = imageData.data
+                    uri?.let{ photoList.add(uri) }
+                }
+                //이미지를 여러개 선택했을 경우
+                else{
+                    for(i in 0 until clipData.itemCount){
+                        val uri = clipData.getItemAt(i).uri
+                        photoList.add(uri)
+                    }
+                }
+                binding.rvPostWritePhotoList.adapter = PostWritePhotoUriAdapter(photoList, this)
+            }
+        }
+
+        // <여행지 추가> 버튼 클릭
         binding.btnPostWriteAddPlace.setOnClickListener {
             val intent = Intent(this, PostWritePlaceActivity::class.java)
-            placeResultLauncher.launch(intent)
-//            startActivityForResult(intent, requestCodePlace)
+            placeHowResultLauncher.launch(intent)
         }
 
         // <코스 추가> 버튼 클릭
@@ -126,11 +139,21 @@ class PostWriteActivity : AppCompatActivity() {
             addCourseResultLauncher.launch(intent)
         }
 
-        //TODO : 사진 입력페이지
+        // <사진 추가> 버튼 클릭
+        binding.btnPostWriteAddPhoto.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            addPhotoResultLauncher.launch(intent)
+        }
 
+        // <등록 하기> 버튼 클릭
         binding.btnPostWritePost.setOnClickListener {
+            // TODO : DB : DB로 게시글 데이터 보내기
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
 

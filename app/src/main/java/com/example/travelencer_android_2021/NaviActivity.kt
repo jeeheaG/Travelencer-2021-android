@@ -31,25 +31,17 @@ class NaviActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navi)
 
-        // MainActivity 넘어가기
-        var intent = Intent(this@NaviActivity, MainActivity::class.java)
-        // 메인 액티비티에서 선택한 버튼에 따라 프레그먼트 변경
-        val mainResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                val resultNum = result.data!!.getIntExtra("select", -1)
-                if (resultNum == -1) finish()
-                navi.selectedItemId = resultNum
-            }
-        }
-        mainResultLauncher.launch(intent)
-
         //처음 보여줄 프래그먼트 설정
-        setFragment(TAG_FEED, FeedFragment())
+        //setFragment(TAG_FEED, FeedFragment())
 
         //네비게이션 클릭에 따라 프래그먼트 설정하는 함수 호출
         navi.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.homeFragment -> mainResultLauncher.launch(intent)
+                R.id.homeFragment -> {
+                    var intent = Intent(this@NaviActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
                 R.id.feedFragment -> setFragment(TAG_FEED, FeedFragment())
                 R.id.placeMainFragment -> setFragment(TAG_PLACE_MAIN, PlaceMainFragment())
                 R.id.postBlogFragment -> setFragment(TAG_POST_BLOG, PostBlogFragment())
@@ -57,6 +49,10 @@ class NaviActivity : AppCompatActivity() {
             }
             true
         }
+
+        // 프레그먼트 설정
+        val resultFragId = intent.getIntExtra("selectFragId", 0)
+        navi.selectedItemId = resultFragId
 
     }
 

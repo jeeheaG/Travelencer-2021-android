@@ -1,11 +1,9 @@
 package com.example.travelencer_android_2021
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -48,20 +46,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setNavi(fregmentId : Int) {
-        val outIntent = Intent(applicationContext, NaviActivity::class.java)
-        outIntent.putExtra("select", fregmentId)
-        setResult(Activity.RESULT_OK, outIntent)
+        var intent = Intent(this@MainActivity, NaviActivity::class.java)
+        intent.putExtra("selectFragId", fregmentId)
+        startActivity(intent)
         finish()
     }
 
-    // 뒤로가기 2번 누르면 앱 종료
+    // 2초 내애 뒤로가기 버튼을 2번 누르면 종료
     override fun onBackPressed() {
-        // 뒤로가기 버튼 클릭
         if(System.currentTimeMillis() - mBackWait >= 2000 ) {
             mBackWait = System.currentTimeMillis()
             Toast.makeText(this@MainActivity,"뒤로가기 버튼을 한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show()
         }
-        else setNavi(-1)
+        else finish()
     }
 
 }

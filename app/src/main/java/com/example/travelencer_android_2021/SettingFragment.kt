@@ -24,6 +24,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 private const val PICK_FROM_ALBUM = 0
@@ -156,8 +157,9 @@ class SettingFragment : Fragment() {
                     if (imageBitmap != null) {
                         // 비트맵을 uri 형태로 바꾸기
                         val bytes = ByteArrayOutputStream()
-                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-                        val path = MediaStore.Images.Media.insertImage(context?.getContentResolver(), imageBitmap, "temp", null)
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, bytes) // 10% 압축
+                        val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
+                        val path = MediaStore.Images.Media.insertImage(context?.getContentResolver(), imageBitmap, "TRAVELENCER_profile_" +  timestamp, null)
                         uri = Uri.parse(path)
                     }
                     // uri가 null이 아니면 크롭하기

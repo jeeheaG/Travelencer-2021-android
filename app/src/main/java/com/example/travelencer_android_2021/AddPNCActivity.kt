@@ -8,7 +8,8 @@ import com.example.travelencer_android_2021.databinding.ActivityAddPNCBinding
 
 class AddPNCActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPNCBinding
-    private val finishPostWritePlace = "finish_post_write_place"
+    private val codePlaceName = "placeName"
+    private val codePlaceLoc = "placeLoc"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,22 +17,26 @@ class AddPNCActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val placeName = intent.getStringExtra("placeName")
-        val placeLoc = intent.getStringExtra("placeLoc")
-
-        //val _PostWritePlaceActivity: PostWritePlaceActivity = PostWritePlaceActivity._PostWritePlaceActivity
+        // placeMain의 여행지 등록 / postWrite의 여행지 검색 / 여행지 등록 -> 셋 중 어디서 온 건 지 알아야 함
+        val from = intent.getStringExtra("from")
+        val placeName = intent.getStringExtra(codePlaceName)
+        val placeLoc = intent.getStringExtra(codePlaceLoc)
 
         binding.btnPlaceRegisterDone.setOnClickListener {
-            val resultIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
-            //resultIntent.putExtra(finishPostWritePlace, true)
-            resultIntent.putExtra("placeName", placeName)
-            resultIntent.putExtra("placeLoc", placeLoc)
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
+            // TODO : DB : DB로 PNC 데이터 전송
 
-//            val intent = Intent()
-//            startActivity(intent)
-//            finish()
+            when(from){
+                "placeMain" -> {
+                    finish()
+                }
+                else -> { // postWrite에서 온 "search" 나 "add"일 경우
+                    val resultIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                    resultIntent.putExtra(codePlaceName, placeName)
+                    resultIntent.putExtra(codePlaceLoc, placeLoc)
+                    setResult(Activity.RESULT_OK, resultIntent)
+                    finish()
+                }
+            }
         }
 
         binding.ivBack.setOnClickListener{

@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,11 @@ class PlaceMainFragment : Fragment() {
         _binding = FragmentPlaceMainBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        binding.btnPlaceMainAddPlace.setOnClickListener {
+            val intent = Intent(activity, AddPlaceActivity::class.java)
+            intent.putExtra("from", "placeMain")
+            startActivity(intent)
+        }
 
         //더미 데이터 목록
         val placeList = arrayListOf(

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -32,7 +33,14 @@ class NaviActivity : AppCompatActivity() {
 
         // MainActivity 넘어가기
         var intent = Intent(this@NaviActivity, MainActivity::class.java)
-        startActivityForResult(intent, 0)
+        // 메인 액티비티에서 선택한 버튼에 따라 프레그먼트 변경
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                val resultNum = result.data!!.getIntExtra("select", -1)
+                if (resultNum == -1) finish()
+                navi.selectedItemId = resultNum
+            }
+        }.launch(intent)
 
         //처음 보여줄 프래그먼트 설정
         setFragment(TAG_FEED, FeedFragment())
@@ -210,14 +218,6 @@ class NaviActivity : AppCompatActivity() {
         edit.putBoolean(SP_PLACE_FILTERED, false)
         edit.putBoolean(SP_FEED_FILTERED, false)
         edit.apply()
-    }
-
-    // 메인 액티비티에서 선택한 버튼에 따라 프레그먼트 변경
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK)
-            navi.selectedItemId = data!!.getIntExtra("select", 0)
     }
 
 }

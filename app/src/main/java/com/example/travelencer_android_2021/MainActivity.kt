@@ -4,10 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 // 홈 액티비티
 class MainActivity : AppCompatActivity() {
+    // 뒤로가기 연속 클릭 대기 시간
+    var mBackWait : Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,5 +54,14 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
+    // 뒤로가기 2번 누르면 앱 종료
+    override fun onBackPressed() {
+        // 뒤로가기 버튼 클릭
+        if(System.currentTimeMillis() - mBackWait >= 2000 ) {
+            mBackWait = System.currentTimeMillis()
+            Toast.makeText(this@MainActivity,"뒤로가기 버튼을 한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show()
+        }
+        else setNavi(-1)
+    }
 
 }

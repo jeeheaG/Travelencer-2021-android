@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.travelencer_android_2021.databinding.FragmentFeedFilterBinding
@@ -93,7 +94,13 @@ class FeedFilterFragment : Fragment() {
             val parentManager: FragmentManager = parentFragmentManager
             val pft: FragmentTransaction = parentManager.beginTransaction()
 
-            pft.add(R.id.flContainer, FeedFragment(), TAG_FEED)
+            // 지역명 전달하기
+            val feedFrag = FeedFragment()
+            val bundle = Bundle()
+            bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
+            bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
+            if (feedFrag != null) feedFrag!!.setArguments(bundle)
+            pft.add(R.id.flContainer, feedFrag, TAG_FEED)
 
             val feedFilter = parentManager.findFragmentByTag(TAG_FEED_FILTER)
 

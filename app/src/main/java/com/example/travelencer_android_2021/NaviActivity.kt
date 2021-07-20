@@ -34,13 +34,14 @@ class NaviActivity : AppCompatActivity() {
         // MainActivity 넘어가기
         var intent = Intent(this@NaviActivity, MainActivity::class.java)
         // 메인 액티비티에서 선택한 버튼에 따라 프레그먼트 변경
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        val mainResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
                 val resultNum = result.data!!.getIntExtra("select", -1)
                 if (resultNum == -1) finish()
                 navi.selectedItemId = resultNum
             }
-        }.launch(intent)
+        }
+        mainResultLauncher.launch(intent)
 
         //처음 보여줄 프래그먼트 설정
         setFragment(TAG_FEED, FeedFragment())
@@ -48,7 +49,7 @@ class NaviActivity : AppCompatActivity() {
         //네비게이션 클릭에 따라 프래그먼트 설정하는 함수 호출
         navi.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.homeFragment -> startActivityForResult(intent, 0)
+                R.id.homeFragment -> mainResultLauncher.launch(intent)
                 R.id.feedFragment -> setFragment(TAG_FEED, FeedFragment())
                 R.id.placeMainFragment -> setFragment(TAG_PLACE_MAIN, PlaceMainFragment())
                 R.id.postBlogFragment -> setFragment(TAG_POST_BLOG, PostBlogFragment())

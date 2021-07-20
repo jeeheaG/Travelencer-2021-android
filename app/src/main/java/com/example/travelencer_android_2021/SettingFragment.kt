@@ -6,24 +6,31 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.ImageDecoder
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +41,7 @@ private const val IMAGE_CAPTURE = 1
 class SettingFragment : Fragment() {
     private var mBinding : FragmentSettingBinding? = null
     var uri : Uri? = null   // 이미지 파일 경로
+    lateinit var currentPhotoPath : String // 사진 경로 값
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +67,6 @@ class SettingFragment : Fragment() {
                     "기존 사진 선택" -> getFromAlbum()
                 }
             }.show()
-            //getFromAlbum()
         }
 
         // <수정 완료> 버튼 클릭
@@ -116,9 +123,27 @@ class SettingFragment : Fragment() {
     fun takePhoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
-                startActivityForResult(takePictureIntent, IMAGE_CAPTURE)
+                val photoFile : File? = try {
+                    createImageFile()
+                } catch (e : IOException) { null }
+                photoFile?.also {
+                    val photoURI : Uri = FileProvider.getUriForFile(
+                            context as NaviActivity, "com.example.travelencer_android_2021.fileprovider",
+                            it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, IMAGE_CAPTURE)
+                }
             }
         }
+    }
+
+    // 이미지 파일 생성
+    private fun createImageFile(): File? {
+        val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
+        val storeageDir : File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)  // 스트리지 디렉토리 경로
+
+        return File.createTempFile("JPEG_${timestamp}_", ".jpg", storeageDir).apply { currentPhotoPath = absolutePath}
     }
 
     // 갤러리 이미지 선택해서 가져오기
@@ -153,15 +178,24 @@ class SettingFragment : Fragment() {
                 // 올바르게 저장됐다면
                 if (resultCode == Activity.RESULT_OK) {
                     // 사진 받아오기
-                    val imageBitmap = data?.extras!!.get("data") as Bitmap
-                    if (imageBitmap != null) {
-                        // 비트맵을 uri 형태로 바꾸기
-                        val bytes = ByteArrayOutputStream()
-                        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, bytes) // 10% 압축
-                        val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
-                        val path = MediaStore.Images.Media.insertImage(context?.getContentResolver(), imageBitmap, "TRAVELENCER_profile_" +  timestamp, null)
-                        uri = Uri.parse(path)
+                    val bitmap : Bitmap
+                    val file = File(currentPhotoPath)   // createImageFile 실행 이후라 값이 들어와 있는 상태
+
+                    // 버전에 따라 다른 비트맵
+                    // 안드로이드 파이 버전보다 낮은 경우 (getBitmap)
+                    if (Build.VERSION.SDK_INT < 28)
+                        bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, Uri.fromFile(file))
+                    // 안드로이드 파이 버전보다 높은 경우 (ImageDecoder)
+                    else {
+                        val decode = ImageDecoder.createSource(
+                                activity?.contentResolver!!,
+                                Uri.fromFile(file)
+                        )
+                        bitmap = ImageDecoder.decodeBitmap(decode)
                     }
+                    // 갤러리에 저장
+                    savePhoto(bitmap)
+                    uri = Uri.fromFile(file)
                     // uri가 null이 아니면 크롭하기
                     if (uri != null) cropImage(uri)
                 }
@@ -179,7 +213,23 @@ class SettingFragment : Fragment() {
                 }
             }
         }
+    }
 
+    // 갤러리에 저장하는 메소드(갤러리에서 확인하는데까지 시간 좀 걸림)
+    private fun savePhoto(bitmap: Bitmap) {
+        // 사진 폴더로 저장하기 위한 경로 선언
+        val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/Travelencer/"  // /storage/emulated/0/Pictures/Travelencer/
+        val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
+        val fileName = "Travelencer_profile_${timestamp}.jpeg"
+        val folder = File(folderPath)
+        Log.d("mmm", folderPath.toString())
+        if (!folder.isDirectory) {  // 해당 경로의 폴더가 존재하지 않으면
+            folder.mkdir()          // 해당 경로에 폴더 생성
+        }
+
+        // 최종 저장
+        val out = FileOutputStream(folderPath + fileName)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)   // 비트맵 압축
     }
 
     override fun onDestroyView() {

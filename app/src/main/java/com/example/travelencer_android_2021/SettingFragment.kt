@@ -60,11 +60,12 @@ class SettingFragment : Fragment() {
 
         // <프로필 사진 변경> 버튼 클릭하면 갤러리에서 사진 가져오기
         binding.btnLoingAndRegister.setOnClickListener {
-            val typeArr = arrayOf("사진 찍기", "기존 사진 선택")
+            val typeArr = arrayOf("사진 찍기", "기존 사진 선택", "기본 이미지로 변경")
             AlertDialog.Builder(context).setItems(typeArr) { dialog, position ->
                 when (typeArr[position]) {
                     "사진 찍기" -> takePhoto()
                     "기존 사진 선택" -> getFromAlbum()
+                    "기본 이미지로 변경" -> imgProfile.setImageResource(R.drawable.ic_user_gray)
                 }
             }.show()
         }
@@ -146,13 +147,6 @@ class SettingFragment : Fragment() {
         return File.createTempFile("JPEG_${timestamp}_", ".jpg", storeageDir).apply { currentPhotoPath = absolutePath}
     }
 
-    // 갤러리 이미지 선택해서 가져오기
-    fun getFromAlbum() {
-        val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"     // 모든 이미지
-        startActivityForResult(intent, PICK_FROM_ALBUM)
-    }
-
     // 사진 크롭하기
     private fun cropImage(uri: Uri?) {
         CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)  // 크롭 위한 가이드 열어서 크롭할 이미지 받아오기
@@ -215,14 +209,21 @@ class SettingFragment : Fragment() {
         }
     }
 
+    // 갤러리 이미지 선택해서 가져오기
+    fun getFromAlbum() {
+        val intent = Intent("android.intent.action.GET_CONTENT")
+        intent.type = "image/*"     // 모든 이미지
+        startActivityForResult(intent, PICK_FROM_ALBUM)
+    }
+
     // 갤러리에 저장하는 메소드(갤러리에서 확인하는데까지 시간 좀 걸림)
     private fun savePhoto(bitmap: Bitmap) {
         // 사진 폴더로 저장하기 위한 경로 선언
-        val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/Travelencer/"  // /storage/emulated/0/Pictures/Travelencer/
+        //val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/Travelencer/"  // /storage/emulated/0/Pictures/Travelencer/
+        val folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/Travelencer/"
         val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
         val fileName = "Travelencer_profile_${timestamp}.jpeg"
         val folder = File(folderPath)
-        Log.d("mmm", folderPath.toString())
         if (!folder.isDirectory) {  // 해당 경로의 폴더가 존재하지 않으면
             folder.mkdir()          // 해당 경로에 폴더 생성
         }

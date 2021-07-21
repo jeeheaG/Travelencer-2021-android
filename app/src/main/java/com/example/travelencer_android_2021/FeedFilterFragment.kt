@@ -28,12 +28,6 @@ class FeedFilterFragment : Fragment() {
 
     lateinit var spinner : Array<Spinner>   // 스피너 배열
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         _binding = FragmentFeedFilterBinding.inflate(inflater, container, false)
@@ -57,27 +51,28 @@ class FeedFilterFragment : Fragment() {
         // preantFragmentManager에 접근해서 현재 feedFilter 프래그먼트 remove, feed 프래그먼트 add
 
         binding.btnShowFeed.setOnClickListener {
-            edit?.putBoolean(SP_FEED_FILTERED, true)
-            edit?.apply()
-            Log.d("로그 -filtered-2--", "feedFiltered : ${pref?.getBoolean(SP_FEED_FILTERED, false)}")
+            if (spinner[1]?.selectedItem.toString() != null) {
+                edit?.putBoolean(SP_FEED_FILTERED, true)
+                edit?.apply()
+                Log.d("로그 -filtered-2--", "feedFiltered : ${pref?.getBoolean(SP_FEED_FILTERED, false)}")
 
+                val parentManager: FragmentManager = parentFragmentManager
+                val pft: FragmentTransaction = parentManager.beginTransaction()
 
-            val parentManager: FragmentManager = parentFragmentManager
-            val pft: FragmentTransaction = parentManager.beginTransaction()
+                // 지역명 전달하기
+                val feedFrag = FeedFragment()
+                val bundle = Bundle()
+                bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
+                bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
+                if (feedFrag != null) feedFrag!!.setArguments(bundle)
+                pft.add(R.id.flContainer, feedFrag, TAG_FEED)
 
-            // 지역명 전달하기
-            val feedFrag = FeedFragment()
-            val bundle = Bundle()
-            bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
-            bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
-            if (feedFrag != null) feedFrag!!.setArguments(bundle)
-            pft.add(R.id.flContainer, feedFrag, TAG_FEED)
+                val feedFilter = parentManager.findFragmentByTag(TAG_FEED_FILTER)
 
-            val feedFilter = parentManager.findFragmentByTag(TAG_FEED_FILTER)
+                feedFilter?.let {pft.remove(it)}
 
-            feedFilter?.let {pft.remove(it)}
-
-            pft.commitAllowingStateLoss()
+                pft.commitAllowingStateLoss()
+            }
         }
 
         return view

@@ -13,6 +13,9 @@ import com.example.travelencer_android_2021.databinding.ActivityPlaceDetailBindi
 import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
 import kotlinx.android.synthetic.main.activity_place_detail.*
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
 //뷰바인딩 사용
 
@@ -80,9 +83,36 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
         })
 
+
+        // 지도
+        val latitude = 37.28730797086605
+        val longitude = 127.01192716921177
+        val placeName = "수원 화성"
+
+        val mapView = MapView(this)
+        val mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longitude)
+
+        mapView.setMapCenterPoint(mapPoint, false)
+        mapView.setZoomLevel(1, true)
+
+        val marker = MapPOIItem()
+        marker.itemName = placeName
+        marker.mapPoint = mapPoint
+        marker.markerType = MapPOIItem.MarkerType.BluePin
+        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+
+        mapView.addPOIItem(marker)
+        binding.clPlaceDetailMapView.addView(mapView)
+
+
+        // <PNC더보기 버튼> 클릭
         binding.ivPlaceDetailPNCMore.setOnClickListener{
             val intent = Intent(this, PNCActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.ivBack.setOnClickListener{
+            finish()
         }
 
 

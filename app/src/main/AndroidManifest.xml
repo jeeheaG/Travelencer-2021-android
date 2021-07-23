@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.travelencer_android_2021">
 
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 외부에서 사진 가져오기 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 외부에서 사진 가져오기, 카카오맵 API -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--    카카오맵 API-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -28,12 +31,6 @@
 
         <activity android:name=".NaviActivity">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity> <!-- <activity android:name=".NaviActivity" /> &lt;!&ndash; 액션바 제거 &ndash;&gt; -->
         <activity
             android:name=".Splash"
@@ -65,6 +62,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+<!--        카카오맵 API App Key-->
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="a265349725cffdb6deae08f828846b0c"/>
     </application>
 
 </manifest>

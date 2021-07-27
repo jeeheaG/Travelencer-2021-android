@@ -108,7 +108,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etPlaceRegisterExplain" />
 
-            <!--TODO : 주소 검색 api -->
+            <TextView
+                android:id="@+id/tvPlaceRegisterAddressInput"
+                android:layout_width="350dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:background="@color/lightyellow"
+                android:text="주소를 입력하세요."
+                android:textSize="15sp"
+                android:textColor="@color/gray"
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterAddress"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterAddress" />
+
+            <Button
+                android:id="@+id/btnPlaceRegisterAddressSearch"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_shape_small"
+                android:fontFamily="@font/hcmalang"
+                android:text="주소 찾기"
+                android:textColor="@color/blue"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterAddressInput"
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterAddressInput" />
 
             <TextView
                 android:id="@+id/tvPlaceRegisterCategory"
@@ -122,7 +146,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/btnPlaceRegisterAddressSearch" />
 
             <RadioGroup
                 android:id="@+id/rgPlaceRegisterCategory"

@@ -9,7 +9,7 @@ import retrofit2.http.Query
 class KakaoLocalApi {
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
-        const val API_KEY = "KakaoAK a265349725cffdb6deae08f828846b0c"
+        const val API_KEY = "KakaoAK ee0e5d4942b211e7b487dfba4d4910da"
     }
 }
 
@@ -19,6 +19,6 @@ interface KakaoApiInterface {
     fun getKakaoAddress(
         @Header("Authorization") key: String,
         @Query("query") address: String,
-        @Query("query") size: Int
+        @Query("size") size: Int
     ): Call<ModelKakaoLocalApi>
 }

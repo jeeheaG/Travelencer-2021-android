@@ -8,18 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelAddressSearchList
 
-//import com.example.kakaomaptestapp.model.ModelKakaoData
 
 class AddPlaceSearchResultAdapter(private val addressList: ArrayList<ModelAddressSearchList>) : RecyclerView.Adapter<AddPlaceSearchResultAdapter.CustomViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddPlaceSearchResultAdapter.CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_address_search_result, parent, false)
         return CustomViewHolder(view).apply {
             //온클릭 리스너 다는 곳
         }
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AddPlaceSearchResultAdapter.CustomViewHolder, position: Int) {
         holder.name.text = addressList[position].name
         //holder.address.text = addressList[position].address
     }

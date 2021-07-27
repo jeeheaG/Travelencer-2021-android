@@ -43,12 +43,8 @@ class PostWritePlaceSearchAdapter(private val placeList: ArrayList<ModelCasePlac
         holder.explain.text = placeList[position].explain.substring(0,20).plus("...") //설명부분 문자열 자르고 ...붙이기
 
         holder.img.clipToOutline = true //안드로이드 버전 5 (롤리팝) 이상부터 적용
-
-//        holder.itemView.setOnClickListener{
-//            val intent = Intent(mContext, PlaceDetailActivity::class.java)
-//            mContext.startActivity(intent)
-//        }
     }
+
     override fun getItemCount(): Int {
         return placeList.size
     }

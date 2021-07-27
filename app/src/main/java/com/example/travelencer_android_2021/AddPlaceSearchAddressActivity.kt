@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,13 +24,20 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
     private val page = 1 //임시값
     private val size = 30 //최대값
 
+    var addressList: ArrayList<ModelAddressSearchList> = arrayListOf() //이거 무쓸모 데이터인데 안 만들고 할 방법 없나..
+    val mAdapter = AddPlaceSearchResultAdapter(addressList)
+
+    fun newAddressList(newList: ArrayList<ModelAddressSearchList>){
+        mAdapter.setNewItemList(newList)
+    }
+
+
     // Kakao Local Api 데이터 받아오기
     private val kakaoApi = KakaoLocalApiRetrofitClient.apiService
 
-
-    fun callKakaoLocalKeyword(address: String): ArrayList<ModelAddressSearchList> {
+    fun callKakaoLocalKeyword(address: String) {
         val kakao = MutableLiveData<ModelKakaoLocalApi>()
-        var addressList: ArrayList<ModelAddressSearchList> = arrayListOf()
+        var newList: ArrayList<ModelAddressSearchList> = arrayListOf()
 
         kakaoApi.getKakaoAddress(KakaoLocalApi.API_KEY, address = address, size = size)
             .enqueue(object : retrofit2.Callback<ModelKakaoLocalApi> {
@@ -95,8 +101,9 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                         }*/
                         for (element in kakao.value!!.documents) {
                             val name = element.address_name
-                            addressList.add(ModelAddressSearchList(name))
+                            newList.add(ModelAddressSearchList(name))
                         }
+                        newAddressList(newList)
                     }
                 }
 
@@ -106,7 +113,6 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                 }
             })
 
-        return addressList
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,13 +125,11 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
         binding.rvAddressSearchResultList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvAddressSearchResultList.setHasFixedSize(true)
 
-        binding.btnAddressSearch.setOnClickListener {
-            val addressList = callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString())
+        binding.rvAddressSearchResultList.adapter = mAdapter
+        //callKakaoLocalKeyword("테헤란로")
 
-            //callKakaoLocalKeyword("테헤란로")
-            val mAdapter = AddPlaceSearchResultAdapter(addressList)
-            binding.rvAddressSearchResultList.adapter = mAdapter
-            mAdapter.notifyDataSetChanged()
+        binding.btnAddressSearch.setOnClickListener {
+            callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString())
 
             //키보드 내림
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

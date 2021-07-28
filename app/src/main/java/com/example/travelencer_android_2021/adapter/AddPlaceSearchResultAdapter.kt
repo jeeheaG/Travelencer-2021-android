@@ -30,12 +30,4 @@ class AddPlaceSearchResultAdapter(private val addressList: ArrayList<ModelAddres
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.tvAddressName)
     }
-
-    fun setNewItemList(newAddressList: ArrayList<ModelAddressSearchList>){
-        addressList.clear()
-        addressList.addAll(newAddressList)
-        Log.i("어댑터", "${addressList[0]} ${addressList[addressList.size-1]}")
-        notifyDataSetChanged()
-    }
-
 }

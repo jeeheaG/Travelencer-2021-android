@@ -24,96 +24,11 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
     private val page = 1 //임시값
     private val size = 30 //최대값
 
-    var addressList: ArrayList<ModelAddressSearchList> = arrayListOf() //이거 무쓸모 데이터인데 안 만들고 할 방법 없나..
+    var addressList: ArrayList<ModelAddressSearchList> = arrayListOf()
     val mAdapter = AddPlaceSearchResultAdapter(addressList)
 
-    fun newAddressList(newList: ArrayList<ModelAddressSearchList>){
-        mAdapter.setNewItemList(newList)
-    }
 
 
-    // Kakao Local Api 데이터 받아오기
-    private val kakaoApi = KakaoLocalApiRetrofitClient.apiService
-
-    fun callKakaoLocalKeyword(address: String) {
-        val kakao = MutableLiveData<ModelKakaoLocalApi>()
-        var newList: ArrayList<ModelAddressSearchList> = arrayListOf()
-
-        kakaoApi.getKakaoAddress(KakaoLocalApi.API_KEY, address = address, size = size)
-            .enqueue(object : retrofit2.Callback<ModelKakaoLocalApi> {
-                override fun onResponse(
-                        call: Call<ModelKakaoLocalApi>,
-                        response: Response<ModelKakaoLocalApi>
-                ) {
-                    kakao.value = response.body()
-
-                    //<<<에러 시 에러코드 받아오는 부분>>>
-                    if (kakao.value == null) {
-                        Log.i("오류 kakao.value == null", response.errorBody().toString())
-                            try {
-                                val jObjError = JSONObject(response.errorBody()!!.string())
-                                Log.i("오류 try", jObjError.getJSONObject("error").getString("message"))
-                                //Toast.makeText(getContext(), jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show()
-                            } catch (e: Exception) {
-                                Log.i("오류 catch", e.message.toString())
-                                //Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    if (!response.isSuccessful) {
-                        Log.i("!response.isSuccessful", response.errorBody().toString())
-                        try {
-                            val jObjError = JSONObject(response.errorBody()!!.string())
-                            Log.i("오류 try", jObjError.getJSONObject("error").getString("message"))
-                            //Toast.makeText(getContext(), jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show()
-                        } catch (e: Exception) {
-                            Log.i("오류 catch", e.message.toString())
-                            //Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    //<<<여기까지>>>
-
-//                    Log.i("kakao", "0 ${kakao.value}")
-                    Log.i("kakao", "0 ${kakao.value!!.documents[0].address_name}")
-//                    Log.i("kakao", "1 ${kakao.value!!.documents[1].address_name}")
-//                    Log.i("kakao", "2 ${kakao.value!!.documents[2].address_name}")
-//                    Log.i("kakao", "0 ${kakao.value!!.documents[0].address_type}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].x}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].y}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_1depth_name}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_2depth_name}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_3depth_name}")
-
-                    Log.i("kakao", "total = ${kakao.value!!.meta.total_count}")
-                    Log.i("kakao", "size = ${kakao.value!!.documents.size}")
-
-                    // 검색결과 총 개수
-                    val total = kakao.value?.let { it.meta.total_count }
-
-                    // TODO : 일단 검색결과 첫 페이지만 나오게 만듦..
-                    if (total != null) {
-                        val loop = if (total < size) total else size
-
-                        //document: address_name통일... 아니면 documents: address: 나 documets: road_address:
-                        //좌표정보나 DB에 넘길 정보들 더 챙기기
-/*                        for (i in 0 until loop) {
-                            val name = kakao.value!!.documents[i].address_name
-                            addressList.add(ModelAddressSearchList(name))
-                        }*/
-                        for (element in kakao.value!!.documents) {
-                            val name = element.address_name
-                            newList.add(ModelAddressSearchList(name))
-                        }
-                        newAddressList(newList)
-                    }
-                }
-
-                override fun onFailure(call: Call<ModelKakaoLocalApi>, t: Throwable) {
-                    Log.e("실패 로그", "실패")
-                    t.printStackTrace()
-                }
-            })
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,6 +54,90 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
 
         // TODO : launch함수 만들고 리사이클러뷰 어댑터에서 finish()담긴 리스너 달기 -> 확인 창 한번 띄우면 좋겠다
 
+
+    }
+
+
+    // Kakao Local Api 데이터 받아오기
+    private val kakaoApi = KakaoLocalApiRetrofitClient.apiService
+
+    fun callKakaoLocalKeyword(address: String) {
+        val kakao = MutableLiveData<ModelKakaoLocalApi>()
+
+        kakaoApi.getKakaoAddress(KakaoLocalApi.API_KEY, address = address, size = size)
+                .enqueue(object : retrofit2.Callback<ModelKakaoLocalApi> {
+                    override fun onResponse(
+                            call: Call<ModelKakaoLocalApi>,
+                            response: Response<ModelKakaoLocalApi>
+                    ) {
+                        kakao.value = response.body()
+
+                        //<<<에러 시 에러코드 받아오는 부분>>>
+                        if (kakao.value == null) {
+                            Log.i("오류 kakao.value == null", response.errorBody().toString())
+                            try {
+                                val jObjError = JSONObject(response.errorBody()!!.string())
+                                Log.i("오류 try", jObjError.getJSONObject("error").getString("message"))
+                                //Toast.makeText(getContext(), jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show()
+                            } catch (e: Exception) {
+                                Log.i("오류 catch", e.message.toString())
+                                //Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        if (!response.isSuccessful) {
+                            Log.i("!response.isSuccessful", response.errorBody().toString())
+                            try {
+                                val jObjError = JSONObject(response.errorBody()!!.string())
+                                Log.i("오류 try", jObjError.getJSONObject("error").getString("message"))
+                                //Toast.makeText(getContext(), jObjError.getJSONObject("error").getString("message"), Toast.LENGTH_LONG).show()
+                            } catch (e: Exception) {
+                                Log.i("오류 catch", e.message.toString())
+                                //Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        //<<<여기까지>>>
+
+                        Log.i("kakao", "0 ${kakao.value!!.documents[0].address_name}")
+//                    Log.i("kakao", "1 ${kakao.value!!.documents[1].address_name}")
+//                    Log.i("kakao", "2 ${kakao.value!!.documents[2].address_name}")
+//                    Log.i("kakao", "0 ${kakao.value!!.documents[0].address_type}")
+//                    Log.i("kakao", "${kakao.value!!.documents[0].x}")
+//                    Log.i("kakao", "${kakao.value!!.documents[0].y}")
+//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_1depth_name}")
+//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_2depth_name}")
+//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_3depth_name}")
+
+                        Log.i("kakao", "total = ${kakao.value!!.meta.total_count}")
+                        Log.i("kakao", "size = ${kakao.value!!.documents.size}")
+
+                        // 검색결과 총 개수
+                        val total = kakao.value?.let { it.meta.total_count }
+
+                        // TODO : 일단 검색결과 첫 페이지만 나오게 만듦..
+                        if (total != null) {
+                            val loop = if (total < size) total else size
+
+                            //document: address_name통일... 아니면 documents: address: 나 documets: road_address:
+                            //좌표정보나 DB에 넘길 정보들 더 챙기기
+/*                        for (i in 0 until loop) {
+                            val name = kakao.value!!.documents[i].address_name
+                            addressList.add(ModelAddressSearchList(name))
+                        }*/
+                            addressList.clear()
+                            for (element in kakao.value!!.documents) {
+                                val name = element.address_name
+                                addressList.add(ModelAddressSearchList(name))
+                            }
+                            mAdapter.notifyDataSetChanged()
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ModelKakaoLocalApi>, t: Throwable) {
+                        Log.e("실패 로그", "실패")
+                        t.printStackTrace()
+                    }
+                })
 
     }
 }

@@ -63,7 +63,8 @@
                     android:layout_height="50dp"
                     android:layout_marginEnd="5dp"
                     android:background="@color/lightyellow"
-                    android:hint="동 또는 도로명을 입력하세요" />
+                    android:hint="동 또는 도로명을 입력하세요"
+                    android:text="테헤란로"/>
 
                 <Button
                     android:id="@+id/btnAddressSearch"

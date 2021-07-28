@@ -1,9 +1,13 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,13 +25,13 @@ import retrofit2.Response
 class AddPlaceSearchAddressActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceSearchAddressBinding
     private val codeAddress = "address"
-    private val page = 1 //임시값
+    var currentPage = 1
+    var isEnd: Boolean? = null
     private val size = 30 //최대값
 
     var addressList: ArrayList<ModelAddressSearchList> = arrayListOf()
-    val mAdapter = AddPlaceSearchResultAdapter(addressList)
-
-
+    //lateinit var mAdapter: AddPlaceSearchResultAdapter
+    val mAdapter = AddPlaceSearchResultAdapter(addressList, this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,15 +40,18 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+
         // 리사이클러 뷰 설정, 어댑터에 데이터 담아 연결
         binding.rvAddressSearchResultList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvAddressSearchResultList.setHasFixedSize(true)
 
+//        mAdapter = AddPlaceSearchResultAdapter(addressList, this)
         binding.rvAddressSearchResultList.adapter = mAdapter
-        //callKakaoLocalKeyword("테헤란로")
 
         binding.btnAddressSearch.setOnClickListener {
-            callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString())
+            addressList.clear()
+            currentPage = 1
+            callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString(), currentPage, size)
 
             //키보드 내림
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -52,19 +59,22 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
             view.clearFocus()
         }
 
-        // TODO : launch함수 만들고 리사이클러뷰 어댑터에서 finish()담긴 리스너 달기 -> 확인 창 한번 띄우면 좋겠다
+        binding.btnAddressMore.setOnClickListener {
+            currentPage += 1
+            callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString(), currentPage, size)
+        }
 
-
+        // TODO : setResult, 리사이클러뷰 어댑터에서 finish()담긴 리스너 달기 -> 확인 창 한번 띄우면 좋겠다
     }
 
 
     // Kakao Local Api 데이터 받아오기
     private val kakaoApi = KakaoLocalApiRetrofitClient.apiService
 
-    fun callKakaoLocalKeyword(address: String) {
+    private fun callKakaoLocalKeyword(address: String, page: Int, size: Int) {
         val kakao = MutableLiveData<ModelKakaoLocalApi>()
 
-        kakaoApi.getKakaoAddress(KakaoLocalApi.API_KEY, address = address, size = size)
+        kakaoApi.getKakaoAddress(KakaoLocalApi.API_KEY, address = address, page = page, size = size)
                 .enqueue(object : retrofit2.Callback<ModelKakaoLocalApi> {
                     override fun onResponse(
                             call: Call<ModelKakaoLocalApi>,
@@ -97,7 +107,7 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                         }
                         //<<<여기까지>>>
 
-                        Log.i("kakao", "0 ${kakao.value!!.documents[0].address_name}")
+//                        Log.i("kakao", "0 ${kakao.value!!.documents[0].address_name}")
 //                    Log.i("kakao", "1 ${kakao.value!!.documents[1].address_name}")
 //                    Log.i("kakao", "2 ${kakao.value!!.documents[2].address_name}")
 //                    Log.i("kakao", "0 ${kakao.value!!.documents[0].address_type}")
@@ -113,23 +123,32 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                         // 검색결과 총 개수
                         val total = kakao.value?.let { it.meta.total_count }
 
-                        // TODO : 일단 검색결과 첫 페이지만 나오게 만듦..
-                        if (total != null) {
-                            val loop = if (total < size) total else size
-
-                            //document: address_name통일... 아니면 documents: address: 나 documets: road_address:
+                        if (total != 0) {
                             //좌표정보나 DB에 넘길 정보들 더 챙기기
-/*                        for (i in 0 until loop) {
-                            val name = kakao.value!!.documents[i].address_name
-                            addressList.add(ModelAddressSearchList(name))
-                        }*/
-                            addressList.clear()
+
+                            //
+                            isEnd = kakao.value?.let { it.meta.is_end }
+                            if(page == 1 && isEnd == false){
+                                if(binding.btnAddressMore.visibility == View.INVISIBLE){
+                                    //<결과 더보기> 버튼 보이기
+                                    binding.btnAddressMore.visibility = View.VISIBLE
+                                }
+                            }
+                            if(page != 1 && isEnd == true){
+                                binding.btnAddressMore.visibility = View.INVISIBLE
+                                Toast.makeText(applicationContext, "마지막 페이지가 더보기 됩니다.", Toast.LENGTH_LONG).show()
+                            }
+
                             for (element in kakao.value!!.documents) {
                                 val name = element.address_name
-                                addressList.add(ModelAddressSearchList(name))
+                                val latitude = element.x.toFloat()
+                                val longitude = element.y.toFloat()
+                                addressList.add(ModelAddressSearchList(name, latitude, longitude))
                             }
                             mAdapter.notifyDataSetChanged()
 
+                        }else{
+                            Toast.makeText(applicationContext, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -138,6 +157,5 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-
     }
 }

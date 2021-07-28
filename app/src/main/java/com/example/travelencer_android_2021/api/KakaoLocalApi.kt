@@ -19,6 +19,7 @@ interface KakaoApiInterface {
     fun getKakaoAddress(
         @Header("Authorization") key: String,
         @Query("query") address: String,
+        @Query("page") page: Int,
         @Query("size") size: Int
     ): Call<ModelKakaoLocalApi>
 }

@@ -115,7 +115,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:background="@color/lightyellow"
-                android:text="주소를 입력하세요."
+                android:text="주소 찾기로 주소를 입력하세요."
                 android:textSize="15sp"
                 android:textColor="@color/gray"
                 app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterAddress"
@@ -175,7 +175,8 @@
                     android:text="관광지"
                     android:textSize="20sp"
                     android:fontFamily="@font/hcsantteut"
-                    android:drawableRight="@drawable/ic_location_yellow_small" />
+                    android:drawableRight="@drawable/ic_location_yellow_small"
+                    android:checked="true" />
 
             </RadioGroup>
 

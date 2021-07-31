@@ -16,12 +16,18 @@ import com.example.travelencer_android_2021.adapter.PostBlogAdapter
 import com.example.travelencer_android_2021.databinding.FragmentPostBlogBinding
 import com.example.travelencer_android_2021.model.ModelPostBlog
 import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.synthetic.main.fragment_feed.view.*
+import kotlinx.android.synthetic.main.fragment_feed.view.feedViewPager
+import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 
 //뷰바인딩 사용
 
 class PostBlogFragment : Fragment() {
     private var _binding: FragmentPostBlogBinding? = null
     private val binding get() = _binding!!
+
+    val tabElement = arrayListOf<String>("사진", "코스", "맛집", "관광지")
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -82,15 +88,17 @@ class PostBlogFragment : Fragment() {
         }
 
         // 게시쿨 어댑터 생성
-        val feedAdapter = FeedAdapter((activity as NaviActivity).supportFragmentManager)
+        val feedAdapter = FeedAdapter(this@PostBlogFragment)
         // 프레그먼트, 탭 타이틀 넣기
-        feedAdapter.addFragment(PostPhotoFragment(), "사진")
-        feedAdapter.addFragment(PostCourseFragment(), "코스")
-        feedAdapter.addFragment(PostFoodFragment(), "맛집")
-        feedAdapter.addFragment(PostSightsFragment(), "관광지")
-        // 탭레이아웃에 뷰 페이저 달기
-        binding.postTabLayout.setupWithViewPager(binding.postViewPager)
+        feedAdapter.addFragment(PostPhotoFragment())
+        feedAdapter.addFragment(PostCourseFragment())
+        feedAdapter.addFragment(PostFoodFragment())
+        feedAdapter.addFragment(PostSightsFragment())
         binding.postViewPager.adapter = feedAdapter
+        // 탭레이아웃에 뷰 페이저 달기
+        TabLayoutMediator(binding.postTabLayout, binding.postViewPager) { tab, position ->
+            tab.text = tabElement[position]
+        }.attach()
 
         // 토글 버튼
         val btnToggle = binding.btnPostBlogToggle

@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.travelencer_android_2021.adapter.FeedAdapter
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 
 // 여행 피드 프레그먼트(여행 피드 필터 결과)
 // 사진, 코스, 맛집, 관광지 탭
 class FeedFragment : Fragment() {
+    val tabElement = arrayListOf<String>("사진", "코스", "맛집", "관광지")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +33,17 @@ class FeedFragment : Fragment() {
         }
 
         // 어댑터 생성
-        val feedAdapter = FeedAdapter((activity as NaviActivity).supportFragmentManager)
+        val feedAdapter = FeedAdapter(this@FeedFragment)
         // 프레그먼트, 탭 타이틀 넣기
-        feedAdapter.addFragment(FeedPhotoFragment(), "사진")
-        feedAdapter.addFragment(FeedCourseFragment(), "코스")
-        feedAdapter.addFragment(FeedFoodFragment(), "맛집")
-        feedAdapter.addFragment(FeedSightsFragment(), "관광지")
+        feedAdapter.addFragment(FeedPhotoFragment())
+        feedAdapter.addFragment(FeedCourseFragment())
+        feedAdapter.addFragment(FeedFoodFragment())
+        feedAdapter.addFragment(FeedSightsFragment())
         view.feedViewPager.adapter = feedAdapter
         // 탭레이아웃에 뷰 페이저 달기
-        view.feedTabLayout.setupWithViewPager(view.feedViewPager)
+        TabLayoutMediator(view.feedTabLayout, view.feedViewPager) { tab, position ->
+            tab.text = tabElement[position]
+        }.attach()
 
         return view
     }

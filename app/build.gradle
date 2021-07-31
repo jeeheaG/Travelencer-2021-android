@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0' // 사진 크롭하기
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"     // 코루틴
     implementation "io.github.ParkSangGwon:tedpermission:2.3.0"    // 권한 설정
+    implementation "androidx.viewpager2:viewpager2:1.0.0"           // viewpager2
 
     //카카오맵 API
     implementation fileTree(include: ['*.jar'], dir: 'libs')

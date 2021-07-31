@@ -1,7 +1,6 @@
 package com.example.travelencer_android_2021.adapter
 
 import android.app.AlertDialog
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,11 +21,11 @@ class PostWriteCourseAdapter : RecyclerView.Adapter<PostWriteCourseAdapter.ViewH
             // x 이미지 클릭 시 스팟 삭제
             itemView.btnDelete.setOnClickListener {
                 // 삭제 확인 알림창 띄우기
-                var alert = AlertDialog.Builder(parent.context)
+                val alert = AlertDialog.Builder(parent.context)
                 alert.setTitle("삭제 확인")
                 alert.setMessage("삭제하시겠습니까? : \n\n" + courseName[position] + "\n" + courseDate[position])
                 // <네> 버튼 누르면
-                alert.setPositiveButton("네") { dialog, which ->
+                alert.setPositiveButton("네") { _, _ ->
                     // 삭제하기
                     courseName.remove(courseName[position])
                     courseDate.remove(courseDate[position])

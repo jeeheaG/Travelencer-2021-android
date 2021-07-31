@@ -3,14 +3,13 @@ package com.example.travelencer_android_2021
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 // 홈 액티비티
 class MainActivity : AppCompatActivity() {
     // 뒤로가기 연속 클릭 대기 시간
-    var mBackWait : Long = 0
+    private var mBackWait : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         // <로그인 & 회원가입> 버튼 클릭
         btnLoingAndRegister.setOnClickListener {
             // LoginActivity로 이동하기
-            var intent = Intent(this@MainActivity, LoginActivity::class.java)
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
 
@@ -45,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun setNavi(fregmentId : Int) {
-        var intent = Intent(this@MainActivity, NaviActivity::class.java)
+    private fun setNavi(fregmentId : Int) {
+        val intent = Intent(this@MainActivity, NaviActivity::class.java)
         intent.putExtra("selectFragId", fregmentId)
         startActivity(intent)
         finish()

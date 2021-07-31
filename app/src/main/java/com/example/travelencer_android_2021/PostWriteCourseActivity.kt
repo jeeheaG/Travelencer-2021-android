@@ -7,7 +7,6 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWriteCourseAdapter
@@ -26,15 +25,15 @@ class PostWriteCourseActivity : AppCompatActivity() {
 
         //현재 날짜, 시간
         val calendar = Calendar.getInstance()
-        var year = calendar.get(Calendar.YEAR)
-        var month = calendar.get(Calendar.MONTH) //JANUARY == 0 임
-        var day = calendar.get(Calendar.DAY_OF_MONTH)
-        var hour = calendar.get(Calendar.HOUR)
-        var minute = calendar.get(Calendar.MINUTE)
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) //JANUARY == 0 임
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val hour = calendar.get(Calendar.HOUR)
+        val minute = calendar.get(Calendar.MINUTE)
 
         // 날짜 설정
         binding.btnPostWriteCourseDate.setOnClickListener {
-            val dateListener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
+            val dateListener = DatePickerDialog.OnDateSetListener { _, y, m, d ->
                 binding.tvPostWriteCourseDate.text = "${y} ${m+1} ${d}"
             }
             val datePicker = DatePickerDialog(this, dateListener, year, month, day)
@@ -47,7 +46,7 @@ class PostWriteCourseActivity : AppCompatActivity() {
 
         // 시간 설정
         binding.btnPostWriteCourseTime.setOnClickListener {
-            val timeListener = TimePickerDialog.OnTimeSetListener { view, h, m ->
+            val timeListener = TimePickerDialog.OnTimeSetListener { _, h, m ->
                 var noon = "error"
                 var noonH = 0
                 if(h<12){
@@ -105,11 +104,11 @@ class PostWriteCourseActivity : AppCompatActivity() {
         // 뒤로 가기 이미지
         binding.ivBack.setOnClickListener{
             // 코스 추가 취소 알림창 띄우기
-            var alert = AlertDialog.Builder(this@PostWriteCourseActivity)
+            val alert = AlertDialog.Builder(this@PostWriteCourseActivity)
             alert.setTitle("취소 확인")
             alert.setMessage("코스 추가를 취소하시겠습니까?")
             // <네> 버튼 누르면
-            alert.setPositiveButton("네") { dialog, which ->
+            alert.setPositiveButton("네") { _, _ ->
                 setResult(Activity.RESULT_CANCELED)
                 finish()
             }

@@ -25,7 +25,7 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
         val imgFeedPhoto = itemView.findViewById<ImageView>(R.id.imgFeedPhoto)
 
         // 사진 리사이징
-        var width = parent.resources.displayMetrics.widthPixels / 3             // 사용자 화면의 가로 길이 / 3
+        val width = parent.resources.displayMetrics.widthPixels / 3             // 사용자 화면의 가로 길이 / 3
 
         // 이미지뷰의 가로, 세로 크기 지정(정사각형)
         imgFeedPhoto.layoutParams = LinearLayoutCompat.LayoutParams(width, width)

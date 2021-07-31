@@ -18,7 +18,6 @@ import com.example.travelencer_android_2021.model.ModelPostBlog
 import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_feed.view.*
-import kotlinx.android.synthetic.main.fragment_feed.view.feedViewPager
 import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 
 //뷰바인딩 사용
@@ -27,7 +26,7 @@ class PostBlogFragment : Fragment() {
     private var _binding: FragmentPostBlogBinding? = null
     private val binding get() = _binding!!
 
-    val tabElement = arrayListOf<String>("사진", "코스", "맛집", "관광지")
+    private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

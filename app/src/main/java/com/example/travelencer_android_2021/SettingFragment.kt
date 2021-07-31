@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +26,6 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -61,7 +59,7 @@ class SettingFragment : Fragment() {
         // <프로필 사진 변경> 버튼 클릭하면 갤러리에서 사진 가져오기
         binding.btnLoingAndRegister.setOnClickListener {
             val typeArr = arrayOf("사진 찍기", "기존 사진 선택", "기본 이미지로 변경")
-            AlertDialog.Builder(context).setItems(typeArr) { dialog, position ->
+            AlertDialog.Builder(context).setItems(typeArr) { _, position ->
                 when (typeArr[position]) {
                     "사진 찍기" -> takePhoto()
                     "기존 사진 선택" -> getFromAlbum()
@@ -93,14 +91,14 @@ class SettingFragment : Fragment() {
         // <서비스 이용 약관> 텍스트뷰 클릭
         binding.tvTOS.setOnClickListener {
             // TOSActivity로 이동하기
-            var intent = Intent(activity, TOSActivity::class.java)
+            val intent = Intent(activity, TOSActivity::class.java)
             startActivity(intent)
         }
 
         // <개인정보 보호정책> 텍스트뷰 클릭
         binding.tvPP.setOnClickListener {
             // PPActivity로 이동하기
-            var intent = Intent(activity, PPActivity::class.java)
+            val intent = Intent(activity, PPActivity::class.java)
             startActivity(intent)
         }
 
@@ -121,7 +119,7 @@ class SettingFragment : Fragment() {
     }
 
     // 사진 찍기
-    fun takePhoto() {
+    private fun takePhoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
                 val photoFile : File? = try {
@@ -210,7 +208,7 @@ class SettingFragment : Fragment() {
     }
 
     // 갤러리 이미지 선택해서 가져오기
-    fun getFromAlbum() {
+    private fun getFromAlbum() {
         val intent = Intent("android.intent.action.GET_CONTENT")
         intent.type = "image/*"     // 모든 이미지
         startActivityForResult(intent, PICK_FROM_ALBUM)

@@ -1,13 +1,11 @@
 package com.example.travelencer_android_2021
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.travelencer_android_2021.adapter.FeedAdapter
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
@@ -15,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_feed.view.*
 // 여행 피드 프레그먼트(여행 피드 필터 결과)
 // 사진, 코스, 맛집, 관광지 탭
 class FeedFragment : Fragment() {
-    val tabElement = arrayListOf<String>("사진", "코스", "맛집", "관광지")
+    private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

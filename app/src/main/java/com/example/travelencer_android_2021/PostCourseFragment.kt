@@ -33,9 +33,9 @@ class PostCourseFragment : Fragment() {
         val spotNameList4 : ArrayList<String> = arrayListOf("하나","둘", "셋", "넷", "다섯")
 
         feedCourseAdapter!!.items.add(spotNameList1)
-        feedCourseAdapter!!.items.add(spotNameList2)
-        feedCourseAdapter!!.items.add(spotNameList3)
-        feedCourseAdapter!!.items.add(spotNameList4)
+        feedCourseAdapter.items.add(spotNameList2)
+        feedCourseAdapter.items.add(spotNameList3)
+        feedCourseAdapter.items.add(spotNameList4)
 
         return view
     }

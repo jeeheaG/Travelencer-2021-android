@@ -2,7 +2,6 @@ package com.example.travelencer_android_2021
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,14 +30,14 @@ class LoginActivity : AppCompatActivity() {
         // <비밀번호 찾기> 텍스트뷰 클릭
         tvPasswordFind.setOnClickListener {
             // PasswordFindActivity로 이동하기
-            var intent = Intent(this@LoginActivity, PasswordFindActivity::class.java)
+            val intent = Intent(this@LoginActivity, PasswordFindActivity::class.java)
             startActivity(intent)
         }
 
         // <회원가입> 버튼 클릭
         btnRegister.setOnClickListener {
             // RegisterActivity로 이동하기
-            var intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
 

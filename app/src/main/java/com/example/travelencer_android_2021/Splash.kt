@@ -3,11 +3,9 @@ package com.example.travelencer_android_2021
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -39,7 +37,7 @@ class Splash : AppCompatActivity() {
                 backgroundExecutable.schedule({
                     mainExecutor.execute {
                         // MainActivity 넘어가기
-                        var intent = Intent(this@Splash, MainActivity::class.java)
+                        val intent = Intent(this@Splash, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     }

@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 // 여행 피드 내 사진, 코스, 맛집, 관광지 탭 관리하는 어댑터
 class FeedAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)  {
     // 프레그먼트 배열
-    val fragmentList = ArrayList<Fragment>()
+    private val fragmentList = ArrayList<Fragment>()
 
     // 프레그먼트, 탭 타이틀 추가
     fun addFragment(fragment: Fragment) = fragmentList.add(fragment)

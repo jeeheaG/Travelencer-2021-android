@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedCourseAdapter
@@ -36,11 +35,11 @@ class FeedCourseFragment : Fragment() {
         val spotNameList6 : ArrayList<String> = arrayListOf("여","행", "여여", "행행", "여여여", "행행행", "여행")
 
         feedCourseAdapter!!.items.add(spotNameList1)
-        feedCourseAdapter!!.items.add(spotNameList2)
-        feedCourseAdapter!!.items.add(spotNameList3)
-        feedCourseAdapter!!.items.add(spotNameList4)
-        feedCourseAdapter!!.items.add(spotNameList5)
-        feedCourseAdapter!!.items.add(spotNameList6)
+        feedCourseAdapter.items.add(spotNameList2)
+        feedCourseAdapter.items.add(spotNameList3)
+        feedCourseAdapter.items.add(spotNameList4)
+        feedCourseAdapter.items.add(spotNameList5)
+        feedCourseAdapter.items.add(spotNameList6)
 
         return view
     }

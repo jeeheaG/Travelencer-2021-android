@@ -35,40 +35,6 @@ class PlaceFilterFragment : Fragment() {
         // 스피너 설정
         FetxhXML(spinner, context as NaviActivity).fetchXML("http://api.visitkorea.or.kr/upload/manual/sample/areaCode_sample1.xml", 0)
 
-//        //지역 아이템 목록 더미 데이터
-//        val placeLargeItemList: Array<String> = resources.getStringArray(R.array.place_large_item_list)
-//        val placeSmallItemList: Array<String> = resources.getStringArray(R.array.place_small_item_list)
-//
-//        //두 스피너 어댑터. 프래그먼트이므로 context가져올 때 activity가 null인지 아닌지 확인
-//        val placeLargeAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeLargeItemList) }
-//        val placeSmallAdapter = activity?.let{ ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, placeSmallItemList) }
-//
-//        binding.spinPlaceLarge.adapter = placeLargeAdapter
-//        binding.spinPlaceLarge.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                if(position!=0){
-//                    Toast.makeText(activity, placeLargeItemList[position], Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                //("Not yet implemented")
-//            }
-//        }
-//
-//        binding.spinPlaceSmall.adapter = placeSmallAdapter
-//        binding.spinPlaceSmall.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                if(position!=0){
-//                    Toast.makeText(activity, placeSmallItemList[position], Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                //("Not yet implemented")
-//            }
-//        }
-
         //이 화면으로 오면 필터 설정이 해제됨
         val pref = activity?.getSharedPreferences("pref", 0)
         val edit = pref?.edit()

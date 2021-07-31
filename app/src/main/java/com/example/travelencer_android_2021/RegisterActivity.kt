@@ -17,8 +17,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // 체크박스 눌러야 <가입하기> 버튼 활성화
         checkbox.setOnCheckedChangeListener { compoundButton, b ->
-            if (checkbox.isChecked == true) btnRegister.isEnabled = true
-            else btnRegister.isEnabled = false
+            btnRegister.isEnabled = checkbox.isChecked
         }
 
         // <가입하기> 버튼 클릭

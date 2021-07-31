@@ -60,7 +60,7 @@ class FeedFilterFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
                 bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
-                if (feedFrag != null) feedFrag!!.setArguments(bundle)
+                if (feedFrag != null) feedFrag.setArguments(bundle)
                 pft.add(R.id.flContainer, feedFrag, TAG_FEED)
 
                 val feedFilter = parentManager.findFragmentByTag(TAG_FEED_FILTER)

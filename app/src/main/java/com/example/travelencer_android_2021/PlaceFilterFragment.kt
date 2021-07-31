@@ -59,7 +59,14 @@ class PlaceFilterFragment : Fragment() {
             val parentManager: FragmentManager = parentFragmentManager
             val pft: FragmentTransaction = parentManager.beginTransaction()
 
-            pft.add(R.id.flContainer, PlaceMainFragment(), TAG_PLACE_MAIN)
+            // 지역명 전달하기
+            val placeMainFrag = PlaceMainFragment()
+            val bundle = Bundle()
+            bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
+            bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
+            if (placeMainFrag != null) placeMainFrag.setArguments(bundle)
+            pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
+
 
             val placeFilter = parentManager.findFragmentByTag(TAG_PLACE_FILTER)
 //            val placeMain = parentManager.findFragmentByTag(TAG_PLACE_MAIN)

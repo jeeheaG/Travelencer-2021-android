@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PlaceMainAdapter
 import com.example.travelencer_android_2021.databinding.FragmentPlaceMainBinding
 import com.example.travelencer_android_2021.model.ModelCasePlaceCard
+import kotlinx.android.synthetic.main.fragment_place_main.view.*
+
 //뷰바인딩 사용
 
 class PlaceMainFragment : Fragment() {
@@ -20,6 +22,15 @@ class PlaceMainFragment : Fragment() {
         //val view = inflater.inflate(R.layout.fragment_place_main, container, false) //setContentView행위를 프래그먼트버전으로 한 것
         _binding = FragmentPlaceMainBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        // 전달받은 필터 선택된 값으로 텍스트뷰 변경
+        val bundle = arguments
+        if (bundle != null) {
+            val area1 = bundle.getString("area1").toString()    // 지역명
+            val area2 = bundle.getString("area2").toString()    // 시군구명
+            view.tvPlaceSmall.text = area2
+            view.tvPlaceLarge.text = area1
+        }
 
         binding.btnPlaceMainAddPlace.setOnClickListener {
             val intent = Intent(activity, AddPlaceActivity::class.java)

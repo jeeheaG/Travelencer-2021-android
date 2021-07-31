@@ -34,7 +34,7 @@
         android:orientation="vertical"
         android:layout_gravity="center">
         <TextView
-            android:id="@+id/tvFoodName"
+            android:id="@+id/tvCourseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="수원 왕갈비 통닭"

@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.list_item_feed_course.view.*
 
 // 여행 피드 - 코스 탭 어댑터
 class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourseAdapter.ViewHolder>() {
-    // ArrayList<String> 배열
+    // ArrayList<String> = 코스 이름 배열
     var items = ArrayList<ArrayList<String>>()
 
     // 뷰홀더 생성
@@ -25,6 +25,7 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
                 // 코스 정보 전달
+                // TODO : 서버 연결 되면 코스 ID만 넘기기
                 val intent = Intent(context, FeedCourseDetailActivity::class.java)
                 intent.putExtra("course", items[position])
                 context.startActivity(intent)
@@ -46,7 +47,7 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
     // 코스 생성
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setItem(item: ArrayList<String>) {
-            var layout = itemView.list_item_feed_course_layout
+            val layout = itemView.list_item_feed_course_layout
 
             layout.removeAllViews()
             CourseMaker().makeCourse(item, layout, context)

@@ -14,4 +14,9 @@
     <style name="COURSE_TEXTVIEW">
         <item name = "android:textSize">17sp</item>
     </style>
+
+<!--    DatePickerDialog 색 -->
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/yellow</item>
+    </style>
 </resources>

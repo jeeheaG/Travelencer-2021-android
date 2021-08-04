@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.travelencer_android_2021.databinding.FragmentPlaceFilterBinding
 import com.example.travelencer_android_2021.model.FetxhXML
+import kotlinx.android.synthetic.main.fragment_place_filter.*
 
-//TODO : 스피너 목록도 관광API로 가져올 수 있지 않았나?
 //뷰바인딩 사용
 
 private const val TAG_PLACE_FILTER = "place_filter_fragment"
@@ -30,6 +30,7 @@ class PlaceFilterFragment : Fragment() {
         _binding = FragmentPlaceFilterBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        //스피너 입력받은 값 가져오기
         spinner = arrayOf(view.findViewById(R.id.spinPlaceLarge), view.findViewById(R.id.spinPlaceSmall))
 
         // 스피너 설정
@@ -46,7 +47,6 @@ class PlaceFilterFragment : Fragment() {
         // 검색 버튼 눌렀을 때
         // sharedPreferences 의 SF_PLACE_FILTERED값 true로 변경
         // preantFragmentManager에 접근해서 현재 placeFilter 프래그먼트 remove, placeMain 프래그먼트 add
-        // TODO : 이후 지역정보도 sharedPreferences로 넘기면 될 듯
 
         binding.btnSearch.setOnClickListener {
             Toast.makeText(activity, "btnSearch onClicked", Toast.LENGTH_SHORT).show()
@@ -62,8 +62,14 @@ class PlaceFilterFragment : Fragment() {
             // 지역명 전달하기
             val placeMainFrag = PlaceMainFragment()
             val bundle = Bundle()
-            bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
-            bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
+
+            val keyword = binding.etSearchKeyword.text.toString()
+            val area1: String? = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"
+            val area2: String? = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"
+
+            bundle.putString("keyword", keyword)    //검색어
+            bundle.putString("area1", area1)    // 지역명
+            bundle.putString("area2", area2)    // 시군구명
             if (placeMainFrag != null) placeMainFrag.setArguments(bundle)
             pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
 
@@ -84,7 +90,6 @@ class PlaceFilterFragment : Fragment() {
         }
 
         return view
-        //return super.onCreateView(inflater, container, savedInstanceState)
     }
 
 }

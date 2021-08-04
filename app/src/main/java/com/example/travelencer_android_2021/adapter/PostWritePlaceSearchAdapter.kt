@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.travelencer_android_2021.*
 import com.example.travelencer_android_2021.model.ModelCasePlaceCard
 
@@ -37,7 +38,7 @@ class PostWritePlaceSearchAdapter(private val placeList: ArrayList<ModelCasePlac
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: PostWritePlaceSearchAdapter.CustomViewHolder, position: Int) {
-        holder.img.setImageResource(placeList[position].img)
+        Glide.with(mContext).load(placeList[position].img).into(holder.img)
         holder.name.text = placeList[position].name
         holder.loc.text = placeList[position].loc
         holder.explain.text = placeList[position].explain.substring(0,20).plus("...") //설명부분 문자열 자르고 ...붙이기

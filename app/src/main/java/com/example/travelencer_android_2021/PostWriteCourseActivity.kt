@@ -36,7 +36,7 @@ class PostWriteCourseActivity : AppCompatActivity() {
             val dateListener = DatePickerDialog.OnDateSetListener { _, y, m, d ->
                 binding.tvPostWriteCourseDate.text = "${y} ${m+1} ${d}"
             }
-            val datePicker = DatePickerDialog(this, dateListener, year, month, day)
+            val datePicker = DatePickerDialog(this, R.style.DialogTheme, dateListener, year, month, day)
             datePicker.show()
         }
         // 텍스트뷰 누를 때도 날짜 설정
@@ -59,7 +59,7 @@ class PostWriteCourseActivity : AppCompatActivity() {
                 }
                 binding.tvPostWriteCourseTime.text = "${noon} ${noonH}시 ${m}분"
             }
-            val timePicker = TimePickerDialog(this, timeListener, hour, minute, true)
+            val timePicker = TimePickerDialog(this, R.style.DialogTheme, timeListener, hour, minute, true)
             timePicker.show()
         }
         // 텍스트뷰 누를 때도 시간 설정

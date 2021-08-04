@@ -4,14 +4,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object KakaoLocalApiRetrofitClient {
-    private val retrofit: Retrofit.Builder by lazy {
+    private val kakaoRetrofit: Retrofit.Builder by lazy {
         Retrofit.Builder()
             .baseUrl(KakaoLocalApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
     }
 
-    val apiService: KakaoApiInterface by lazy {
-        retrofit
+    val kakaoApiService: KakaoApiInterface by lazy {
+        kakaoRetrofit
             .build()
             .create(KakaoApiInterface::class.java)
     }

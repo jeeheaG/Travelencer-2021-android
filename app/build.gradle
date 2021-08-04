@@ -15,6 +15,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true //okhttp 오류로 추가
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,9 +60,14 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/libDaumMapAndroid.jar')
 
-    //주소검색 Kakao Local API - Retrofit 라이브러리
+    //Retrofit 라이브러리, GSON
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //http통신에 대한 로그 출력을 위해 okhttp와 httpLoggingInterceptor 추가
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.5.0'
+    implementation group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '4.5.0'
+    implementation 'com.android.support:multidex:1.0.3' //okhttp 오류로 추가
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -1,8 +1,6 @@
 package com.example.travelencer_android_2021
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -24,14 +22,14 @@ import retrofit2.Response
 
 class AddPlaceSearchAddressActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceSearchAddressBinding
-    private val codeAddress = "address"
+    //private val codeAddress = "address"
     var currentPage = 1
     var isEnd: Boolean? = null
     private val size = 30 //최대값
 
     var addressList: ArrayList<ModelAddressSearchList> = arrayListOf()
     //lateinit var mAdapter: AddPlaceSearchResultAdapter
-    val mAdapter = AddPlaceSearchResultAdapter(addressList, this)
+    private val mAdapter = AddPlaceSearchResultAdapter(addressList, this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,10 +67,10 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
 
 
     // Kakao Local Api 데이터 받아오기
-    private val kakaoApi = KakaoLocalApiRetrofitClient.apiService
+    private val kakaoApi = KakaoLocalApiRetrofitClient.kakaoApiService
 
     private fun callKakaoLocalKeyword(address: String, page: Int, size: Int) {
-        val kakao = MutableLiveData<ModelKakaoLocalApi>()
+        val kakaoData = MutableLiveData<ModelKakaoLocalApi>()
 
         kakaoApi.getKakaoAddress(KakaoLocalApi.API_KEY, address = address, page = page, size = size)
                 .enqueue(object : retrofit2.Callback<ModelKakaoLocalApi> {
@@ -80,10 +78,10 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                             call: Call<ModelKakaoLocalApi>,
                             response: Response<ModelKakaoLocalApi>
                     ) {
-                        kakao.value = response.body()
+                        kakaoData.value = response.body()
 
                         //<<<에러 시 에러코드 받아오는 부분>>>
-                        if (kakao.value == null) {
+                        if (kakaoData.value == null) {
                             Log.i("오류 kakao.value == null", response.errorBody().toString())
                             try {
                                 val jObjError = JSONObject(response.errorBody()!!.string())
@@ -107,27 +105,27 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                         }
                         //<<<여기까지>>>
 
-//                        Log.i("kakao", "0 ${kakao.value!!.documents[0].address_name}")
-//                    Log.i("kakao", "1 ${kakao.value!!.documents[1].address_name}")
-//                    Log.i("kakao", "2 ${kakao.value!!.documents[2].address_name}")
-//                    Log.i("kakao", "0 ${kakao.value!!.documents[0].address_type}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].x}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].y}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_1depth_name}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_2depth_name}")
-//                    Log.i("kakao", "${kakao.value!!.documents[0].address.region_3depth_name}")
+//                        Log.i("kakao", "0 ${kakaoData.value!!.documents[0].address_name}")
+//                    Log.i("kakao", "1 ${kakaoData.value!!.documents[1].address_name}")
+//                    Log.i("kakao", "2 ${kakaoData.value!!.documents[2].address_name}")
+//                    Log.i("kakao", "0 ${kakaoData.value!!.documents[0].address_type}")
+//                    Log.i("kakao", "${kakaoData.value!!.documents[0].x}")
+//                    Log.i("kakao", "${kakaoData.value!!.documents[0].y}")
+//                    Log.i("kakao", "${kakaoData.value!!.documents[0].address.region_1depth_name}")
+//                    Log.i("kakao", "${kakaoData.value!!.documents[0].address.region_2depth_name}")
+//                    Log.i("kakao", "${kakaoData.value!!.documents[0].address.region_3depth_name}")
 
-                        Log.i("kakao", "total = ${kakao.value!!.meta.total_count}")
-                        Log.i("kakao", "size = ${kakao.value!!.documents.size}")
+                        Log.i("kakao", "total = ${kakaoData.value!!.meta.total_count}")
+                        Log.i("kakao", "size = ${kakaoData.value!!.documents.size}")
 
                         // 검색결과 총 개수
-                        val total = kakao.value?.let { it.meta.total_count }
+                        val total = kakaoData.value?.let { it.meta.total_count }
 
                         if (total != 0) {
                             //좌표정보나 DB에 넘길 정보들 더 챙기기
 
                             //
-                            isEnd = kakao.value?.let { it.meta.is_end }
+                            isEnd = kakaoData.value?.let { it.meta.is_end }
                             if(page == 1 && isEnd == false){
                                 if(binding.btnAddressMore.visibility == View.INVISIBLE){
                                     //<결과 더보기> 버튼 보이기
@@ -139,7 +137,7 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
                                 Toast.makeText(applicationContext, "마지막 페이지가 더보기 됩니다.", Toast.LENGTH_LONG).show()
                             }
 
-                            for (element in kakao.value!!.documents) {
+                            for (element in kakaoData.value!!.documents) {
                                 val name = element.address_name
                                 val latitude = element.x.toFloat()
                                 val longitude = element.y.toFloat()

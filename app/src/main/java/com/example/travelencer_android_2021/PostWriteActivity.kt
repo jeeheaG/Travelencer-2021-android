@@ -44,14 +44,14 @@ class PostWriteActivity : AppCompatActivity() {
             val startDateListener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
                 binding.tvPostWriteStartDate.text = "${y} ${m+1} ${d}"
             }
-            val startDatePicker = DatePickerDialog(this, startDateListener, year, month, day)
+            val startDatePicker = DatePickerDialog(this, R.style.DialogTheme, startDateListener, year, month, day)
             startDatePicker.show()
         }
         binding.btnPostWriteEndDate.setOnClickListener {
             val endDateListener = DatePickerDialog.OnDateSetListener { view, y, m, d ->
                 binding.tvPostWriteEndDate.text = "${y} ${m+1} ${d}"
             }
-            val endDatePicker = DatePickerDialog(this, endDateListener, year, month, day)
+            val endDatePicker = DatePickerDialog(this, R.style.DialogTheme, endDateListener, year, month, day)
             endDatePicker.show()
         }
 

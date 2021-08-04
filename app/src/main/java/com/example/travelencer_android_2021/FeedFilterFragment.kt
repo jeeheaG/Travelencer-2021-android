@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.travelencer_android_2021.databinding.FragmentFeedFilterBinding
@@ -47,20 +48,20 @@ class FeedFilterFragment : Fragment() {
         // preantFragmentManager에 접근해서 현재 feedFilter 프래그먼트 remove, feed 프래그먼트 add
 
         binding.btnShowFeed.setOnClickListener {
-            if (spinner[1]?.selectedItem.toString() != null) {
-                edit?.putBoolean(SP_FEED_FILTERED, true)
-                edit?.apply()
-                Log.d("로그 -filtered-2--", "feedFiltered : ${pref?.getBoolean(SP_FEED_FILTERED, false)}")
+            edit?.putBoolean(SP_FEED_FILTERED, true)
+            edit?.apply()
+            Log.d("로그 -filtered-2--", "feedFiltered : ${pref?.getBoolean(SP_FEED_FILTERED, false)}")
 
-                val parentManager: FragmentManager = parentFragmentManager
-                val pft: FragmentTransaction = parentManager.beginTransaction()
+            val parentManager: FragmentManager = parentFragmentManager
+            val pft: FragmentTransaction = parentManager.beginTransaction()
 
-                // 지역명 전달하기
-                val feedFrag = FeedFragment()
-                val bundle = Bundle()
+            // 지역명 전달하기
+            val feedFrag = FeedFragment()
+            val bundle = Bundle()
+            try {
                 bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
                 bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
-                if (feedFrag != null) feedFrag.setArguments(bundle)
+                feedFrag.arguments = bundle
                 pft.add(R.id.flContainer, feedFrag, TAG_FEED)
 
                 val feedFilter = parentManager.findFragmentByTag(TAG_FEED_FILTER)
@@ -69,6 +70,10 @@ class FeedFilterFragment : Fragment() {
 
                 pft.commitAllowingStateLoss()
             }
+            catch (e : NullPointerException) {
+                Toast.makeText(context, "지역을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         return view

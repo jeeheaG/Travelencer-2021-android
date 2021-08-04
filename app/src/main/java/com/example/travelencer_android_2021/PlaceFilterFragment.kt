@@ -55,13 +55,13 @@ class PlaceFilterFragment : Fragment() {
             edit?.apply()
 //            Log.d("로그 -filtered-2--", "placeFiltered : ${pref?.getBoolean(SP_PLACE_FILTERED, false)}")
 
-
             val parentManager: FragmentManager = parentFragmentManager
             val pft: FragmentTransaction = parentManager.beginTransaction()
 
             // 지역명 전달하기
             val placeMainFrag = PlaceMainFragment()
             val bundle = Bundle()
+<<<<<<< HEAD
 
             val keyword = binding.etSearchKeyword.text.toString()
             val area1: String? = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"
@@ -72,9 +72,16 @@ class PlaceFilterFragment : Fragment() {
             bundle.putString("area2", area2)    // 시군구명
             if (placeMainFrag != null) placeMainFrag.setArguments(bundle)
             pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
+=======
+            try {
+                bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
+                bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
+                placeMainFrag.arguments = bundle
+                pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
+>>>>>>> 5e115c46d1e397d4057d0c9e3ba48a453d1b2c0f
 
 
-            val placeFilter = parentManager.findFragmentByTag(TAG_PLACE_FILTER)
+                val placeFilter = parentManager.findFragmentByTag(TAG_PLACE_FILTER)
 //            val placeMain = parentManager.findFragmentByTag(TAG_PLACE_MAIN)
 //
 //            Log.d("로그 at filter---", "parentManager에서 tag로 찾은 것들 값 확인. NULL인 건 반영x \n" +
@@ -84,9 +91,13 @@ class PlaceFilterFragment : Fragment() {
 //                    "postBlog : ${parentManager.findFragmentByTag("post_blog_fragment")}\n" +
 //                    "setting : ${parentManager.findFragmentByTag("setting_fragment")}")
 
-            placeFilter?.let {pft.remove(it)}
+                placeFilter?.let {pft.remove(it)}
 
-            pft.commitAllowingStateLoss()
+                pft.commitAllowingStateLoss()
+            }
+            catch (e : NullPointerException) {
+                Toast.makeText(context, "지역을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view

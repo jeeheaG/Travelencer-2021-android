@@ -61,25 +61,19 @@ class PlaceFilterFragment : Fragment() {
             // 지역명 전달하기
             val placeMainFrag = PlaceMainFragment()
             val bundle = Bundle()
-<<<<<<< HEAD
 
-            val keyword = binding.etSearchKeyword.text.toString()
-            val area1: String? = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"
-            val area2: String? = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"
-
-            bundle.putString("keyword", keyword)    //검색어
-            bundle.putString("area1", area1)    // 지역명
-            bundle.putString("area2", area2)    // 시군구명
-            if (placeMainFrag != null) placeMainFrag.setArguments(bundle)
-            pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
-=======
             try {
-                bundle.putString("area1", spinner[0].selectedItem.toString())    // 지역명
-                bundle.putString("area2", spinner[1].selectedItem.toString())    // 시군구명
+
+                val keyword = binding.etSearchKeyword.text.toString()
+                val area1: String? = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"
+                val area2: String? = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"
+
+                bundle.putString("keyword", keyword)    //검색어
+                bundle.putString("area1", area1)    // 지역명
+                bundle.putString("area2", area2)    // 시군구명
+
                 placeMainFrag.arguments = bundle
                 pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
->>>>>>> 5e115c46d1e397d4057d0c9e3ba48a453d1b2c0f
-
 
                 val placeFilter = parentManager.findFragmentByTag(TAG_PLACE_FILTER)
 //            val placeMain = parentManager.findFragmentByTag(TAG_PLACE_MAIN)

@@ -41,12 +41,16 @@ class PlaceMainFragment : Fragment() {
         var keyword = ""
         var area1 = ""
         var area2 = ""
+        var area1Code = -1   // 지역 코드
+        var area2Code = -1   // 시군구 코드
 
         val bundle = arguments
         if (bundle != null) {
             keyword = bundle.getString("keyword").toString()    //검색어
             area1 = bundle.getString("area1").toString()    // 지역명
             area2 = bundle.getString("area2").toString()    // 시군구명
+            area1Code = bundle.getInt("area1Code")           // 지역 코드
+            area2Code = bundle.getInt("area2Code")          // 시군구 코드
             view.tvPlaceSmall.text = area2
             view.tvPlaceLarge.text = area1
         }

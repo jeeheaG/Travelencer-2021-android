@@ -34,7 +34,8 @@ class PlaceFilterFragment : Fragment() {
         spinner = arrayOf(view.findViewById(R.id.spinPlaceLarge), view.findViewById(R.id.spinPlaceSmall))
 
         // 스피너 설정
-        FetxhXML(spinner, context as NaviActivity).fetchXML("http://api.visitkorea.or.kr/upload/manual/sample/areaCode_sample1.xml", 0)
+        val spinnerSetting = FetxhXML(spinner, context as NaviActivity)
+        spinnerSetting.fetchXML("http://api.visitkorea.or.kr/upload/manual/sample/areaCode_sample1.xml", 0)
 
         //이 화면으로 오면 필터 설정이 해제됨
         val pref = activity?.getSharedPreferences("pref", 0)
@@ -67,10 +68,14 @@ class PlaceFilterFragment : Fragment() {
                 val keyword = binding.etSearchKeyword.text.toString()
                 val area1: String? = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"
                 val area2: String? = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"
+                val area1Code = spinnerSetting.areaCodeArray[0][(spinner[0].selectedItemPosition)].areaCode // 지역 코드
+                val area2Code = spinnerSetting.areaCodeArray[1][(spinner[1].selectedItemPosition)].areaCode // 시군구 코드
 
                 bundle.putString("keyword", keyword)    //검색어
                 bundle.putString("area1", area1)    // 지역명
                 bundle.putString("area2", area2)    // 시군구명
+                bundle.putInt("area1Code", area1Code)   // 지역 코드
+                bundle.putInt("area2Code", area2Code)   // 시군구 코드
 
                 placeMainFrag.arguments = bundle
                 pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)

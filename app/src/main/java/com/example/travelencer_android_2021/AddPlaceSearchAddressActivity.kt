@@ -28,7 +28,6 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
     private val size = 30 //최대값
 
     var addressList: ArrayList<ModelAddressSearchList> = arrayListOf()
-    //lateinit var mAdapter: AddPlaceSearchResultAdapter
     private val mAdapter = AddPlaceSearchResultAdapter(addressList, this)
 
 

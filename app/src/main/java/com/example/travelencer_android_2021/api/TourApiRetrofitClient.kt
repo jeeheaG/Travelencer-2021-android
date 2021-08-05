@@ -1,9 +1,11 @@
 package com.example.travelencer_android_2021.api
 
 import android.util.Log
+import android.widget.Toast
 import com.example.travelencer_android_2021.model.Items
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
+import com.google.gson.JsonSyntaxException
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

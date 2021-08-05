@@ -29,23 +29,8 @@ interface TourApiInterface {
             @Query("keyword") keyword: String,
             @Query("MobileOS") os: String = TourApi.OS,
             @Query("MobileApp") appName: String = TourApi.APP_NAME,
-            @Query("_type") type: String = TourApi.DATA_TYPE
-//        @Query("areaCode") area: String,
-//        @Query("sigunguCode") sigungu: String
+            @Query("_type") type: String = TourApi.DATA_TYPE,
+            @Query("areaCode") area: String,
+            @Query("sigunguCode") sigungu: String
     ): Call<ModelTourApiKeyword>
 }
-
-/*
-interface TourApiInterface {
-    @GET("searchKeyword?ServiceKey={serviceKey}&keyword={keyword}&MobileOS={os}&MobileApp=AppTest")
-    fun getTourData(
-        //@Header("Authorization") key: String,
-        @Query("ServiceKey") serviceKey: String,
-        @Query("keyword") keyword: String,
-        @Query("MobileOS") os: String,
-        @Query("MobileApp") appName: String,
-        @Query("_type") type: String
-//        @Query("areaCode") area: String,
-//        @Query("sigunguCode") sigungu: String
-    ): Call<ModelTourApiKeyword>
-}*/

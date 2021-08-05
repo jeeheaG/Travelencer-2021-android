@@ -3,13 +3,11 @@ package com.example.travelencer_android_2021.adapter
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -26,11 +24,14 @@ class PlaceMainAdapter(private val placeList: ArrayList<ModelCasePlaceCard>, pri
 //            for (i in placeList){
 //                Log.d("로그Tour PlaceMainAdapter", "${i.name}, ${i.loc}")
 //            }
-/*            itemView.setOnClickListener {
+            itemView.setOnClickListener {
                 val curPosition: Int = adapterPosition
                 val place: ModelCasePlaceCard = placeList[curPosition]
-                Toast.makeText(parent.context, "이름:${place.name}, 위치:${place.loc}, 설명:${place.explain}", Toast.LENGTH_SHORT).show()
-            }*/
+                val intent = Intent(mContext, PlaceDetailActivity::class.java)
+                intent.putExtra("contentId", place.contentId)
+                mContext.startActivity(intent)
+                //Toast.makeText(parent.context, "이름:${place.name}, 위치:${place.loc}, 설명:${place.explain}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -39,17 +40,14 @@ class PlaceMainAdapter(private val placeList: ArrayList<ModelCasePlaceCard>, pri
         //Log.d("로그Tour PlaceMainAdapter", "onBindViewHolder실행")
         Glide.with(mContext).load(placeList[position].img).into(holder.img)
         holder.name.text = placeList[position].name
-        holder.loc.text = placeList[position].loc
-        holder.explain.text = if(placeList[position].explain.length>20){
-            placeList[position].explain.substring(0,20).plus("...") //20자 이상이면 문자열 자르고 ...붙이기
-        } else placeList[position].explain
+        holder.loc.text = if(placeList[position].loc.length>20){
+            placeList[position].loc.substring(0,20).plus("...") //20자 이상이면 문자열 자르고 ...붙이기
+        } else placeList[position].loc
 
         holder.img.clipToOutline = true //안드로이드 버전 5 (롤리팝) 이상부터 적용
 
-        holder.itemView.setOnClickListener{
-            val intent = Intent(mContext, PlaceDetailActivity::class.java)
-            mContext.startActivity(intent)
-        }
+//        holder.itemView.setOnClickListener{
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -61,7 +59,6 @@ class PlaceMainAdapter(private val placeList: ArrayList<ModelCasePlaceCard>, pri
         val img = itemView.findViewById<ImageView>(R.id.ivPlaceMain) //이미지
         val name = itemView.findViewById<TextView>(R.id.tvPlaceItemName) //장소 이름
         val loc = itemView.findViewById<TextView>(R.id.tvPlaceItemLoc) //지역
-        val explain = itemView.findViewById<TextView>(R.id.tvPlaceItemExplain) //설명
     }
 
 }

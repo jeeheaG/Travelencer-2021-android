@@ -4,5 +4,5 @@ class ModelCasePlaceCard(
         val img: String,
         val name: String,
         val loc: String,
-        val explain: String
+        val contentId: String
         )

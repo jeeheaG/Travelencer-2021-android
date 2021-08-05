@@ -42,27 +42,15 @@
             android:fontFamily="@font/hcsantteut"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@+id/clPlaceItem"
-            app:layout_constraintBottom_toTopOf="@+id/tvPlaceItemExplain"/>
+            app:layout_constraintBottom_toTopOf="@+id/tvPlaceItemLoc"/>
 
         <TextView
             android:id="@+id/tvPlaceItemLoc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="경기도 수원시"
-            android:textSize="20dp"
-            android:fontFamily="@font/hcsantteut"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/tvPlaceItemName"
-            app:layout_constraintBottom_toTopOf="@+id/tvPlaceItemExplain"/>
-
-        <TextView
-            android:id="@+id/tvPlaceItemExplain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/hcsantteut"
-            android:text="수원 화성의 수원의 대표적인 관광지로.."
+            android:text="경기도 수원시 영통구 11"
             android:textColor="@color/black"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="@+id/clPlaceItem"

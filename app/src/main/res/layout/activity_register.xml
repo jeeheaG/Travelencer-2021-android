@@ -50,7 +50,7 @@
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="이름"
-            android:inputType="text"
+            android:inputType="textPersonName"
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tvEmailId"
             android:layout_width="350dp"
             android:layout_height="50dp"
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tvPassword1"
             android:layout_width="350dp"
             android:layout_height="50dp"
@@ -81,7 +81,7 @@
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tvPassword2"
             android:layout_width="350dp"
             android:layout_height="50dp"

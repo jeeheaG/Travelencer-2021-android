@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.editId.text.toString()
             val password = binding.editPassWord.text.toString()
 
+            // 로그인 하기
             startLogin(LoginData(email, password))
         }
 

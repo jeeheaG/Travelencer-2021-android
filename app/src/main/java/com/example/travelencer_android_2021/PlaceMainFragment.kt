@@ -11,13 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PlaceMainAdapter
-import com.example.travelencer_android_2021.api.TourApi
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.FragmentPlaceMainBinding
 import com.example.travelencer_android_2021.model.ModelCasePlaceCard
-import com.example.travelencer_android_2021.model.ModelKakaoLocalApi
 import com.example.travelencer_android_2021.model.ModelTourApiKeyword
-import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.fragment_place_main.view.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
@@ -65,7 +62,7 @@ class PlaceMainFragment : Fragment() {
         binding.rvPlaceMain.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false) //프래그먼트이므로 this대신 activity
         binding.rvPlaceMain.setHasFixedSize(true)
 
-        mAdapter = PlaceMainAdapter(placeList, requireActivity()) //activity!!대신 requireActivity 쓰라는데 저게 뭐지
+        mAdapter = PlaceMainAdapter(placeList, requireActivity()) //TODO : activity!!대신 requireActivity 쓰라는데 저게 뭐지
         binding.rvPlaceMain.adapter = mAdapter
 
         //interceptor설정과 데이터 요청 함수
@@ -90,7 +87,7 @@ class PlaceMainFragment : Fragment() {
         //Log.d("로그 tour", "keyword : ${keyword}")
 
         // api 요청보냄
-        tourApi.getTourData(keyword = keyword, area = areaCode, sigungu = sigunguCode)
+        tourApi.getTourKeywordData(keyword = keyword, area = areaCode, sigungu = sigunguCode)
                 .enqueue(object : retrofit2.Callback<ModelTourApiKeyword> {
 
                     override fun onResponse(
@@ -146,11 +143,11 @@ class PlaceMainFragment : Fragment() {
 
                     //retrofit 은 통신장애로 인한 오류만 Failure로 넘어간다 -> 아닌듯??
                     override fun onFailure(call: Call<ModelTourApiKeyword>, t: Throwable) {
-                        Log.e("실패 로그", "실패")
-                        t.printStackTrace()
                         // 검색 결과 없어서 오류날 경우 IllegalStateException Exception Throwable ..
                         // TODO : 토스트말고 다이얼로그 띄워서 다시 필터로 보내는 게 나을 듯
                         Toast.makeText(activity, "검색 결과가 없거나 1개 뿐입니다. 다른 검색어로 검색해 주세요", Toast.LENGTH_LONG).show()
+                        Log.e("실패 로그", "실패..")
+                        t.printStackTrace()
                     }
                 })
     }

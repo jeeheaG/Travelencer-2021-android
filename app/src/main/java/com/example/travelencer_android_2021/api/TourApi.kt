@@ -24,13 +24,26 @@ class TourApi {
 
 interface TourApiInterface {
     @GET("searchKeyword")
-    fun getTourData(
-            @Query("ServiceKey") serviceKey: String = TourApi.API_KEY_D,
+    fun getTourKeywordData(
             @Query("keyword") keyword: String,
+            @Query("areaCode") area: String,
+            @Query("sigunguCode") sigungu: String,
+            @Query("ServiceKey") serviceKey: String = TourApi.API_KEY_D,
             @Query("MobileOS") os: String = TourApi.OS,
             @Query("MobileApp") appName: String = TourApi.APP_NAME,
-            @Query("_type") type: String = TourApi.DATA_TYPE,
-            @Query("areaCode") area: String,
-            @Query("sigunguCode") sigungu: String
+            @Query("_type") type: String = TourApi.DATA_TYPE
     ): Call<ModelTourApiKeyword>
+}
+
+interface TourApiDetailInterface {
+    @GET("detailIntro")
+    fun getTourDetailData(
+            @Query("contentId") contentId: String,
+            @Query("ServiceKey") serviceKey: String = TourApi.API_KEY_D,
+            @Query("MobileOS") os: String = TourApi.OS,
+            @Query("MobileApp") appName: String = TourApi.APP_NAME,
+            @Query("_type") type: String = TourApi.DATA_TYPE
+
+    )
+//    : Call<>
 }

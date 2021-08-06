@@ -24,10 +24,8 @@ class FeedFragment : Fragment() {
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         val bundle = arguments
         if (bundle != null) {
-            val area1 = bundle.getString("area1").toString()    // 지역명
-            val area2 = bundle.getString("area2").toString()    // 시군구명
-            view.tvArea.text = area2
-            view.tvArea2.text = area1
+            val keyword = bundle.getString("keyword").toString()    // 검색어
+            view.tvKeyword.text = keyword
         }
 
         // 어댑터 생성

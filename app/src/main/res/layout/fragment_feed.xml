@@ -52,11 +52,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
 
                 <TextView
-                    android:id="@+id/tvArea"
+                    android:id="@+id/tvKeyword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:text="수원"
+                    android:text="오류"
                     android:textColor="@color/black"
                     android:textSize="40sp"
                     android:fontFamily="@font/hcsantteut"
@@ -65,18 +65,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView"/>
-                <TextView
-                    android:id="@+id/tvArea2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="경기도"
-                    android:textColor="@color/black"
-                    android:textSize="23sp"
-                    android:fontFamily="@font/hcsantteut"
-                    android:gravity="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvArea"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

@@ -46,40 +46,57 @@
         android:layout_weight="1"
         android:gravity="center">
         <EditText
+            android:id="@+id/tvName"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="이름"
+            android:inputType="text"
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/tvNickname"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="닉네임"
+            android:inputType="text"
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/tvEmailId"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="이메일 아이디"
+            android:inputType="textEmailAddress"
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/tvPassword1"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="비밀번호"
+            android:inputType="textPassword"
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/tvPassword2"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="비밀번호 재입력"
+            android:inputType="textPassword"
             android:gravity="center"
             android:background="@color/lightyellow"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:id="@+id/tvPasswordCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:text="비밀번호가 일치하지 않습니다."/>
     </LinearLayout>
 
     <LinearLayout
@@ -102,7 +119,6 @@
             android:layout_width="150dp"
             android:layout_height="45dp"
             android:background="@drawable/btn_shape"
-            android:enabled="false"
             android:text="가입하기"
             android:textSize="25sp"
             android:textColor="@color/blue"

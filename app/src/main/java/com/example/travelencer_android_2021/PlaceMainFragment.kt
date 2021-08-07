@@ -14,7 +14,7 @@ import com.example.travelencer_android_2021.adapter.PlaceMainAdapter
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.FragmentPlaceMainBinding
 import com.example.travelencer_android_2021.model.ModelCasePlaceCard
-import com.example.travelencer_android_2021.model.ModelTourApiKeyword
+import com.example.travelencer_android_2021.model.modelTourApiKeyword.ModelTourApiKeyword
 import kotlinx.android.synthetic.main.fragment_place_main.view.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
@@ -79,7 +79,7 @@ class PlaceMainFragment : Fragment() {
     }
 
 
-    // Kakao Local Api 데이터 받아오기
+    // 데이터 받아오기
     private val tourApi = TourApiRetrofitClient.tourApiService
 
     private fun callTourKeyword(keyword: String, areaCode: String, sigunguCode: String) {
@@ -150,6 +150,6 @@ class PlaceMainFragment : Fragment() {
                         t.printStackTrace()
                     }
                 })
-    }
+    }//요청 함수 끝
 
 }

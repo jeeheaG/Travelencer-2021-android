@@ -1,4 +1,4 @@
-package com.example.travelencer_android_2021.model
+package com.example.travelencer_android_2021.model.modelTourApiKeyword
 
 data class ModelTourApiKeyword(
         val response: Response

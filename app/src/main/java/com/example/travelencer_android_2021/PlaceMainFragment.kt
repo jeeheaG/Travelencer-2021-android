@@ -135,7 +135,7 @@ class PlaceMainFragment : Fragment() {
                                 val addr = item.addr1 ?: "-" //null이면 문자열 "-"로 대체해라
                                 var imageUrl: String = item.firstimage ?: dummyImageUrl //firstimage null일 수도 있어서 널체크 지우면 안됨
                                 placeList.add(i, ModelCasePlaceCard(imageUrl, item.title, addr, item.contentid))
-                        }
+                            }
 
                         }
                         mAdapter.notifyDataSetChanged()

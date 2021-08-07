@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 카카오맵 API -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> &lt;!&ndash; 카카오맵 API 에러 Disable_PrivacyLocation_Information 해결시도&ndash;&gt;-->
 
     <application
         android:name="androidx.multidex.MultiDexApplication"

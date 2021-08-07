@@ -37,10 +37,4 @@ object TourApiRetrofitClient {
             .create(TourApiInterface::class.java)
     }
 
-/*    val tourApiDetailCommonService: TourApiDetailCommonInterface by lazy {
-        tourRetrofit
-                .build()
-                .create(TourApiInterface::class.java)
-    }*/
-
 }

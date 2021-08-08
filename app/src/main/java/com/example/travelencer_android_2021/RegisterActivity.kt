@@ -30,49 +30,49 @@ class RegisterActivity : AppCompatActivity() {
 
         // 비밀번호 일치하는지 확인
         var passwordCheck = false
-        binding.tvPassword1.doOnTextChanged { text, start, before, count ->
-            val password1 = binding.tvPassword1.text.toString()
-            val password2 = binding.tvPassword2.text.toString()
+        binding.editPassword1.doOnTextChanged { text, start, before, count ->
+            val password1 = binding.editPassword1.text.toString()
+            val password2 = binding.editPassword2.text.toString()
 
             // 비밀번호 6자리인지 확인
-            if (!isPasswordValid(password1)) binding.tvPassword1.error = "비민번호는 6지리 이상이어야 합니다."
-            else binding.tvPassword1.error = null
+            if (!isPasswordValid(password1)) binding.editPassword1.error = "비민번호는 6지리 이상이어야 합니다."
+            else binding.editPassword1.error = null
 
             // 비밀번호 정확히 입력했는지 확인
             if(password1.equals(password2)) {
                 passwordCheck = true
-                binding.tvPassword2.error = null
+                binding.editPassword2.error = null
             }
             else {
                 passwordCheck = false
-                binding.tvPassword2.error = "비밀번호가 다릅니다."
+                binding.editPassword2.error = "비밀번호가 다릅니다."
             }
         }
-        binding.tvPassword2.doOnTextChanged { text, start, before, count ->
-            val password1 = binding.tvPassword1.text.toString()
-            val password2 = binding.tvPassword2.text.toString()
+        binding.editPassword2.doOnTextChanged { text, start, before, count ->
+            val password1 = binding.editPassword1.text.toString()
+            val password2 = binding.editPassword2.text.toString()
 
             // 비밀번호 정확히 입력했는지 확인
             if(password1.equals(password2)) {
                 passwordCheck = true
-                binding.tvPassword2.error = null
+                binding.editPassword2.error = null
             }
             else {
                 passwordCheck = false
-                binding.tvPassword2.error = "비밀번호가 다릅니다."
+                binding.editPassword2.error = "비밀번호가 다릅니다."
             }
         }
 
         // 이메일 유효성 확인
         var emailCheck = false
-        binding.tvEmailId.doOnTextChanged { text, start, before, count ->
-            val email = binding.tvEmailId.text.toString()
+        binding.editEmailId.doOnTextChanged { text, start, before, count ->
+            val email = binding.editEmailId.text.toString()
             if (!isEmailValid(email)) {
-                binding.tvEmailId.error = "이메일이 유효하지 않습니다."
+                binding.editEmailId.error = "이메일이 유효하지 않습니다."
                 emailCheck = false
             }
             else {
-                binding.tvEmailId.error = null
+                binding.editEmailId.error = null
                 emailCheck = true
             }
         }
@@ -80,23 +80,27 @@ class RegisterActivity : AppCompatActivity() {
         // <가입하기> 버튼 클릭
         btnRegister.setOnClickListener {
             // 이름 검사
-            val name = binding.tvName.text.toString()
+            val name = binding.editName.text.toString()
             if (name.isEmpty()) {
                 Toast.makeText(applicationContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             // 닉네임 검사
-            val nickname = binding.tvNickname.text
+            val nickname = binding.editNickname.text
             // 이메일 검사
-            val email = binding.tvEmailId.text.toString()
+            val email = binding.editEmailId.text.toString()
             if (!emailCheck) {
                 Toast.makeText(applicationContext, "이메일이 유효하지 않습니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             // 비밀번호 검사
-            val password = binding.tvPassword2.text.toString()
+            val password = binding.editPassword2.text.toString()
             if (password.isEmpty()) {
                 Toast.makeText(applicationContext, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (!isPasswordValid(password)) {
+                Toast.makeText(applicationContext, "비민번호는 6지리 이상이어야 합니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (!passwordCheck) {

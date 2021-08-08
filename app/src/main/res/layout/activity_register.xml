@@ -46,7 +46,7 @@
         android:layout_weight="1"
         android:gravity="center">
         <EditText
-            android:id="@+id/tvName"
+            android:id="@+id/editName"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="이름"
@@ -55,7 +55,7 @@
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
-            android:id="@+id/tvNickname"
+            android:id="@+id/editNickname"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="닉네임"
@@ -64,7 +64,7 @@
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tvEmailId"
+            android:id="@+id/editEmailId"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="이메일 아이디"
@@ -73,7 +73,7 @@
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tvPassword1"
+            android:id="@+id/editPassword1"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="비밀번호"
@@ -82,7 +82,7 @@
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tvPassword2"
+            android:id="@+id/editPassword2"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="비밀번호 재입력"
@@ -90,13 +90,6 @@
             android:gravity="center"
             android:background="@color/lightyellow"
             android:layout_marginBottom="10dp"/>
-        <TextView
-            android:id="@+id/tvPasswordCheck"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:visibility="invisible"
-            android:text="비밀번호가 일치하지 않습니다."/>
     </LinearLayout>
 
     <LinearLayout

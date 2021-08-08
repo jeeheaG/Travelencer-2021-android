@@ -45,7 +45,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:layout_weight="1">
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editId"
             android:layout_width="350dp"
             android:layout_height="50dp"
@@ -56,7 +56,7 @@
             android:layout_marginBottom="20dp"
             android:maxLines="1"
             android:singleLine="true"/>
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editPassWord"
             android:layout_width="350dp"
             android:layout_height="50dp"

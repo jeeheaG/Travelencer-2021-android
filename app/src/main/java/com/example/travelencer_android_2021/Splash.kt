@@ -74,7 +74,8 @@ class Splash : AppCompatActivity() {
                 .setPermissionListener(permission)
                 .setRationaleMessage("Travelencer를 이용하기 위해 권한을 허용해주세요.")
                 .setDeniedMessage("권한을 거부하셨습니다. [앱 설정]->[권한] 항목에서 허용해주세요.")
-                .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) // 필수 권한만
+                .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) // 필수 권한만
                 .check()
     }
 }

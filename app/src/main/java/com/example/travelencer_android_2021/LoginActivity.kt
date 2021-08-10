@@ -103,14 +103,17 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val result : LoginResponse = response.body()!!
                     Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
-                    Log.d("mmm 로그인 성공", "로그인 성공, 유저 아이디 : " + result.userId)
-                    finish()
+
+                    if (result.code == 200) {
+                        Log.d("mmm 로그인 성공", "userId : " + result.userId)
+                        finish()
+                    }
                 }
             }
 
             // 응답 실패 시
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(applicationContext, "로그인 에라 발생", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "로그인 에러 발생", Toast.LENGTH_SHORT).show()
                 Log.d("mmm 로그인 fail", t.message.toString())
             }
         })

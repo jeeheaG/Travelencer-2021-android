@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.travelencer_android_2021.databinding.ActivityAddPNCBinding
 
+// Main에서 왔는지 Write에서 왔는지 resultCode로 구분
+const val RESULT_CODE_MAIN = Activity.RESULT_FIRST_USER + 0 //1
+const val RESULT_CODE_WRITE = Activity.RESULT_FIRST_USER + 1 //2
+
 class AddPNCActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPNCBinding
     private val codePlaceName = "placeName"
@@ -27,13 +31,15 @@ class AddPNCActivity : AppCompatActivity() {
 
             when(from){
                 "placeMain" -> {
+                    setResult(RESULT_CODE_MAIN)
                     finish()
                 }
-                else -> { // postWrite에서 온 "search" 나 "add"일 경우
+                else -> { // postWrite에서 온 "search" 나 "add"일 경우 장소명과 장소주소를 가지고 돌아감
                     val resultIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
                     resultIntent.putExtra(codePlaceName, placeName)
                     resultIntent.putExtra(codePlaceLoc, placeLoc)
-                    setResult(Activity.RESULT_OK, resultIntent)
+                    setResult(RESULT_CODE_WRITE, resultIntent)
+
                     finish()
                 }
             }

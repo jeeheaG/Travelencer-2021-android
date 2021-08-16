@@ -66,7 +66,7 @@ class PlaceMainFragment : Fragment() {
         binding.rvPlaceMain.adapter = mAdapter
 
         //interceptor설정과 데이터 요청 함수
-        TourApiRetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
+        TourApiRetrofitClient.tourInterceptor.level = HttpLoggingInterceptor.Level.BODY
         callTourKeyword(keyword, area1Code, area2Code)
         Log.d("로그 Tour검색", "$keyword, $area1Code, $area2Code")
 

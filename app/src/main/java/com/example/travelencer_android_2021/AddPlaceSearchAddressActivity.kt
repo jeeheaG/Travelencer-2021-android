@@ -23,6 +23,7 @@ import retrofit2.Response
 class AddPlaceSearchAddressActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceSearchAddressBinding
     //private val codeAddress = "address"
+    var currentKeyword: String = ""
     var currentPage = 1
     var isEnd: Boolean? = null
     private val size = 30 //최대값
@@ -46,22 +47,27 @@ class AddPlaceSearchAddressActivity : AppCompatActivity() {
         binding.rvAddressSearchResultList.adapter = mAdapter
 
         binding.btnAddressSearch.setOnClickListener {
-            addressList.clear()
-            currentPage = 1
-            callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString(), currentPage, size)
+            currentKeyword = binding.etAddressSearchKeyword.text.toString()
+            if(currentKeyword.isEmpty()){
+                Toast.makeText(this, "검색어를 입력해 주세요.", Toast.LENGTH_SHORT).show()
+            }else{
+                addressList.clear()
+                currentPage = 1
+                callKakaoLocalKeyword(currentKeyword, currentPage, size)
 
-            //키보드 내림
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-            view.clearFocus()
+                //키보드 내림
+                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+                view.clearFocus()
+            }
         }
 
         binding.btnAddressMore.setOnClickListener {
             currentPage += 1
-            callKakaoLocalKeyword(binding.etAddressSearchKeyword.text.toString(), currentPage, size)
+            callKakaoLocalKeyword(currentKeyword, currentPage, size)
         }
 
-        // TODO : setResult, 리사이클러뷰 어댑터에서 finish()담긴 리스너 달기 -> 확인 창 한번 띄우면 좋겠다
+        // TODO : 주소 목록의 항목 터치 시 setResult, 리사이클러뷰 어댑터에서 finish()담긴 리스너 달기 -> 확인 창 한번 띄우면 좋겠다
     }
 
 

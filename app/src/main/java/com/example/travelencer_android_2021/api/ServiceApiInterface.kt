@@ -1,9 +1,6 @@
 package com.example.travelencer_android_2021.api
 
-import com.example.travelencer_android_2021.data.JoinData
-import com.example.travelencer_android_2021.data.JoinResponse
-import com.example.travelencer_android_2021.data.LoginData
-import com.example.travelencer_android_2021.data.LoginResponse
+import com.example.travelencer_android_2021.data.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -16,4 +13,8 @@ interface ServiceApiInterface {
     // 회원가입
     @POST("/user/join")
     fun userJoin(@Body data: JoinData): Call<JoinResponse>
+
+    //장소 등록
+    @POST("/place/register")
+    fun placeRegister(@Body data: PlaceRegisterData): Call<PlaceRegisterResponse>
 }

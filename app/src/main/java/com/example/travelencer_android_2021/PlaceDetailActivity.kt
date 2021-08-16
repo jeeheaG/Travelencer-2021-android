@@ -1,6 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +15,6 @@ import com.example.travelencer_android_2021.adapter.PlaceDetailRecentPostAdapter
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.ActivityPlaceDetailBinding
 import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
-import com.example.travelencer_android_2021.model.ModelCasePlaceCard
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
 import com.example.travelencer_android_2021.model.modelTourApiDetailCommon.ModelTourApiDetailCommon
 import com.example.travelencer_android_2021.model.modelTourApiDetailImage.ModelTourApiDetailImage
@@ -142,7 +140,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         }
 
         //interceptor설정과 데이터 요청 함수
-        TourApiRetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
+        TourApiRetrofitClient.tourInterceptor.level = HttpLoggingInterceptor.Level.BODY
         callTourDetailCommon(contentId, this)
         callTourDetailImage(contentId, this)
 

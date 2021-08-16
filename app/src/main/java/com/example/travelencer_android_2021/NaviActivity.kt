@@ -205,7 +205,7 @@ class NaviActivity : AppCompatActivity() {
 
         ft.commitAllowingStateLoss()
 
-    }
+    } //setFragment 함수 끝
 
     override fun onDestroy() {
         super.onDestroy()

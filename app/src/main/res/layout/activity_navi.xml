@@ -32,5 +32,5 @@
         app:itemIconTint="@drawable/menu_selector_color"
         app:itemTextColor="@drawable/menu_selector_color"
         android:layout_weight="1" />
-//android:background="@color/white", weight
+<!--android:background="@color/white", weight-->
 </LinearLayout>

@@ -14,14 +14,15 @@ import kotlinx.android.synthetic.main.fragment_feed.view.*
 // 여행 피드 프레그먼트(여행 피드 필터 결과)
 // 사진, 코스, 맛집, 관광지 탭
 class FeedFragment : Fragment() {
-    private lateinit var binding : FragmentFeedBinding
+    private var _binding : FragmentFeedBinding? = null
+    private val binding get() = _binding!!
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentFeedBinding.inflate(inflater, container, false)
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFeedBinding.inflate(inflater, container, false)
 
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         val bundle = arguments
@@ -44,6 +45,11 @@ class FeedFragment : Fragment() {
         }.attach()
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

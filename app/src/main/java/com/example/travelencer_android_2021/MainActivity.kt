@@ -4,41 +4,47 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.travelencer_android_2021.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 // 홈 액티비티
 class MainActivity : AppCompatActivity() {
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+
     // 뒤로가기 연속 클릭 대기 시간
     private var mBackWait : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         // <로그인 & 회원가입> 버튼 클릭
-        btnLoingAndRegister.setOnClickListener {
+        binding.btnLoingAndRegister.setOnClickListener {
             // LoginActivity로 이동하기
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
 
         // 설정 이미지 클릭
-        imgSetting.setOnClickListener {
+        binding.imgSetting.setOnClickListener {
             setNavi(R.id.settingFragment)
         }
 
         // <여행지 검색> 클릭
-        btnSearchPlace.setOnClickListener {
+        binding.btnSearchPlace.setOnClickListener {
             setNavi(R.id.placeMainFragment)
         }
 
         // <여행 피드> 클릭
-        btnFeed.setOnClickListener {
+        binding.btnFeed.setOnClickListener {
             setNavi(R.id.feedFragment)
         }
 
         // <나의 여행 일지> 클릭
-        btnMyPost.setOnClickListener {
+        binding.btnMyPost.setOnClickListener {
             setNavi(R.id.postBlogFragment)
         }
 

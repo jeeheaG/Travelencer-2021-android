@@ -12,11 +12,12 @@ import com.example.travelencer_android_2021.model.ModelFeedPhoto
 
 // 여행 피드 - 사진 탭
 class FeedPhotoFragment : Fragment() {
-    private lateinit var binding : FragmentFeedPhotoBinding
+    private var _binding : FragmentFeedPhotoBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = FragmentFeedPhotoBinding.inflate(inflater, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentFeedPhotoBinding.inflate(inflater, container, false)
 
         // 격자 레이아웃 생성
         binding.rcFeedPhoto.layoutManager = GridLayoutManager(activity, 3)
@@ -37,4 +38,10 @@ class FeedPhotoFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

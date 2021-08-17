@@ -3,12 +3,10 @@ package com.example.travelencer_android_2021
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.JoinResponse
 import com.example.travelencer_android_2021.data.LoginData
 import com.example.travelencer_android_2021.data.LoginResponse
 import com.example.travelencer_android_2021.databinding.ActivityLoginBinding
@@ -18,11 +16,12 @@ import retrofit2.Response
 
 // 로그인 액티비티
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -33,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
 
         // 이메일 유효성 확인
         var emailCheck = false
-        binding.editId.doOnTextChanged { text, start, before, count ->
+        binding.editId.doOnTextChanged { _, _, _, _ ->
             val email = binding.editId.text.toString()
             if (!isEmailValid(email)) {
                 binding.editId.error = "이메일이 유효하지 않습니다."
@@ -46,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // 비밀번호 일치하는지 확인
-        binding.editPassWord.doOnTextChanged { text, start, before, count ->
+        binding.editPassWord.doOnTextChanged { _, _, _, _ ->
             val password = binding.editPassWord.text.toString()
 
             // 비밀번호 6자리인지 확인

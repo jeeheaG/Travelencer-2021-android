@@ -12,13 +12,14 @@ import com.example.travelencer_android_2021.databinding.FragmentFeedCourseBindin
 
 // 여행 피드 - 코스 탭
 class FeedCourseFragment : Fragment() {
-    private lateinit var binding : FragmentFeedCourseBinding
+    private var _binding : FragmentFeedCourseBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentFeedCourseBinding.inflate(inflater, container, false)
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFeedCourseBinding.inflate(inflater, container, false)
 
         // 리사이클러뷰 매니저 설정
         val layoutManager = LinearLayoutManager(activity)
@@ -45,5 +46,11 @@ class FeedCourseFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }

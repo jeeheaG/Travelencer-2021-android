@@ -12,11 +12,12 @@ import kotlinx.android.synthetic.main.activity_password_find.*
 
 // 비밀번호 찾기 액티비티
 class PasswordFindActivity  : AppCompatActivity() {
-    private lateinit var binding: ActivityPasswordFindBinding
+    private var _binding: ActivityPasswordFindBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPasswordFindBinding.inflate(layoutInflater)
+        _binding = ActivityPasswordFindBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -29,7 +30,7 @@ class PasswordFindActivity  : AppCompatActivity() {
 
         // 이메일 유효성 확인
         var emailCheck = false
-        binding.editEmailId.doOnTextChanged { text, start, before, count ->
+        binding.editEmailId.doOnTextChanged { _, _, _, _ ->
             val email = binding.editEmailId.text.toString()
             if (!isEmailValid(email)) {
                 binding.editEmailId.error = "이메일이 유효하지 않습니다."
@@ -78,7 +79,7 @@ class PasswordFindActivity  : AppCompatActivity() {
 
         // 비밀번호 일치하는지 확인
         var passwordCheck = false
-        binding.editPassword1.doOnTextChanged { text, start, before, count ->
+        binding.editPassword1.doOnTextChanged { _, _, _, _ ->
             val password1 = binding.editPassword1.text.toString()
             val password2 = binding.editPassword2.text.toString()
 
@@ -87,7 +88,7 @@ class PasswordFindActivity  : AppCompatActivity() {
             else binding.editPassword1.error = null
 
             // 비밀번호 정확히 입력했는지 확인
-            if(password1.equals(password2)) {
+            if(password1 == password2) {
                 passwordCheck = true
                 binding.editPassword2.error = null
             }
@@ -96,12 +97,12 @@ class PasswordFindActivity  : AppCompatActivity() {
                 binding.editPassword2.error = "비밀번호가 다릅니다."
             }
         }
-        binding.editPassword2.doOnTextChanged { text, start, before, count ->
+        binding.editPassword2.doOnTextChanged { _, _, _, _ ->
             val password1 = binding.editPassword1.text.toString()
             val password2 = binding.editPassword2.text.toString()
 
             // 비밀번호 정확히 입력했는지 확인
-            if(password1.equals(password2)) {
+            if(password1 == password2) {
                 passwordCheck = true
                 binding.editPassword2.error = null
             }

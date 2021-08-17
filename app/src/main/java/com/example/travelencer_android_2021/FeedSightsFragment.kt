@@ -13,13 +13,14 @@ import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 여행 피드 - 관광지 탭
 class FeedSightsFragment : Fragment() {
-    private lateinit var binding : FragmentFeedSightsBinding
+    private var _binding : FragmentFeedSightsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentFeedSightsBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentFeedSightsBinding.inflate(inflater, container, false)
 
         // 리사이클러뷰 매니저 설정
         val layoutManager = LinearLayoutManager(activity)
@@ -39,6 +40,11 @@ class FeedSightsFragment : Fragment() {
         feedSightsAdapter.items.add(ModelCourseSpot("한강공원", "저러쿵"))
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

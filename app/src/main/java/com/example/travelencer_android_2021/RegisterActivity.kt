@@ -15,11 +15,12 @@ import retrofit2.Response
 
 // 회원가입 액티비티
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRegisterBinding
+    private var _binding: ActivityRegisterBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        _binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -30,49 +31,49 @@ class RegisterActivity : AppCompatActivity() {
 
         // 비밀번호 일치하는지 확인
         var passwordCheck = false
-        binding.editPassword1.doOnTextChanged { text, start, before, count ->
-            val password1 = binding.editPassword1.text.toString()
-            val password2 = binding.editPassword2.text.toString()
+        editPassword1.doOnTextChanged { _, _, _, _ ->
+            val password1 = editPassword1.text.toString()
+            val password2 = editPassword2.text.toString()
 
             // 비밀번호 6자리인지 확인
-            if (!isPasswordValid(password1)) binding.editPassword1.error = "비민번호는 6지리 이상이어야 합니다."
-            else binding.editPassword1.error = null
+            if (!isPasswordValid(password1)) editPassword1.error = "비민번호는 6지리 이상이어야 합니다."
+            else editPassword1.error = null
 
             // 비밀번호 정확히 입력했는지 확인
-            if(password1.equals(password2)) {
+            if(password1 == password2) {
                 passwordCheck = true
-                binding.editPassword2.error = null
+                editPassword2.error = null
             }
             else {
                 passwordCheck = false
-                binding.editPassword2.error = "비밀번호가 다릅니다."
+                editPassword2.error = "비밀번호가 다릅니다."
             }
         }
-        binding.editPassword2.doOnTextChanged { text, start, before, count ->
-            val password1 = binding.editPassword1.text.toString()
-            val password2 = binding.editPassword2.text.toString()
+        editPassword2.doOnTextChanged { _, _, _, _ ->
+            val password1 = editPassword1.text.toString()
+            val password2 = editPassword2.text.toString()
 
             // 비밀번호 정확히 입력했는지 확인
-            if(password1.equals(password2)) {
+            if(password1 == password2) {
                 passwordCheck = true
-                binding.editPassword2.error = null
+                editPassword2.error = null
             }
             else {
                 passwordCheck = false
-                binding.editPassword2.error = "비밀번호가 다릅니다."
+                editPassword2.error = "비밀번호가 다릅니다."
             }
         }
 
         // 이메일 유효성 확인
         var emailCheck = false
-        binding.editEmailId.doOnTextChanged { text, start, before, count ->
-            val email = binding.editEmailId.text.toString()
+        editEmailId.doOnTextChanged { _, _, _, _ ->
+            val email = editEmailId.text.toString()
             if (!isEmailValid(email)) {
-                binding.editEmailId.error = "이메일이 유효하지 않습니다."
+                editEmailId.error = "이메일이 유효하지 않습니다."
                 emailCheck = false
             }
             else {
-                binding.editEmailId.error = null
+                editEmailId.error = null
                 emailCheck = true
             }
         }
@@ -80,21 +81,21 @@ class RegisterActivity : AppCompatActivity() {
         // <가입하기> 버튼 클릭
         btnRegister.setOnClickListener {
             // 이름 검사
-            val name = binding.editName.text.toString()
+            val name = editName.text.toString()
             if (name.isEmpty()) {
                 Toast.makeText(applicationContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             // 닉네임 검사
-            val nickname = binding.editNickname.text
+            val nickname = editNickname.text
             // 이메일 검사
-            val email = binding.editEmailId.text.toString()
+            val email = editEmailId.text.toString()
             if (!emailCheck) {
                 Toast.makeText(applicationContext, "이메일이 유효하지 않습니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             // 비밀번호 검사
-            val password = binding.editPassword2.text.toString()
+            val password = editPassword2.text.toString()
             if (password.isEmpty()) {
                 Toast.makeText(applicationContext, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener

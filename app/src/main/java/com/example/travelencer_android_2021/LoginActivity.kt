@@ -11,6 +11,7 @@ import com.example.travelencer_android_2021.data.LoginData
 import com.example.travelencer_android_2021.data.LoginResponse
 import com.example.travelencer_android_2021.databinding.ActivityLoginBinding
 import kotlinx.android.synthetic.main.activity_login.*
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Response
 
@@ -24,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        RetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         // 뒤로가기 이미지 클릭
         binding.imgBack.setOnClickListener {
@@ -95,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
 
     // 로그인 하기
     private fun startLogin(data : LoginData) {
-        val call = RetrofitClient.serviceApi.userLogin(data)
+        val call = RetrofitClient.serviceApiUser.userLogin(data)
         call.enqueue(object : retrofit2.Callback<LoginResponse> {
             // 응답 성공 시
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {

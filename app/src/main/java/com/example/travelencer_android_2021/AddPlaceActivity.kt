@@ -11,8 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
-import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.api.TourApiRetrofitClient
+import com.example.travelencer_android_2021.api.RetrofitClientPlace
 import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.data.PlaceRegisterResponse
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
@@ -50,7 +49,7 @@ class AddPlaceActivity : AppCompatActivity() {
         val pncResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == RESULT_CODE_MAIN || result.resultCode == RESULT_CODE_WRITE){
                 //interceptor설정과 데이터 요청 함수
-                RetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
+                RetrofitClientPlace.interceptor.level = HttpLoggingInterceptor.Level.BODY
 
                 // 서버에 장소등록 요청 보냄(<다음으로> 버튼을 눌러 placeData 데이터가 만들어진 상태여야 함)
                 placeData?.let { postAddPlace(it) }
@@ -148,7 +147,9 @@ class AddPlaceActivity : AppCompatActivity() {
                     plcExplain = binding.etPlaceRegisterExplain.text.toString(),
                     plcAddress = binding.tvPlaceRegisterAddressInput.text.toString(),
                     plcCategory = categoryChecked,
-                    plcPicture = photoList
+                    plcPicture = "ThisIsDummyStringAnything"
+                    //plcPicture = photoList
+
             )
 
             val intent = Intent(this, AddPNCActivity::class.java)
@@ -165,7 +166,7 @@ class AddPlaceActivity : AppCompatActivity() {
     }
 
     private fun postAddPlace(data: PlaceRegisterData){
-        val call = RetrofitClient.serviceApi.placeRegister(data)
+        val call = RetrofitClientPlace.serviceApiPlace.placeRegister(data)
         call.enqueue(object : retrofit2.Callback<PlaceRegisterResponse> {
             override fun onResponse(call: Call<PlaceRegisterResponse>, response: Response<PlaceRegisterResponse>) {
                 if (response.isSuccessful) {
@@ -175,7 +176,6 @@ class AddPlaceActivity : AppCompatActivity() {
 
                     Log.d("로그 postAddPlace code", "${result.code}")
                     Log.d("로그 postAddPlace msg", result.message)
-
 
                     Log.d("로그 postAddPlace", "${result}")
 

@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedCourseAdapter
 
 // 게시물 - 코스 탭
 class PostCourseFragment : Fragment() {
-
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -25,7 +25,8 @@ class PostCourseFragment : Fragment() {
         // 리아시클러뷰에 어댑터 달기
         val feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }
         rcFeedCourse.adapter = feedCourseAdapter
-
+        // divider 추가
+        rcFeedCourse.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         val spotNameList1 : ArrayList<String> = arrayListOf("가", "나", "다", "라", "미", "비", "사",  "아",  "자")
         val spotNameList2 : ArrayList<String> = arrayListOf("게", "시", "물")

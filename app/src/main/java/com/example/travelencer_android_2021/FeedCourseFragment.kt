@@ -5,27 +5,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedCourseAdapter
+import com.example.travelencer_android_2021.databinding.FragmentFeedCourseBinding
 
 // 여행 피드 - 코스 탭
 class FeedCourseFragment : Fragment() {
+    private lateinit var binding : FragmentFeedCourseBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.fragment_feed_course, container, false)
+        binding = FragmentFeedCourseBinding.inflate(inflater, container, false)
 
-        val rcFeedCourse = view.findViewById<RecyclerView>(R.id.rcFeedCourse)
         // 리사이클러뷰 매니저 설정
         val layoutManager = LinearLayoutManager(activity)
-        rcFeedCourse.layoutManager = layoutManager
+        binding.rcFeedCourse.layoutManager = layoutManager
         // 리아시클러뷰에 어댑터 달기
         val feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }
-        rcFeedCourse.adapter = feedCourseAdapter
-
+        binding.rcFeedCourse.adapter = feedCourseAdapter
+        // divider 추가
+        binding.rcFeedCourse.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         val spotNameList1 : ArrayList<String> = arrayListOf("이러쿵지역","저러쿵지역긴지역명도잘라서보여준다", "3지역", "마지막커브지역", "다섯번째지역", "여섯번째지역", "일곱", "888", "아홉번째", "10번", "11번", "12번", "13번", "14번", "15번", "16번", "17번")
         val spotNameList2 : ArrayList<String> = arrayListOf("1","2", "3식당", "4여행지")
@@ -41,7 +43,7 @@ class FeedCourseFragment : Fragment() {
         feedCourseAdapter.items.add(spotNameList5)
         feedCourseAdapter.items.add(spotNameList6)
 
-        return view
+        return binding.root
     }
 
 }

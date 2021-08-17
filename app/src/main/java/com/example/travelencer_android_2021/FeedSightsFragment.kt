@@ -5,27 +5,30 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedSightsAdapter
+import com.example.travelencer_android_2021.databinding.FragmentFeedSightsBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 여행 피드 - 관광지 탭
 class FeedSightsFragment : Fragment() {
+    private lateinit var binding : FragmentFeedSightsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.fragment_feed_sights, container, false)
+        binding = FragmentFeedSightsBinding.inflate(inflater, container, false)
 
-        val rcFeedSights = view.findViewById<RecyclerView>(R.id.rcFeedSights)
         // 리사이클러뷰 매니저 설정
         val layoutManager = LinearLayoutManager(activity)
-        rcFeedSights.layoutManager = layoutManager
+        binding.rcFeedSights.layoutManager = layoutManager
         // 리아시클러뷰에 어댑터 달기
         val feedSightsAdapter = FeedSightsAdapter()
-        rcFeedSights.adapter = feedSightsAdapter
+        binding.rcFeedSights.adapter = feedSightsAdapter
+        // divider 추가
+        binding.rcFeedSights.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         feedSightsAdapter.items.add(ModelCourseSpot("수원 화성", "고양시 수원시"))
         feedSightsAdapter.items.add(ModelCourseSpot("어디어디 마을", "어쩌구"))
@@ -35,7 +38,7 @@ class FeedSightsFragment : Fragment() {
         feedSightsAdapter.items.add(ModelCourseSpot("밤가시마을", "이러쿵"))
         feedSightsAdapter.items.add(ModelCourseSpot("한강공원", "저러쿵"))
 
-        return view
+        return binding.root
     }
 
 }

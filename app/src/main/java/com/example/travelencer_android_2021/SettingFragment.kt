@@ -49,12 +49,11 @@ class SettingFragment : Fragment() {
         mBinding = binding
 
         // 동그란 이미지
-        val imgProfile = binding.imgProfile
-        imgProfile.background = ShapeDrawable(OvalShape()).apply {
+        binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {
             paint.color = Color.WHITE
         }
 
-        imgProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
+        binding.imgProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
 
         // <프로필 사진 변경> 버튼 클릭하면 갤러리에서 사진 가져오기
         binding.btnLoingAndRegister.setOnClickListener {

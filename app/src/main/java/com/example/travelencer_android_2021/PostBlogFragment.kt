@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.FeedAdapter
 import com.example.travelencer_android_2021.adapter.PostBlogAdapter
@@ -72,6 +73,8 @@ class PostBlogFragment : Fragment() {
         binding.rvPostBlogPostList.setHasFixedSize(true)
 
         binding.rvPostBlogPostList.adapter = activity?.let { PostBlogAdapter(postList, it) }
+        // divider 추가
+        binding.rvPostBlogPostList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         binding.ivPostBlogProfile.background = ShapeDrawable(OvalShape())
         binding.ivPostBlogProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용

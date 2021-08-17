@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
         // 뒤로가기 이미지 클릭
-        imgBack.setOnClickListener {
+        binding.imgBack.setOnClickListener {
             finish()
         }
 
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // <로그인> 버튼 클릭
-        btnLogin.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             val email = binding.editId.text.toString()
             val password = binding.editPassWord.text.toString()
 
@@ -79,14 +79,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // <비밀번호 찾기> 텍스트뷰 클릭
-        tvPasswordFind.setOnClickListener {
+        binding.tvPasswordFind.setOnClickListener {
             // PasswordFindActivity로 이동하기
             val intent = Intent(this@LoginActivity, PasswordFindActivity::class.java)
             startActivity(intent)
         }
 
         // <회원가입> 버튼 클릭
-        btnRegister.setOnClickListener {
+        binding.btnRegister.setOnClickListener {
             // RegisterActivity로 이동하기
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)

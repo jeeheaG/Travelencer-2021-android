@@ -30,12 +30,12 @@ class PostPhotoFragment : Fragment() {
         feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "4"))
         feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "5"))
         feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "6"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://yt3.ggpht.com/ytc/AAUvwniH02-F6A92emPJzoDG633EB7ss_Q6kvP7Vo7sFlw=s900-c-k-c0x00ffffff-no-r", "7"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://yt3.ggpht.com/ytc/AAUvwniH02-F6A92emPJzoDG633EB7ss_Q6kvP7Vo7sFlw=s900-c-k-c0x00ffffff-no-r", "8"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://yt3.ggpht.com/ytc/AAUvwniH02-F6A92emPJzoDG633EB7ss_Q6kvP7Vo7sFlw=s900-c-k-c0x00ffffff-no-r", "9"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://yt3.ggpht.com/ytc/AAUvwniH02-F6A92emPJzoDG633EB7ss_Q6kvP7Vo7sFlw=s900-c-k-c0x00ffffff-no-r", "10"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://yt3.ggpht.com/ytc/AAUvwniH02-F6A92emPJzoDG633EB7ss_Q6kvP7Vo7sFlw=s900-c-k-c0x00ffffff-no-rj", "11"))
-
+        feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "4"))
+        feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "5"))
+        feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "6"))
+        feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "4"))
+        feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "5"))
+        feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "6"))
         return view
     }
 }

@@ -34,7 +34,7 @@ class FeedPhotoFragment : Fragment() {
         feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "8"))
         feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "9"))
         feedPhototAdapter.items.add(ModelFeedPhoto("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbWtUpuVhoPd4eSzs1Q6eXT7SkrtQ6eo93Dw&usqp=CAU", "10"))
- 
+
         return binding.root
     }
 }

@@ -10,6 +10,7 @@ import com.example.travelencer_android_2021.data.JoinData
 import com.example.travelencer_android_2021.data.JoinResponse
 import com.example.travelencer_android_2021.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_register.*
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Response
 
@@ -23,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        RetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         // 뒤로가기 이미지 클릭
         imgBack.setOnClickListener {
@@ -133,7 +135,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // 회원가입하기
     private fun startJoin(data : JoinData) {
-        val call = RetrofitClient.serviceApi.userJoin(data)
+        val call = RetrofitClient.serviceApiUser.userJoin(data)
         call.enqueue(object : retrofit2.Callback<JoinResponse> {
             // 응답 성공 시
             override fun onResponse(call: Call<JoinResponse>, response: Response<JoinResponse>) {

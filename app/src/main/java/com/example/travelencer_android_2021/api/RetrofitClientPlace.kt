@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 //okhttp와 httpLoggingInterceptor
-object RetrofitClient {
+object RetrofitClientPlace {
     var interceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
         override fun log(message: String) {
             Log.e("", message)
@@ -24,14 +24,14 @@ object RetrofitClient {
 
 
     // 서버 연결
-    private val retrofitUser = Retrofit.Builder()
-            .baseUrl("http://152.70.95.197:3000")
-//            .baseUrl("http://152.70.95.197:3001")
+    private val retrofitPlace = Retrofit.Builder()
+//            .baseUrl("http://152.70.95.197:3000")
+            .baseUrl("http://152.70.95.197:3001")
             .client(client) //okhttp
             .addConverterFactory(GsonConverterFactory.create())
 
-    val serviceApiUser: ServiceApiInterface by lazy {
-        retrofitUser.build().create(ServiceApiInterface::class.java)
+    val serviceApiPlace: ServiceApiInterface by lazy {
+        retrofitPlace.build().create(ServiceApiInterface::class.java)
     }
 
 }

@@ -5,6 +5,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,10 +30,16 @@ class PostBlogFragment : Fragment() {
 
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
 
+    private var uid = -1    // uid 값
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        // uid 받기
+        val bundle = arguments
+        if (bundle != null) uid = bundle.getInt("uid")
 
         val photoList = arrayListOf(
                 ModelPostBlogPhoto(R.drawable.dummy_haewoojae),

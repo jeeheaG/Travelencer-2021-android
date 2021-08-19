@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -107,6 +108,9 @@ class LoginActivity : AppCompatActivity() {
 
                     if (result.code == 200) {
                         Log.d("mmm 로그인 성공", "userId : " + result.userId)
+                        val outIntent = Intent(applicationContext, MainActivity::class.java)
+                        outIntent.putExtra("uid", result.userId)
+                        setResult(Activity.RESULT_OK, outIntent)
                         finish()
                     }
                 }

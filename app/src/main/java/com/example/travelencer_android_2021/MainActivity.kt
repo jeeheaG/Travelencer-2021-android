@@ -1,9 +1,12 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.travelencer_android_2021.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -11,6 +14,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+
+    private var uid = -1
 
     // 뒤로가기 연속 클릭 대기 시간
     private var mBackWait : Long = 0
@@ -21,12 +26,24 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        // uid 받기
+        uid = intent.getIntExtra("uid", -1)
+
+        val loginResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                if (data != null) uid = data.getIntExtra("uid", -1)
+                Log.d("mmmm", uid.toString())
+            }
+        }
+
         // <로그인 & 회원가입> 버튼 클릭
         binding.btnLoingAndRegister.setOnClickListener {
-            // LoginActivity로 이동하기
+            // LoginActivity로 이동해서 uid 받아오기
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(intent)
+            loginResultLauncher.launch(intent)
         }
+
 
         // 설정 이미지 클릭
         binding.imgSetting.setOnClickListener {
@@ -53,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     private fun setNavi(fregmentId : Int) {
         val intent = Intent(this@MainActivity, NaviActivity::class.java)
         intent.putExtra("selectFragId", fregmentId)
+        intent.putExtra("uid", uid)
         startActivity(intent)
         finish()
     }

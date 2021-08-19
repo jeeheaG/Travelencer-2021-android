@@ -14,6 +14,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,8 +39,9 @@ private const val IMAGE_CAPTURE = 1
 // 설정 프레그먼트
 class SettingFragment : Fragment() {
     private var mBinding : FragmentSettingBinding? = null
-    var uri : Uri? = null   // 이미지 파일 경로
-    lateinit var currentPhotoPath : String // 사진 경로 값
+    private var uri : Uri? = null                   // 이미지 파일 경로
+    private lateinit var currentPhotoPath : String  // 사진 경로 값
+    private var uid = -1                            // uid 값
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +49,10 @@ class SettingFragment : Fragment() {
 
         val binding = FragmentSettingBinding.inflate(inflater, container, false)
         mBinding = binding
+
+        // uid 받기
+        val bundle = arguments
+        if (bundle != null) uid = bundle.getInt("uid")
 
         // 동그란 이미지
         binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {
@@ -105,10 +111,10 @@ class SettingFragment : Fragment() {
         binding.tvWithDraw.setOnClickListener {
             AlertDialog.Builder(context)
                     .setMessage("정말 탈퇴하시겠습니까?")
-                    .setPositiveButton("네") { dialog, which ->
+                    .setPositiveButton("네") { _, _ ->
                         Toast.makeText(context, "탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
                     }
-                    .setNegativeButton("아니오") { dialog, which ->
+                    .setNegativeButton("아니오") { _, _ ->
                         Toast.makeText(context, "취소되었습니다.", Toast.LENGTH_SHORT).show()
                     }
                     .show()
@@ -174,15 +180,15 @@ class SettingFragment : Fragment() {
 
                     // 버전에 따라 다른 비트맵
                     // 안드로이드 파이 버전보다 낮은 경우 (getBitmap)
-                    if (Build.VERSION.SDK_INT < 28)
-                        bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, Uri.fromFile(file))
+                    bitmap = if (Build.VERSION.SDK_INT < 28)
+                        MediaStore.Images.Media.getBitmap(activity?.contentResolver, Uri.fromFile(file))
                     // 안드로이드 파이 버전보다 높은 경우 (ImageDecoder)
                     else {
                         val decode = ImageDecoder.createSource(
                                 activity?.contentResolver!!,
                                 Uri.fromFile(file)
                         )
-                        bitmap = ImageDecoder.decodeBitmap(decode)
+                        ImageDecoder.decodeBitmap(decode)
                     }
                     // 갤러리에 저장
                     savePhoto(bitmap)

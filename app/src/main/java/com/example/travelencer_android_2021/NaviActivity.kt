@@ -26,10 +26,14 @@ private const val SP_FEED_FILTERED: String = "feedFiltered"
 class NaviActivity : AppCompatActivity() {
     private var placeFiltered: Boolean = false
     private var feedFiltered: Boolean = false
+    private var uid = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navi)
+
+        // uid 받기
+        uid = intent.getIntExtra("uid", -1)
 
         //처음 보여줄 프래그먼트 설정
         //setFragment(TAG_FEED, FeedFragment())
@@ -38,7 +42,8 @@ class NaviActivity : AppCompatActivity() {
         navi.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.homeFragment -> {
-                    var intent = Intent(this@NaviActivity, MainActivity::class.java)
+                    val intent = Intent(this@NaviActivity, MainActivity::class.java)
+                    intent.putExtra("uid", uid)
                     startActivity(intent)
                     finish()
                 }
@@ -68,6 +73,13 @@ class NaviActivity : AppCompatActivity() {
         feedFiltered = pref.getBoolean(SP_FEED_FILTERED, false)
         Log.d("로그----","placeFiltered - ${placeFiltered}")
         Log.d("로그----","feedFiltered - ${feedFiltered}")
+
+        // uid가 필요한 fragment에 uid 넣어주기
+        if (fragment is PostBlogFragment || fragment is SettingFragment) {
+            val bundle = Bundle()
+            bundle.putInt("uid", uid)
+            fragment.arguments = bundle
+        }
 
 
         //트랜잭션에 fragment들 add

@@ -31,13 +31,18 @@ class FeedSightsFragment : Fragment() {
         // divider 추가
         binding.rcFeedSights.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedSightsAdapter.items.add(ModelCourseSpot("수원 화성", "고양시 수원시"))
-        feedSightsAdapter.items.add(ModelCourseSpot("어디어디 마을", "어쩌구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("이런이런 공원", "저꺼고"))
-        feedSightsAdapter.items.add(ModelCourseSpot("호수공원", "고양시 덕양구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("산길 공원", "저러저러"))
-        feedSightsAdapter.items.add(ModelCourseSpot("밤가시마을", "이러쿵"))
-        feedSightsAdapter.items.add(ModelCourseSpot("한강공원", "저러쿵"))
+        feedSightsAdapter.items.add(ModelCourseSpot("방화수류정", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("화성행궁", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("수원화성", "수원시 장안구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("만석공원", "수원시 장안구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("창룡문", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("해우재", "수원시 장안구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("광교 호수공원", "수원시 영통구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("효원공원월화뭔", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("플라잉 수원", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("수원화성박물관", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("장안문", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("수원 시립 아이파크 미술관", "수원시 팔달구"))
 
         return binding.root
     }

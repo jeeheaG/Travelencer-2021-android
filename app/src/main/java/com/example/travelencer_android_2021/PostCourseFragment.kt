@@ -28,10 +28,10 @@ class PostCourseFragment : Fragment() {
         // divider 추가
         rcFeedCourse.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        val spotNameList1 : ArrayList<String> = arrayListOf("가", "나", "다", "라", "미", "비", "사",  "아",  "자")
-        val spotNameList2 : ArrayList<String> = arrayListOf("게", "시", "물")
-        val spotNameList3 : ArrayList<String> = arrayListOf("1번", "2번", "3번", "4번")
-        val spotNameList4 : ArrayList<String> = arrayListOf("하나","둘", "셋", "넷", "다섯")
+        val spotNameList1 : ArrayList<String> = arrayListOf("연무대", "화성여차", "서장대", "화성행궁", "공방거리", "재래시장", "화성 박물관", "통닭거리", "플라잉 수원")
+        val spotNameList2 : ArrayList<String> = arrayListOf("광교 호수공원", "수원화성", "화성 행궁", "공방거리")
+        val spotNameList3 : ArrayList<String> = arrayListOf("팔달마을", "수원화성", "행굴동 벽화마을", "지동 벽화마을", "방화 수류청")
+        val spotNameList4 : ArrayList<String> = arrayListOf("노을빛 전망대", "통닭거리", "지동 시장", "수원 화성 박물관", "연무대")
 
         feedCourseAdapter!!.items.add(spotNameList1)
         feedCourseAdapter.items.add(spotNameList2)

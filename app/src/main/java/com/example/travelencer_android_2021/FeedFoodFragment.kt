@@ -32,15 +32,15 @@ class FeedFoodFragment : Fragment() {
         // divider 추가
         binding.rcFeedFood.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedFoodAdapter.items.add(ModelCourseSpot("마라마라탕", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("과일가게", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("명동 칼숙수", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("어쩌구 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("저쩌고 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("이러쿵 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("저러쿨 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("이런 식당", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("저런 식당", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("지아니스나폴리", "수원시 영통구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("좋은 소식", "수원시 영통구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("이나경 송탄 부대찌개", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("평장원", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("을라메히꼬", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("가보정1관", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("슬리핑테이블", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("우판 등심", "수원시 영통구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("윤가 곰탕", "수원시 영통구"))
 
         return binding.root
     }

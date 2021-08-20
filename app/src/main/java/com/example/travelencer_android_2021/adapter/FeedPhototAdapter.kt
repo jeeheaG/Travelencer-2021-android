@@ -32,7 +32,7 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                Toast.makeText(parent.context, "${position} 클릭", Toast.LENGTH_SHORT).show()
+                Toast.makeText(parent.context, "${items[position].str} 클릭", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -30,12 +30,12 @@ class FeedCourseFragment : Fragment() {
         // divider 추가
         binding.rcFeedCourse.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        val spotNameList1 : ArrayList<String> = arrayListOf("이러쿵지역","저러쿵지역긴지역명도잘라서보여준다", "3지역", "마지막커브지역", "다섯번째지역", "여섯번째지역", "일곱", "888", "아홉번째", "10번", "11번", "12번", "13번", "14번", "15번", "16번", "17번")
-        val spotNameList2 : ArrayList<String> = arrayListOf("1","2", "3식당", "4여행지")
-        val spotNameList3 : ArrayList<String> = arrayListOf("111","222", "333", "444", "555")
-        val spotNameList4 : ArrayList<String> = arrayListOf("하나","둘")
-        val spotNameList5 : ArrayList<String> = arrayListOf("서울","부산", "춘천", "제주", "프랑스", "스위스")
-        val spotNameList6 : ArrayList<String> = arrayListOf("여","행", "여여", "행행", "여여여", "행행행", "여행")
+        val spotNameList1 : ArrayList<String> = arrayListOf("연무대", "화성여차", "서장대", "화성행궁", "공방거리", "재래시장", "화성 박물관", "통닭거리", "플라잉 수원")
+        val spotNameList2 : ArrayList<String> = arrayListOf("광교 호수공원", "수원화성", "화성 행궁", "공방거리")
+        val spotNameList3 : ArrayList<String> = arrayListOf("팔달마을", "수원화성", "행굴동 벽화마을", "지동 벽화마을", "방화 수류청")
+        val spotNameList4 : ArrayList<String> = arrayListOf("노을빛 전망대", "통닭거리", "지동 시장", "수원 화성 박물관", "연무대")
+        val spotNameList5 : ArrayList<String> = arrayListOf("수원 화성 박물관", "아이파크 미술관", "르본 수원 실크로드 호텔", "광교 호수공원")
+        val spotNameList6 : ArrayList<String> = arrayListOf("해우재", "회서문", "화성 행궁", "장안문", "화홍문", "연무대", "수원화성 박물관")
 
         feedCourseAdapter!!.items.add(spotNameList1)
         feedCourseAdapter.items.add(spotNameList2)

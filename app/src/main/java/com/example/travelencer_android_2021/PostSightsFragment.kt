@@ -31,12 +31,11 @@ class PostSightsFragment : Fragment() {
         // divider 추가
         rcFeedSights.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedSightsAdapter.items.add(ModelCourseSpot("게시물 관광지", "고양시 수원시"))
-        feedSightsAdapter.items.add(ModelCourseSpot("개미마을", "어쩌구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("어디어디동네", "저꺼고"))
-        feedSightsAdapter.items.add(ModelCourseSpot("방바다", "고양시 덕양구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("하늘공원", "저러저러"))
-        feedSightsAdapter.items.add(ModelCourseSpot("지나가던 마을", "이러쿵"))
+        feedSightsAdapter.items.add(ModelCourseSpot("수원화성", "수원시 장안구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("만석공원", "수원시 장안구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("창룡문", "수원시 팔달구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("해우재", "수원시 장안구"))
+        feedSightsAdapter.items.add(ModelCourseSpot("광교 호수공원", "수원시 영통구"))
 
         return view
     }

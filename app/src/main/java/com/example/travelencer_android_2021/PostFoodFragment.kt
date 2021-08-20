@@ -29,11 +29,15 @@ class PostFoodFragment : Fragment() {
         // divider 추가
         rcFeedFood.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedFoodAdapter.items.add(ModelCourseSpot("게시물 맛집", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("맛지1", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("맛집2", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("맛집3", "고양시 덕양구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("맛있겠다", "고양시 덕양구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("지아니스나폴리", "수원시 영통구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("좋은 소식", "수원시 영통구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("이나경 송탄 부대찌개", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("평장원", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("을라메히꼬", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("가보정1관", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("슬리핑테이블", "수원시 팔달구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("우판 등심", "수원시 영통구"))
+        feedFoodAdapter.items.add(ModelCourseSpot("윤가 곰탕", "수원시 영통구"))
 
         return view
     }

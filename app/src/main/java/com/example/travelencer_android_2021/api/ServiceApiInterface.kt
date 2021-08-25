@@ -14,6 +14,10 @@ interface ServiceApiInterface {
     @POST("/user/join")
     fun userJoin(@Body data: JoinData): Call<JoinResponse>
 
+    // 비밀번호 찾기
+    @POST("/user/pwchange")
+    fun userPwchange(@Body data: PasswordFindData): Call<PasswordFindResponse>
+
     //장소 등록
     @POST("/place/register")
     fun placeRegister(@Body data: PlaceRegisterData): Call<PlaceRegisterResponse>

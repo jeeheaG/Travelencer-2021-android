@@ -52,7 +52,8 @@ class SettingFragment : Fragment() {
 
         // uid 받기
         val bundle = arguments
-        if (bundle != null) uid = bundle.getInt("uid")
+        if (bundle != null) uid = bundle.getInt("uid", -1)
+        Log.d("mmm setting", "${uid}")
 
         // 동그란 이미지
         binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {

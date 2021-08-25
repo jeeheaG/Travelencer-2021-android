@@ -7,8 +7,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.example.travelencer_android_2021.api.GMailSender
+import com.example.travelencer_android_2021.api.RetrofitClient
+import com.example.travelencer_android_2021.data.PasswordFindData
+import com.example.travelencer_android_2021.data.PasswordFindResponse
 import com.example.travelencer_android_2021.databinding.ActivityPasswordFindBinding
 import kotlinx.android.synthetic.main.activity_password_find.*
+import retrofit2.Call
+import retrofit2.Response
 
 // 비밀번호 찾기 액티비티
 class PasswordFindActivity  : AppCompatActivity() {
@@ -50,7 +55,6 @@ class PasswordFindActivity  : AppCompatActivity() {
                 // 이메일 보내기
                 val mailSender = GMailSender()
                 code = mailSender.code          // 이메일 인증키 저장
-                Log.d("mmm code", code)
                 mailSender.sendEmail(email)
                 Toast.makeText(applicationContext, "이메일을 성공적으로 보냈습니다.", Toast.LENGTH_SHORT).show()
 
@@ -113,6 +117,7 @@ class PasswordFindActivity  : AppCompatActivity() {
         }
         // <비밀번호 변경> 버튼 클릭
         binding.btnChangePassword.setOnClickListener {
+            val email = binding.editEmailId.text.toString()
             // 비밀번호 검사
             val password = binding.editPassword2.text.toString()
             if (password.isEmpty()) {
@@ -128,9 +133,33 @@ class PasswordFindActivity  : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(applicationContext, "비밀번호가 성공적으로 변경되었습니다.(아직 DB 연결 x)", Toast.LENGTH_SHORT).show()
+            startChangePassword(PasswordFindData(email, password))
         }
 
+    }
+
+    // 비밀번호 변경하기
+    private fun startChangePassword(data : PasswordFindData) {
+        val call = RetrofitClient.serviceApiUser.userPwchange(data)
+        call.enqueue(object : retrofit2.Callback<PasswordFindResponse> {
+            // 응답 성공 시
+            override fun onResponse(call: Call<PasswordFindResponse>, response: Response<PasswordFindResponse>) {
+                if (response.isSuccessful) {
+                    val result : PasswordFindResponse = response.body()!!
+
+                    if (result.code == 200) {
+                        Toast.makeText(applicationContext, "비밀번호가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+            }
+
+            // 응답 실패 시
+            override fun onFailure(call: Call<PasswordFindResponse>, t: Throwable) {
+                Toast.makeText(applicationContext, "로그인 에러 발생", Toast.LENGTH_SHORT).show()
+                Log.d("mmm 로그인 fail", t.message.toString())
+            }
+        })
     }
 
     // 이메일 형식 체크

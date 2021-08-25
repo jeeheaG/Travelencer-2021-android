@@ -1,10 +1,13 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -23,12 +26,18 @@ private const val SP_PLACE_FILTERED: String = "placeFiltered"
 class PlaceFilterFragment : Fragment() {
     private var _binding: FragmentPlaceFilterBinding? = null
     private val binding get() = _binding!!
+    private var uid = -1                            // uid 값
 
     lateinit var spinner : Array<Spinner>   // 스피너 배열
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPlaceFilterBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        // uid 받기
+        val bundle = arguments
+        if (bundle != null) uid = bundle.getInt("uid", -1)
+        Log.d("mmm palce filter", "${uid}")
 
         //스피너 입력받은 값 가져오기
         spinner = arrayOf(view.findViewById(R.id.spinPlaceLarge), view.findViewById(R.id.spinPlaceSmall))
@@ -43,6 +52,17 @@ class PlaceFilterFragment : Fragment() {
         edit?.putBoolean(SP_PLACE_FILTERED, false)
         edit?.apply()
         Log.d("로그 -placeFiltered-1--", "placeFiltered : ${pref?.getBoolean(SP_PLACE_FILTERED, true)}")
+
+        // 검색 editText에서 엔터 눌렸을 때 <검색> 버튼 누른 효과 주기
+        binding.etSearchKeyword.setOnKeyListener { _, keyCode, keyEvent ->
+            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                // 키패드 내리기
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
+                binding.btnSearch.performClick()
+            }
+            true
+        }
 
 
         // 검색 버튼 눌렀을 때
@@ -76,6 +96,7 @@ class PlaceFilterFragment : Fragment() {
                 bundle.putString("area2", area2)    // 시군구명
                 bundle.putInt("area1Code", area1Code)   // 지역 코드
                 bundle.putInt("area2Code", area2Code)   // 시군구 코드
+                bundle.putInt("uid", uid)
 
                 placeMainFrag.arguments = bundle
                 pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)
@@ -96,6 +117,9 @@ class PlaceFilterFragment : Fragment() {
             }
             catch (e : NullPointerException) {
                 Toast.makeText(context, "지역을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            catch (e : ArrayIndexOutOfBoundsException) {
+                Toast.makeText(context, "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
             }
         }
 

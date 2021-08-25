@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ class FeedFragment : Fragment() {
     private var _binding : FragmentFeedBinding? = null
     private val binding get() = _binding!!
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
+    private var uid = -1
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +31,9 @@ class FeedFragment : Fragment() {
         if (bundle != null) {
             val keyword = bundle.getString("keyword").toString()    // 검색어
             binding.tvKeyword.text = keyword
+            uid = bundle.getInt("uid", -1)
         }
+        Log.d("mmm feed", "${uid}")
 
         // 어댑터 생성
         val feedAdapter = FeedAdapter(this@FeedFragment)

@@ -39,7 +39,8 @@ class PostBlogFragment : Fragment() {
 
         // uid 받기
         val bundle = arguments
-        if (bundle != null) uid = bundle.getInt("uid")
+        if (bundle != null) uid = bundle.getInt("uid", -1)
+        Log.d("mmm post", "${uid}")
 
         val photoList = arrayListOf(
                 ModelPostBlogPhoto(R.drawable.dummy_haewoojae),

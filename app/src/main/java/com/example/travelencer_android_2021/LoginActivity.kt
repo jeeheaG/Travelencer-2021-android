@@ -107,9 +107,9 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
 
                     if (result.code == 200) {
-                        Log.d("mmm 로그인 성공", "userId : " + result.userId)
+                        // uid 보내기
                         val outIntent = Intent(applicationContext, MainActivity::class.java)
-                        outIntent.putExtra("uid", result.userId)
+                        outIntent.putExtra("uid", result.uid)
                         setResult(Activity.RESULT_OK, outIntent)
                         finish()
                     }

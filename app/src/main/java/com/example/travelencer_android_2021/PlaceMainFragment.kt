@@ -27,6 +27,8 @@ class PlaceMainFragment : Fragment() {
     private var _binding: FragmentPlaceMainBinding? = null
     private val binding get() = _binding!!
 
+    private var uid = -1
+
     var placeList = arrayListOf<ModelCasePlaceCard>()
     private lateinit var mAdapter: PlaceMainAdapter
 
@@ -51,7 +53,10 @@ class PlaceMainFragment : Fragment() {
             area2Code = bundle.getInt("area2Code").toString()    // 시군구 코드
             view.tvPlaceSmall.text = area2
             view.tvPlaceLarge.text = area1
+
+            uid = bundle.getInt("uid", -1)
         }
+        Log.d("mmm palce", "${uid}")
 
         binding.btnPlaceMainAddPlace.setOnClickListener {
             val intent = Intent(activity, AddPlaceActivity::class.java)

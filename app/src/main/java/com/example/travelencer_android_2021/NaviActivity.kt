@@ -81,7 +81,6 @@ class NaviActivity : AppCompatActivity() {
             fragment.arguments = bundle
         }
 
-
         //트랜잭션에 fragment들 add
         //feed, placeMain메뉴 이외의 다른 메뉴를 눌렀을 때
         if(tag != TAG_PLACE_MAIN && tag != TAG_FEED && manager.findFragmentByTag(tag) == null){

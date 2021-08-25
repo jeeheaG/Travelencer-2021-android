@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
                 if (data != null) uid = data.getIntExtra("uid", -1)
-                Log.d("mmmm", uid.toString())
             }
         }
 

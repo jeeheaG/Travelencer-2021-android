@@ -2,4 +2,7 @@
     <string name="app_name">Travelencer_Android_2021</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="find_password_text"><u>비밀번호를 잊어버리셨나요?</u></string>
+    <string name="register_text"><u>회원이 아니신가요?</u></string>
 </resources>

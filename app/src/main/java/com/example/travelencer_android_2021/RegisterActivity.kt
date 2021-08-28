@@ -9,7 +9,10 @@ import com.example.travelencer_android_2021.api.RetrofitClient
 import com.example.travelencer_android_2021.data.JoinData
 import com.example.travelencer_android_2021.data.JoinResponse
 import com.example.travelencer_android_2021.databinding.ActivityRegisterBinding
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.activity_register.btnRegister
+import kotlinx.android.synthetic.main.activity_register.imgBack
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Response
@@ -82,14 +85,12 @@ class RegisterActivity : AppCompatActivity() {
 
         // <가입하기> 버튼 클릭
         btnRegister.setOnClickListener {
-            // 이름 검사
-            val name = editName.text.toString()
-            if (name.isEmpty()) {
-                Toast.makeText(applicationContext, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            // 닉네임 검사
+            val nickname = editNickname.text.toString()
+            if (nickname.isEmpty()) {
+                Toast.makeText(applicationContext, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            // 닉네임 검사
-            val nickname = editNickname.text
             // 이메일 검사
             val email = editEmailId.text.toString()
             if (!emailCheck) {
@@ -117,7 +118,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             // 회원가입 하기
-            startJoin(JoinData(name, email, password))
+            startJoin(JoinData(nickname, email, password))
         }
 
     }
@@ -150,7 +151,7 @@ class RegisterActivity : AppCompatActivity() {
 
             // 응답 실패 시
             override fun onFailure(call: Call<JoinResponse>, t: Throwable) {
-                Toast.makeText(applicationContext, "회원가입 에라 발생", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "회원가입 에러 발생", Toast.LENGTH_SHORT).show()
                 Log.d("mmm 회원가입 fail", t.message.toString())
             }
         })

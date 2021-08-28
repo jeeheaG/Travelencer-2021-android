@@ -80,17 +80,12 @@
             android:id="@+id/tvPasswordFind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="비밀 번호 찾기"
+            android:text="@string/find_password_text"
             android:fontFamily="@font/hcsantteut"
             android:textSize="15sp"
             android:gravity="center"
             android:linksClickable="true"
             android:autoLink="web" />
-        <View
-            android:layout_width="100dp"
-            android:layout_height="1dp"
-            android:background="#707070"
-            android:layout_marginTop="1dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -101,18 +96,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="회원이 아니신가요?"
+            android:text="@string/register_text"
             android:textSize="15sp"
             android:fontFamily="@font/hcsantteut"
             android:gravity="center"
-            android:linksClickable="true"
-            android:autoLink="web" />
-        <View
-            android:layout_width="130dp"
-            android:layout_height="1dp"
-            android:background="@color/gray"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="5dp"/>
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="150dp"

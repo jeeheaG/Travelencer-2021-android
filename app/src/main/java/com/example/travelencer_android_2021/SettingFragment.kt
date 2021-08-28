@@ -153,7 +153,7 @@ class SettingFragment : Fragment() {
 
                     // 설정 변경하기
                     if (result.code == 200) {
-                        Toast.makeText(context, "성공", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "성공! 닉네임 : ${result.name}", Toast.LENGTH_SHORT).show()
                         //setting(result.proPic ?: "-1", result.name, result.info ?: "안녕하세요")
                     }
                 }

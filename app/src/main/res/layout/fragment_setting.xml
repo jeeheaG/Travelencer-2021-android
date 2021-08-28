@@ -58,7 +58,7 @@
             android:src="@drawable/ic_user_gray"
             android:layout_marginBottom="10dp"/>
         <Button
-            android:id="@+id/btnLoingAndRegister"
+            android:id="@+id/btnChangeProPic"
             android:layout_width="150dp"
             android:layout_height="45dp"
             android:background="@drawable/btn_shape"
@@ -69,6 +69,7 @@
             android:text="프로필 사진 변경"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/editName"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="nickname"
@@ -76,6 +77,7 @@
             android:background="@color/lightyellow"
             android:layout_marginBottom="20dp"/>
         <EditText
+            android:id="@+id/editInfo"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:hint="계정 소개글"

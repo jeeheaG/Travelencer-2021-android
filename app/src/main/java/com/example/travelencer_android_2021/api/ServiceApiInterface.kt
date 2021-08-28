@@ -21,4 +21,8 @@ interface ServiceApiInterface {
     //장소 등록
     @POST("/place/register")
     fun placeRegister(@Body data: PlaceRegisterData): Call<PlaceRegisterResponse>
+
+    // 설정
+    @POST("/setting")
+    fun getSetting(@Body data: SettingData): Call<SettingResponse>
 }

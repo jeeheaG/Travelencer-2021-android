@@ -22,11 +22,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
+import com.example.travelencer_android_2021.api.RetrofitClient
+import com.example.travelencer_android_2021.data.SettingData
+import com.example.travelencer_android_2021.data.SettingResponse
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
+import retrofit2.Call
+import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -38,32 +43,34 @@ private const val IMAGE_CAPTURE = 1
 
 // 설정 프레그먼트
 class SettingFragment : Fragment() {
-    private var mBinding : FragmentSettingBinding? = null
+    private var _binding : FragmentSettingBinding? = null
+    private val binding get() = _binding!!
     private var uri : Uri? = null                   // 이미지 파일 경로
     private lateinit var currentPhotoPath : String  // 사진 경로 값
     private var uid = -1                            // uid 값
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
-        val binding = FragmentSettingBinding.inflate(inflater, container, false)
-        mBinding = binding
+        _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
         // uid 받기
         val bundle = arguments
         if (bundle != null) uid = bundle.getInt("uid", -1)
-        Log.d("mmm setting", "${uid}")
+        Log.d("mmm setting", "$uid")
+
+        // 사용자 정보 받아와서 설정하기
+        if (uid != -1) startSetting(SettingData(uid))
 
         // 동그란 이미지
         binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {
             paint.color = Color.WHITE
         }
-
         binding.imgProfile.clipToOutline = true //안드로이드 버전 5(롤리팝)이상에서만 적용
 
         // <프로필 사진 변경> 버튼 클릭하면 갤러리에서 사진 가져오기
-        binding.btnLoingAndRegister.setOnClickListener {
+        binding.btnChangeProPic.setOnClickListener {
             val typeArr = arrayOf("사진 찍기", "기존 사진 선택", "기본 이미지로 변경")
             AlertDialog.Builder(context).setItems(typeArr) { _, position ->
                 when (typeArr[position]) {
@@ -76,7 +83,7 @@ class SettingFragment : Fragment() {
 
         // <수정 완료> 버튼 클릭
         binding.btnSetting.setOnClickListener {
-            Toast.makeText(context, "수정 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "수정 완료되었습니다.(DB 연결 X)", Toast.LENGTH_SHORT).show()
         }
 
         // <로그아웃> 버튼 클릭
@@ -121,7 +128,43 @@ class SettingFragment : Fragment() {
                     .show()
         }
 
-        return mBinding?.root
+        return binding.root
+    }
+
+    // 설정하기
+    private fun setting(proPic : String, name : String, info : String) {
+        // 프로필 사진
+        val bitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(Uri.parse(proPic)))
+        imgProfile.setImageBitmap(bitmap)
+        // 닉네임
+        binding.editName.setText(name)
+        // 계정 소개글
+        binding.editInfo.setText(info)
+    }
+
+    // 설정 DB 연결
+    private fun startSetting(data : SettingData) {
+        val call = RetrofitClient.serviceApiSetting.getSetting(data)
+        call.enqueue(object : retrofit2.Callback<SettingResponse> {
+            // 응답 성공 시
+            override fun onResponse(call: Call<SettingResponse>, response: Response<SettingResponse>) {
+                if (response.isSuccessful) {
+                    val result : SettingResponse = response.body()!!
+
+                    // 설정 변경하기
+                    if (result.code == 200) {
+                        Toast.makeText(context, "성공", Toast.LENGTH_SHORT).show()
+                        //setting(result.proPic ?: "-1", result.name, result.info ?: "안녕하세요")
+                    }
+                }
+            }
+
+            // 응답 실패 시
+            override fun onFailure(call: Call<SettingResponse>, t: Throwable) {
+                Toast.makeText(context, "설정 에러 발생 ${t.message}", Toast.LENGTH_LONG).show()
+                Log.d("mmm 설정 fail", t.message.toString())
+            }
+        })
     }
 
     // 사진 찍기
@@ -238,7 +281,7 @@ class SettingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        mBinding = null
+        _binding = null
         super.onDestroyView()
     }
 

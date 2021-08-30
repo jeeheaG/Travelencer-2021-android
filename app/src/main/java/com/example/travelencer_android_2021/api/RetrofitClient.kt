@@ -6,6 +6,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+//크롬 테스트 했던 url
+//http://152.70.95.197:3001/place/register?plcName=a&plcProduce=a&plcAddress=a&plcCategory=0&plcPicture=a&plcGood=a&plcBad=a&locX=127.07012&locY=37.29222
+//http://152.70.95.197:3000/user/login?email=%22j@h.com%22&password=%22000000%22
 
 //okhttp와 httpLoggingInterceptor
 object RetrofitClient {

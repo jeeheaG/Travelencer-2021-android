@@ -7,7 +7,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,12 +82,13 @@ class PostWriteActivity : AppCompatActivity() {
                 val howAddPlace = result.data?.getStringExtra("how")
                 when(howAddPlace) {
                     "add" -> {
-                        val intent = Intent(this, AddPlaceActivity::class.java)
-                        placeResultLauncher.launch(intent)
+                        val addIntent = Intent(this, AddPlaceActivity::class.java)
+                        addIntent.putExtra("from", "add")
+                        placeResultLauncher.launch(addIntent)
                     }
                     "search" -> {
-                        val intent = Intent(this, PostWritePlaceSearchActivity::class.java)
-                        placeResultLauncher.launch(intent)
+                        val searchIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                        placeResultLauncher.launch(searchIntent)
                     }
                 }
             }

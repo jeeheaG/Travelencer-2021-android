@@ -102,9 +102,11 @@ class SettingFragment : Fragment() {
             Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
         }
 
-        // <로그아웃> 버튼 클릭
+        // <챗봇 연결> 버튼 클릭
         binding.btnChatBot.setOnClickListener {
-            Toast.makeText(context, "챗봇 준비중", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "챗봇 준비중", Toast.LENGTH_SHORT).show()
+            val chatBotIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://bot.dialogflow.com/b403c3aa-6dbe-4c9a-83a5-6ce39e60148c"))
+            startActivity(chatBotIntent)
         }
 
         // 뒤로가기 이미지 클릭

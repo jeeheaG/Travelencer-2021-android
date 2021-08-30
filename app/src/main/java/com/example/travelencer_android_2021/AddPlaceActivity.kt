@@ -11,13 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
-import com.example.travelencer_android_2021.api.RetrofitClientPlace
-import com.example.travelencer_android_2021.data.PlaceRegisterData
-import com.example.travelencer_android_2021.data.PlaceRegisterResponse
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Response
 
 class AddPlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceBinding
@@ -38,7 +32,9 @@ class AddPlaceActivity : AppCompatActivity() {
 //        var placeLongitude: Float
 //        var placeCategory: String
 //        var placeImageList: ArrayList<Uri>
-        var placeData: PlaceRegisterData? = null
+/*        var placeData: PlaceRegisterData? = null*/
+        var latitude = 0f
+        var longitude = 0f
         var photoList = arrayListOf<Uri>()
 
         //사진 목록 RecyclerView 설정
@@ -48,11 +44,11 @@ class AddPlaceActivity : AppCompatActivity() {
         //pnc에서 작업 실행 후 돌아왔을 때 실행되는 함수
         val pncResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == RESULT_CODE_MAIN || result.resultCode == RESULT_CODE_WRITE){
-                //interceptor설정과 데이터 요청 함수
+/*                //interceptor설정과 데이터 요청 함수
                 RetrofitClientPlace.interceptor.level = HttpLoggingInterceptor.Level.BODY
 
                 // 서버에 장소등록 요청 보냄(<다음으로> 버튼을 눌러 placeData 데이터가 만들어진 상태여야 함)
-                placeData?.let { postAddPlace(it) }
+                placeData?.let { postAddPlace(it) }*/
 
                 when(result.resultCode){
                     //placeMain에서 온 경우
@@ -82,8 +78,8 @@ class AddPlaceActivity : AppCompatActivity() {
                     binding.tvPlaceRegisterAddressInput.text = data.getStringExtra("name")
                     binding.tvPlaceRegisterAddressInput.setTextColor(ContextCompat.getColor(this, R.color.black))
 
-                    val latitude = data.getFloatExtra("latitude", 0f)
-                    val longitude = data.getFloatExtra("longitude", 0f)
+                    latitude = data.getFloatExtra("latitude", 0f)
+                    longitude = data.getFloatExtra("longitude", 0f)
 
                     //Log.d("로그name", "name= ${data.getStringExtra("name")} // bind= ${binding.tvPlaceRegisterAddressInput.text}")
                     //Log.d("로그lat long", "lat= ${latitude} // long= ${longitude}")
@@ -120,8 +116,8 @@ class AddPlaceActivity : AppCompatActivity() {
 
         // <주소 찾기> 클릭
         binding.btnPlaceRegisterAddressSearch.setOnClickListener {
-            val intent = Intent(this, AddPlaceSearchAddressActivity::class.java)
-            addressResultLauncher.launch(intent)
+            val addressIntent = Intent(this, AddPlaceSearchAddressActivity::class.java)
+            addressResultLauncher.launch(addressIntent)
         }
 
         // <사진 추가> 버튼 클릭
@@ -141,23 +137,37 @@ class AddPlaceActivity : AppCompatActivity() {
                 //R.id.rbtnPlaceRegisterCategorySights -> {radioChecked = 1}
             }
 
-            //서버에 넘겨줄 데이터 만들어둠
-            placeData = PlaceRegisterData(
+/*            //서버에 넘겨줄 데이터 만들어둠
+            val placeData = PlaceRegisterData(
                     plcName = binding.etPlaceRegisterName.text.toString(),
-                    plcExplain = binding.etPlaceRegisterExplain.text.toString(),
+                    plcProduce = binding.etPlaceRegisterExplain.text.toString(),
                     plcAddress = binding.tvPlaceRegisterAddressInput.text.toString(),
                     plcCategory = categoryChecked,
-                    plcPicture = "ThisIsDummyStringAnything"
+                    plcPicture = "ThisIsDummyStringAnything",
+                    plcGood = "",
+                    plcBad = "",
+                    locX = 0f,
+                    locY = 0f
                     //plcPicture = photoList
+            )*/
 
-            )
+            val pncIntent = Intent(this, AddPNCActivity::class.java)
+            pncIntent.putExtra("placeName", binding.etPlaceRegisterName.text.toString())
+            pncIntent.putExtra("placeExplain", binding.etPlaceRegisterExplain.text.toString())
+            pncIntent.putExtra("placeAddress", binding.tvPlaceRegisterAddressInput.text.toString())
+            //Log.d("로그 placeAddress-------", "address : ${binding.tvPlaceRegisterAddressInput.text.toString()}")
+            pncIntent.putExtra("placeCategory", categoryChecked)
+            pncIntent.putExtra("placeImage", "ThisIsDummyString")
+            pncIntent.putExtra("placeLatitude", latitude)
+            pncIntent.putExtra("placeLongitude", longitude)
+            pncIntent.putExtra("from", intent.getStringExtra("from"))
+            pncResultLauncher.launch(pncIntent)
 
-            val intent = Intent(this, AddPNCActivity::class.java)
-            intent.putExtra(codePlaceName, binding.etPlaceRegisterName.text.toString())
+/*            intent.putExtra(codePlaceName, binding.etPlaceRegisterName.text.toString())
             intent.putExtra(codePlaceLoc, binding.tvPlaceRegisterAddressInput.text.toString())
             intent.putExtra("placeCategory", categoryChecked)
             intent.putExtra("from", "add")
-            pncResultLauncher.launch(intent)
+            pncResultLauncher.launch(intent)*/
         }
 
         binding.ivBack.setOnClickListener{
@@ -165,7 +175,7 @@ class AddPlaceActivity : AppCompatActivity() {
         }
     }
 
-    private fun postAddPlace(data: PlaceRegisterData){
+    /*private fun postAddPlace(data: PlaceRegisterData){
         val call = RetrofitClientPlace.serviceApiPlace.placeRegister(data)
         call.enqueue(object : retrofit2.Callback<PlaceRegisterResponse> {
             override fun onResponse(call: Call<PlaceRegisterResponse>, response: Response<PlaceRegisterResponse>) {
@@ -188,5 +198,5 @@ class AddPlaceActivity : AppCompatActivity() {
 
             }
         })
-    }
+    }*/
 }

@@ -23,6 +23,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.example.travelencer_android_2021.api.RetrofitClient
+import com.example.travelencer_android_2021.data.SettingChangeData
+import com.example.travelencer_android_2021.data.SettingChangeResponse
 import com.example.travelencer_android_2021.data.SettingData
 import com.example.travelencer_android_2021.data.SettingResponse
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
@@ -32,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 import retrofit2.Call
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -49,7 +52,7 @@ class SettingFragment : Fragment() {
     private lateinit var currentPhotoPath : String  // 사진 경로 값
     private var uid = -1                            // uid 값
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
@@ -83,7 +86,15 @@ class SettingFragment : Fragment() {
 
         // <수정 완료> 버튼 클릭
         binding.btnSetting.setOnClickListener {
-            Toast.makeText(context, "수정 완료되었습니다.(DB 연결 X)", Toast.LENGTH_SHORT).show()
+            val name = binding.editName.text.toString()
+            val info = binding.editInfo.text.toString()
+
+            val source = ImageDecoder.createSource(activity?.contentResolver!!, uri!!)
+            var bitmap = ImageDecoder.decodeBitmap(source)
+            bitmap = resize(bitmap)
+            val image = bitmapToByteArray(bitmap)
+
+            changeSetting(SettingChangeData(uid, image, name, info))
         }
 
         // <로그아웃> 버튼 클릭
@@ -134,8 +145,8 @@ class SettingFragment : Fragment() {
     // 설정하기
     private fun setting(proPic : String, name : String, info : String) {
         // 프로필 사진
-        val bitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(Uri.parse(proPic)))
-        imgProfile.setImageBitmap(bitmap)
+//        val bitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(Uri.parse(proPic)))
+//        imgProfile.setImageBitmap(bitmap)
         // 닉네임
         binding.editName.setText(name)
         // 계정 소개글
@@ -144,7 +155,7 @@ class SettingFragment : Fragment() {
 
     // 설정 DB 연결
     private fun startSetting(data : SettingData) {
-        val call = RetrofitClient.serviceApiSetting.getSetting(data)
+        val call = RetrofitClient.serviceApiSetting.setSetting(data)
         call.enqueue(object : retrofit2.Callback<SettingResponse> {
             // 응답 성공 시
             override fun onResponse(call: Call<SettingResponse>, response: Response<SettingResponse>) {
@@ -153,8 +164,8 @@ class SettingFragment : Fragment() {
 
                     // 설정 변경하기
                     if (result.code == 200) {
-                        Toast.makeText(context, "성공! 닉네임 : ${result.name}", Toast.LENGTH_SHORT).show()
-                        //setting(result.proPic ?: "-1", result.name, result.info ?: "안녕하세요")
+                        Log.d("mmm settin profile", result.proPic ?: "-1")
+                        setting(result.proPic ?: "-1", result.name, result.info ?: "안녕하세요")
                     }
                 }
             }
@@ -165,6 +176,70 @@ class SettingFragment : Fragment() {
                 Log.d("mmm 설정 fail", t.message.toString())
             }
         })
+    }
+
+    // 설정 변경 DB 연결
+    private fun changeSetting(data : SettingChangeData) {
+        val call = RetrofitClient.serviceApiSetting.changeSetting(data)
+        call.enqueue(object : retrofit2.Callback<SettingChangeResponse> {
+            // 응답 성공 시
+            override fun onResponse(call: Call<SettingChangeResponse>, response: Response<SettingChangeResponse>) {
+                if (response.isSuccessful) {
+                    val result : SettingChangeResponse = response.body()!!
+
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // 응답 실패 시
+            override fun onFailure(call: Call<SettingChangeResponse>, t: Throwable) {
+                Toast.makeText(context, "설정 변경 에러 발생 ${t.message}", Toast.LENGTH_LONG).show()
+                Log.d("mmm 설정 변경 fail", t.message.toString())
+            }
+        })
+    }
+
+
+    // 사진 크기 변경
+    private fun resize(bitmap : Bitmap) : Bitmap {
+        var bm = bitmap
+
+        val config = resources.configuration
+//        if (config.smallestScreenWidthDp >= 800)
+//            bm = Bitmap.createScaledBitmap(bm, 400, 400, true)
+//        else if (config.smallestScreenWidthDp >= 600)
+//            bm = Bitmap.createScaledBitmap(bm, 300, 300, true)
+//        else if (config.smallestScreenWidthDp >= 400)
+//            bm = Bitmap.createScaledBitmap(bm, 200, 200, true)
+//        else if (config.smallestScreenWidthDp >= 360)
+//            bm = Bitmap.createScaledBitmap(bm, 180, 180, true)
+//        else
+//            bm = Bitmap.createScaledBitmap(bm, 160, 160, true)
+
+        bm = Bitmap.createScaledBitmap(bm, 160, 160, true)
+        return  bm
+    }
+    // 비트맵을 바이너리 바이트 배열로 변환
+    private fun bitmapToByteArray(bitmap : Bitmap) : String {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val byteArray = stream.toByteArray()
+        return "&image=" + byteArrayToBinaryString(byteArray)
+    }
+    // 바이너리 바이트 배열을 String으로 변환
+    private fun byteArrayToBinaryString(b: ByteArray) : String {
+        val sb = StringBuilder()
+        for (i in 0..b.size-1)
+            sb.append(byteToBinaryString(b[i].toInt()))
+        return sb.toString()
+    }
+    // 바이너리 바이트를 String으로 변환
+    private fun byteToBinaryString(n: Int) : String {
+        val sb = StringBuilder("00000000")
+        for (bit in 0..7) {
+            if (((n shr bit) and 1) > 0) sb.setCharAt(7-bit, '1')
+        }
+        return sb.toString()
     }
 
     // 사진 찍기

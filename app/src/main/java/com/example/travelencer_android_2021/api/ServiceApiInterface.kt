@@ -23,6 +23,10 @@ interface ServiceApiInterface {
     fun placeRegister(@Body data: PlaceRegisterData): Call<PlaceRegisterResponse>
 
     // 설정
-    @POST("/setting")
-    fun getSetting(@Body data: SettingData): Call<SettingResponse>
+    @POST("/setting/set")
+    fun setSetting(@Body data: SettingData): Call<SettingResponse>
+
+    // 설정 변경
+    @POST("/setting/change")
+    fun changeSetting(@Body data: SettingChangeData): Call<SettingChangeResponse>
 }

@@ -49,6 +49,12 @@ class MainActivity : AppCompatActivity() {
             setNavi(R.id.settingFragment)
         }
 
+        // 사람모양 이미지 선택 > QR 액티비티로 이동
+        binding.imgQR.setOnClickListener {
+            val intent = Intent(this@MainActivity, QRActivity::class.java)
+            startActivity(intent)
+        }
+
         // <여행지 검색> 클릭
         binding.btnSearchPlace.setOnClickListener {
             setNavi(R.id.placeMainFragment)

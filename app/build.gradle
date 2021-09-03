@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.travelencer_android_2021"
-        minSdkVersion 19
+        minSdkVersion 24 // QR 19 -> 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -55,6 +55,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"     // 코루틴
     implementation "io.github.ParkSangGwon:tedpermission:2.3.0"         // 권한 설정
     implementation "androidx.viewpager2:viewpager2:1.0.0"               // viewpager2
+    
+    // QR 코드 생성
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    implementation 'com.google.zxing:core:3.4.1'
 
     // 메일 보내기
     implementation files('libs/activation.jar')

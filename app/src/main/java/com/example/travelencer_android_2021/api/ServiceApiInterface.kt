@@ -1,9 +1,10 @@
 package com.example.travelencer_android_2021.api
 
 import com.example.travelencer_android_2021.data.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ServiceApiInterface {
     // 로그인
@@ -27,6 +28,15 @@ interface ServiceApiInterface {
     fun setSetting(@Body data: SettingData): Call<SettingResponse>
 
     // 설정 변경
+    @Multipart  // 프로필 이미지
     @POST("/setting/change")
-    fun changeSetting(@Body data: SettingChangeData): Call<SettingChangeResponse>
+//    fun changeSetting(@Part photo : MultipartBody.Part?, @PartMap map : HashMap<String, RequestBody>): Call<SettingChangeResponse>
+    fun changeSetting(@Part proPic : MultipartBody.Part?,
+                      @Part UID : MultipartBody.Part,
+                      @Part name : MultipartBody.Part,
+                      @Part info : MultipartBody.Part,
+                      ): Call<SettingChangeResponse>
+//    @POST("/setting/change")
+//    // 기타 정보 변경
+//    fun changeSetting(@Body data: SettingChangeData): Call<SettingChangeResponse>
 }

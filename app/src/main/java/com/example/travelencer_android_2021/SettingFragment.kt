@@ -3,6 +3,7 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -23,7 +24,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.SettingChangeData
 import com.example.travelencer_android_2021.data.SettingChangeResponse
 import com.example.travelencer_android_2021.data.SettingData
 import com.example.travelencer_android_2021.data.SettingResponse
@@ -32,14 +32,19 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 private const val PICK_FROM_ALBUM = 0
 private const val IMAGE_CAPTURE = 1
@@ -49,8 +54,10 @@ class SettingFragment : Fragment() {
     private var _binding : FragmentSettingBinding? = null
     private val binding get() = _binding!!
     private var uri : Uri? = null                   // 이미지 파일 경로
+    private lateinit var folder : File
     private lateinit var currentPhotoPath : String  // 사진 경로 값
     private var uid = -1                            // uid 값
+    private var laseSelect = "변경 없음"             // 마지막으로 프로필 설정한 방법
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -81,20 +88,49 @@ class SettingFragment : Fragment() {
                     "기존 사진 선택" -> getFromAlbum()
                     "기본 이미지로 변경" -> imgProfile.setImageResource(R.drawable.ic_user_gray)
                 }
+                laseSelect = typeArr[position]
             }.show()
         }
 
         // <수정 완료> 버튼 클릭
         binding.btnSetting.setOnClickListener {
+            // 이름, 소개글
             val name = binding.editName.text.toString()
             val info = binding.editInfo.text.toString()
 
-            val source = ImageDecoder.createSource(activity?.contentResolver!!, uri!!)
-            var bitmap = ImageDecoder.decodeBitmap(source)
-            bitmap = resize(bitmap)
-            val image = bitmapToByteArray(bitmap)
+//            val uidBody = RequestBody.create("text/plain".toMediaTypeOrNull(), uid.toString())
+//            val nameBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
+//            val infoBody = RequestBody.create("text/plain".toMediaTypeOrNull(), info)
+//
+//            val map = HashMap<String, RequestBody>()
+//            map["UID"] = uidBody
+//            map["name"] = nameBody
+//            map["info"] = infoBody
+            val uidBody = MultipartBody.Part.createFormData("UID", uid.toString())
+            val nameBody = MultipartBody.Part.createFormData("name", name)
+            val infoBody = MultipartBody.Part.createFormData("info", info)
 
-            changeSetting(SettingChangeData(uid, image, name, info))
+            // 프로필
+            when (laseSelect) {
+                "사진 찍기" -> {
+                    val file = File(currentPhotoPath)
+                    val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
+                    val proPic = MultipartBody.Part.createFormData("proPic", file.name, photoBody)
+                    changeSetting(proPic, uidBody, nameBody, infoBody)
+                    Log.d("mmm", "사진 찍기")
+                }
+                "기존 사진 선택" -> {
+                    val file = File(currentPhotoPath)
+                    val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
+                    val proPic = MultipartBody.Part.createFormData("proPic", file.name, photoBody)
+                    changeSetting(proPic, uidBody, nameBody, infoBody)
+                    Log.d("mmm", "기존 사진 선택")
+                }
+                "기본 이미지로 변경" -> {
+                    //changeSetting(null, uidBody, nameBody, infoBody)
+                    Log.d("mmm", "기본 이미지로 변경")
+                }
+            }
         }
 
         // <로그아웃> 버튼 클릭
@@ -104,7 +140,6 @@ class SettingFragment : Fragment() {
 
         // <챗봇 연결> 버튼 클릭
         binding.btnChatBot.setOnClickListener {
-//            Toast.makeText(context, "챗봇 준비중", Toast.LENGTH_SHORT).show()
             val chatBotIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://bot.dialogflow.com/b403c3aa-6dbe-4c9a-83a5-6ce39e60148c"))
             startActivity(chatBotIntent)
         }
@@ -145,17 +180,24 @@ class SettingFragment : Fragment() {
     }
 
     // 설정하기
-    private fun setting(proPic : String, name : String, info : String) {
+    private fun setting(proPic: ArrayList<Double>?, name: String, info: String) {
         // 프로필 사진
-//        val bitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(Uri.parse(proPic)))
-//        imgProfile.setImageBitmap(bitmap)
+        if (proPic == null) {
+            imgProfile.setImageResource(R.drawable.ic_user_gray)
+            Log.d("mmm", "기본 사진")
+        }
+        else {
+            val bitmap = convertBitmap(proPic)
+            imgProfile.setImageBitmap(bitmap)
+            Log.d("mmm", "기본 사진 아님")
+        }
         // 닉네임
         binding.editName.setText(name)
         // 계정 소개글
         binding.editInfo.setText(info)
     }
 
-    // 설정 DB 연결
+    // 설정 DB 연결(사용자 설정 정보 가져오기)
     private fun startSetting(data : SettingData) {
         val call = RetrofitClient.serviceApiSetting.setSetting(data)
         call.enqueue(object : retrofit2.Callback<SettingResponse> {
@@ -166,8 +208,7 @@ class SettingFragment : Fragment() {
 
                     // 설정 변경하기
                     if (result.code == 200) {
-                        Log.d("mmm settin profile", result.proPic ?: "-1")
-                        setting(result.proPic ?: "-1", result.name, result.info ?: "안녕하세요")
+                        setting(result.proPic, result.name, result.info ?: "안녕하세요")
                     }
                 }
             }
@@ -180,68 +221,43 @@ class SettingFragment : Fragment() {
         })
     }
 
-    // 설정 변경 DB 연결
-    private fun changeSetting(data : SettingChangeData) {
-        val call = RetrofitClient.serviceApiSetting.changeSetting(data)
+    // 설정 변경 DB 연결(사용자가 수정한 정보 보냐기)
+    private fun changeSetting(proPic : MultipartBody.Part, UID : MultipartBody.Part, name : MultipartBody.Part, info : MultipartBody.Part) {
+        val call = RetrofitClient.serviceApiSetting.changeSetting(proPic, UID, name, info)
         call.enqueue(object : retrofit2.Callback<SettingChangeResponse> {
             // 응답 성공 시
             override fun onResponse(call: Call<SettingChangeResponse>, response: Response<SettingChangeResponse>) {
                 if (response.isSuccessful) {
                     val result : SettingChangeResponse = response.body()!!
 
-                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                    // 설정 변경하기
+                    if (result.code == 200) {
+                        Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                    }
                 }
             }
-
             // 응답 실패 시
             override fun onFailure(call: Call<SettingChangeResponse>, t: Throwable) {
-                Toast.makeText(context, "설정 변경 에러 발생 ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "설정 변경 에러 발생(기타 정보 오류) ${t.message}", Toast.LENGTH_LONG).show()
                 Log.d("mmm 설정 변경 fail", t.message.toString())
             }
         })
     }
 
-
-    // 사진 크기 변경
-    private fun resize(bitmap : Bitmap) : Bitmap {
-        var bm = bitmap
-
-        val config = resources.configuration
-//        if (config.smallestScreenWidthDp >= 800)
-//            bm = Bitmap.createScaledBitmap(bm, 400, 400, true)
-//        else if (config.smallestScreenWidthDp >= 600)
-//            bm = Bitmap.createScaledBitmap(bm, 300, 300, true)
-//        else if (config.smallestScreenWidthDp >= 400)
-//            bm = Bitmap.createScaledBitmap(bm, 200, 200, true)
-//        else if (config.smallestScreenWidthDp >= 360)
-//            bm = Bitmap.createScaledBitmap(bm, 180, 180, true)
-//        else
-//            bm = Bitmap.createScaledBitmap(bm, 160, 160, true)
-
-        bm = Bitmap.createScaledBitmap(bm, 160, 160, true)
-        return  bm
-    }
-    // 비트맵을 바이너리 바이트 배열로 변환
-    private fun bitmapToByteArray(bitmap : Bitmap) : String {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val byteArray = stream.toByteArray()
-        return "&image=" + byteArrayToBinaryString(byteArray)
-    }
-    // 바이너리 바이트 배열을 String으로 변환
-    private fun byteArrayToBinaryString(b: ByteArray) : String {
-        val sb = StringBuilder()
-        for (i in 0..b.size-1)
-            sb.append(byteToBinaryString(b[i].toInt()))
-        return sb.toString()
-    }
-    // 바이너리 바이트를 String으로 변환
-    private fun byteToBinaryString(n: Int) : String {
-        val sb = StringBuilder("00000000")
-        for (bit in 0..7) {
-            if (((n shr bit) and 1) > 0) sb.setCharAt(7-bit, '1')
+    private fun exByte(list: ArrayList<Double>): ByteArray {
+        val list2: MutableList<Byte> = mutableListOf()
+        for (i in 0 until list.size) {
+            list2.add(list[i].toInt().toByte())
         }
-        return sb.toString()
+        return list2.toByteArray()
+    }
+    private fun convertBitmap(input: ArrayList<Double>): Bitmap {
+        val arr = exByte(input)
+        try {
+            return BitmapFactory.decodeByteArray(arr, 0, arr.size)
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 
     // 사진 찍기
@@ -326,7 +342,9 @@ class SettingFragment : Fragment() {
                         // 이미지 파일 읽어와서 설정하기
                         val bitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(result.uri!!))
                         imgProfile.setImageBitmap(bitmap)
-
+                        // 크롭한 사진 저장하기
+                        createImageFile()
+                        savePhoto(bitmap)
                     }
                 }
             }
@@ -347,7 +365,7 @@ class SettingFragment : Fragment() {
         val folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/Travelencer/"
         val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
         val fileName = "Travelencer_profile_${timestamp}.jpeg"
-        val folder = File(folderPath)
+        folder = File(folderPath)
         if (!folder.isDirectory) {  // 해당 경로의 폴더가 존재하지 않으면
             folder.mkdir()          // 해당 경로에 폴더 생성
         }

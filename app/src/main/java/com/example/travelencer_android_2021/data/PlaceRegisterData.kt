@@ -7,7 +7,7 @@ data class PlaceRegisterData(
         val plcProduce: String, //Explain
         val plcAddress: String,
         val plcCategory: Int,
-        val plcPicture: String,
+        val plcPicture: ArrayList<Uri>,
         val plcGood: String,
         val plcBad: String,
         val locX: Float,

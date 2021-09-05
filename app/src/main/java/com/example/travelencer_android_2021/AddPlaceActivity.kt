@@ -25,6 +25,7 @@ class AddPlaceActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        //미리 선언해둬야하는 변수들
 //        var placeName: String
 //        var placeExplain: String
 //        var placeAddress: String
@@ -37,11 +38,17 @@ class AddPlaceActivity : AppCompatActivity() {
         var longitude = 0f
         var photoList = arrayListOf<Uri>()
 
-        //사진 목록 RecyclerView 설정
+
+        //사진 RecyclerView 설정
         binding.rvPlaceRegisterPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvPlaceRegisterPhotoList.setHasFixedSize(true)
 
-        //pnc에서 작업 실행 후 돌아왔을 때 실행되는 함수
+        // 사진 recyclerView adapter 설정
+        val photoAdapter = PostWritePhotoUriAdapter(photoList, this)
+        binding.rvPlaceRegisterPhotoList.adapter = photoAdapter
+
+
+        //pnc에서 작업 실행 후 돌아왔을 때 실행되는 launcher
         val pncResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == RESULT_CODE_MAIN || result.resultCode == RESULT_CODE_WRITE){
 /*                //interceptor설정과 데이터 요청 함수
@@ -70,6 +77,8 @@ class AddPlaceActivity : AppCompatActivity() {
             }
         }
 
+
+        //주소 입력 후 돌아왔을 때 실행되는 launcher
         val addressResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
                 val data = result.data
@@ -87,30 +96,40 @@ class AddPlaceActivity : AppCompatActivity() {
             }
         }
 
-        // 사진 추가 launcher. 사진 목록 리스트 photoList에 추가함
-        // TODO : 처음에 사진 여러장 넣는 게 bind가 됐다 안됐다 하는데 이건 뭐람 ㅋㅋㅋㅋㅋㅋ 일단 푸시.. 내 폰 성능 문제일수도
-        val photoAdapter = PostWritePhotoUriAdapter(photoList, this)
-        binding.rvPlaceRegisterPhotoList.adapter = photoAdapter
 
+        // 사진 선택 후 돌아왔을 때 실행되는 launcher. 사진 목록 리스트 photoList에 uri값들을 추가함
+        // TODO : 처음에 사진 넣는 게 bind가 됐다 안됐다 하는데 이건 뭐람 ㅋㅋㅋㅋㅋㅋ 일단 푸시.. 내 폰 성능 문제일수도
+        //  -> uri말고 비트맵으로 하면 되려나? 나중에 고쳐보자
         val addPhotoResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            // reult.data에는 선택한 사진들의 uri 가 들어있음
             val imageData = result.data
+
             // 이미지를 한 개라도 선택했을 경우
             if(result.resultCode == Activity.RESULT_OK && imageData != null){
                 val clipData = imageData.clipData
+
                 // 이미지를 한 개만 선택했을 경우
                 if(clipData == null){
+                    //uri 한 개 꺼내오기
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
                 }
                 //이미지를 여러개 선택했을 경우
                 else{
+                    //uri 여러 개일 때 꺼내오기 result.data.clipData.getItemAt(i).uri
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
                         photoList.add(uri)
                     }
                 }
 
+                //TODO : 이거 호출하는 부분이 문제인가? 음..
                 photoAdapter.notifyDataSetChanged()
+            }
+
+            //아무 이미지도 선택하지 않고 돌아왔을 경우
+            else{
+                Log.d("로그 place ------", "아무 사진도 선택하지 않았습니다.")
             }
         }
 
@@ -123,7 +142,7 @@ class AddPlaceActivity : AppCompatActivity() {
         // <사진 추가> 버튼 클릭
         binding.btnPlaceRegisterAddPhoto.setOnClickListener {
             val photoIntent = Intent(Intent.ACTION_PICK)
-            photoIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            photoIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI //선택한 사진 uri 를 intent의 data에 저장
             photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
             photoIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             addPhotoResultLauncher.launch(photoIntent)
@@ -137,37 +156,21 @@ class AddPlaceActivity : AppCompatActivity() {
                 //R.id.rbtnPlaceRegisterCategorySights -> {radioChecked = 1}
             }
 
-/*            //서버에 넘겨줄 데이터 만들어둠
-            val placeData = PlaceRegisterData(
-                    plcName = binding.etPlaceRegisterName.text.toString(),
-                    plcProduce = binding.etPlaceRegisterExplain.text.toString(),
-                    plcAddress = binding.tvPlaceRegisterAddressInput.text.toString(),
-                    plcCategory = categoryChecked,
-                    plcPicture = "ThisIsDummyStringAnything",
-                    plcGood = "",
-                    plcBad = "",
-                    locX = 0f,
-                    locY = 0f
-                    //plcPicture = photoList
-            )*/
-
+            // AddPlace화면에서 입력한 정보들 다 넘겨줌. 서버로 보내는 건 AddPNC에서 함.
             val pncIntent = Intent(this, AddPNCActivity::class.java)
             pncIntent.putExtra("placeName", binding.etPlaceRegisterName.text.toString())
             pncIntent.putExtra("placeExplain", binding.etPlaceRegisterExplain.text.toString())
             pncIntent.putExtra("placeAddress", binding.tvPlaceRegisterAddressInput.text.toString())
-            //Log.d("로그 placeAddress-------", "address : ${binding.tvPlaceRegisterAddressInput.text.toString()}")
             pncIntent.putExtra("placeCategory", categoryChecked)
-            pncIntent.putExtra("placeImage", "ThisIsDummyString")
+            //pncIntent.putExtra("placeImage", photoList)
+            // **photoList는 이미지들의 uri가 담긴 ArrayLsit<Uri> 임.
+            //원래는 intent로 arrayList전달 시 arrayList가 담는 자료형에 Precelable 를 추가로 구현해 줘야 하지만 Uri는 이미 구현이 되어있어서 나는 그냥 쓸 수 있었음!
+            pncIntent.putParcelableArrayListExtra("placeImage", photoList)
             pncIntent.putExtra("placeLatitude", latitude)
             pncIntent.putExtra("placeLongitude", longitude)
             pncIntent.putExtra("from", intent.getStringExtra("from"))
             pncResultLauncher.launch(pncIntent)
 
-/*            intent.putExtra(codePlaceName, binding.etPlaceRegisterName.text.toString())
-            intent.putExtra(codePlaceLoc, binding.tvPlaceRegisterAddressInput.text.toString())
-            intent.putExtra("placeCategory", categoryChecked)
-            intent.putExtra("from", "add")
-            pncResultLauncher.launch(intent)*/
         }
 
         binding.ivBack.setOnClickListener{

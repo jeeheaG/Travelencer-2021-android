@@ -23,9 +23,8 @@ object RetrofitClientPlace {
             .build()
 
 
-    // 서버 연결
+    // Place서버 연결
     private val retrofitPlace = Retrofit.Builder()
-//            .baseUrl("http://152.70.95.197:3000")
             .baseUrl("http://152.70.95.197:3001")
             .client(client) //okhttp
             .addConverterFactory(GsonConverterFactory.create())

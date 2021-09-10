@@ -1,0 +1,100 @@
+게시물 postT 완
+CREATE TABLE postT( 
+pstUserID INT NOT NULL, 
+pstID INT NOT NULL, 
+pstCreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP, 
+pstUpdate DATETIME DEFAULT CURRENT_TIMESTAMP, 
+pstTitle VARCHAR(30) NULL, 
+pstStartDate VARCHAR(20) NULL,
+pstFinDate VARCHAR(20) NULL,
+pstContent VARCHAR(255) NULL,  
+PRIMARY KEY(pstID),
+FOREIGN KEY(pstUserID) REFERENCES userT(UID)
+);
+		
+유저정보 userT 완
+CREATE TABLE userT (
+        UID INT NOT NULL AUTO_INCREMENT,
+        name VARCHAR(20) NOT NULL,
+        email VARCHAR(50) NOT NULL,
+        password VARCHAR(20) NOT NULL,
+        proPic BLOB NULL,
+        info VARCHAR(100) NULL,
+        PRIMARY KEY (UID));
+		
+장소정보 placeT 완
+CREATE TABLE placeT (
+        plcName VARCHAR(10) NOT NULL,
+        plcProduce VARCHAR(50) NULL,
+        plcAddress VARCHAR(20) NOT NULL,
+        plcCategory INT(10) NOT NULL,
+        plcID INT(10) NOT NULL,
+        locX FLOAT DEFAULT 0,
+        locY FLOAT DEFAULT 0,
+        PRIMARY KEY(plcID)
+);
+			
+코스 courseT 완
+CREATE TABLE courseT (
+        postID INT(10) NOT NULL,
+        courseID INT(10) NOT NULL,
+        placesName text NOT NULL,
+        PRIMARY KEY(courseID));
+
+평점 ratingT 완
+CREATE TABLE ratingT(
+ratingID INT NOT NULL AUTO_INCREMENT,
+placeID INT NOT NULL,
+rating DOUBLE,
+PRIMARY KEY(ratingID)
+);
+------------------------------------------------------------
+장소 아이디 placeidT 완
+CREATE TABLE placeidT(
+pstID INT NOT NULL,
+plcID INT(10) NOT NULL,
+FOREIGN KEY (pstID) REFERENCES postT(pstID),
+FOREIGN KEY (plcID) REFERENCES placeT(plcID)
+);
+
+게시물사진 postpicT 완
+CREATE TABLE postpicT(
+pstID INT NOT NULL,
+postPic BLOB NULL,
+FOREIGN KEY (pstID) REFERENCES postT(pstID)
+);
+
+유저즐겨찾기 userfavT 완
+CREATE TABLE userfavT(
+UID INT NOT NULL AUTO_INCREMENT,
+plcID INT(10) NOT NULL,
+FOREIGN KEY (UID) REFERENCES userT(UID),
+FOREIGN KEY (plcID) REFERENCES placeT(plcID)
+);
+
+장소 장단점 placepncT 완
+CREATE TABLE placepncT(
+plcID INT(10) NOT NULL,
+plcGood VARCHAR(50) NULL,
+plcBad VARCHAR(50) NULL,
+pncCaterory INT NULL,
+FOREIGN KEY (plcID) REFERENCES placeT(plcID)
+);
+
+장소 사진 placepicT 완
+CREATE TABLE placepicT(
+plcID INT(10) NOT NULL,
+plcPic BLOB NULL,
+FOREIGN KEY (plcID) REFERENCES placeT(plcID)
+);
+
+코스 장소 courseplaceT 완
+CREATE TABLE courseplaceT(
+courseplcID INT NOT NULL,
+courseID INT(10) NOT NULL,
+courseplcName VARCHAR(10),
+courseDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+courseTime TIME,
+PRIMARY KEY (courseplcID),
+FOREIGN KEY (courseID) REFERENCES courseT(courseID)
+);

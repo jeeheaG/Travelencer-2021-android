@@ -143,7 +143,6 @@ class RegisterActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val result : JoinResponse = response.body()!!
                     Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
-                    Log.d("mmm 회원가입 성공", response.message())
 
                     if (result.code == 200) finish()
                 }

@@ -3,7 +3,6 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -24,18 +23,20 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.SettingChangeResponse
 import com.example.travelencer_android_2021.data.SettingData
 import com.example.travelencer_android_2021.data.SettingResponse
+import com.example.travelencer_android_2021.data.UserRewiteData
+import com.example.travelencer_android_2021.data.UserRewiteResponse
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
@@ -44,7 +45,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 private const val PICK_FROM_ALBUM = 0
 private const val IMAGE_CAPTURE = 1
@@ -53,9 +53,10 @@ private const val IMAGE_CAPTURE = 1
 class SettingFragment : Fragment() {
     private var _binding : FragmentSettingBinding? = null
     private val binding get() = _binding!!
+
     private var uri : Uri? = null                   // 이미지 파일 경로
-    private lateinit var folder : File
-    private lateinit var currentPhotoPath : String  // 사진 경로 값
+    private lateinit var currentPhotoPath : String  // 사진 절대 경로 값
+//    private lateinit var bitmap : Bitmap            // 크롭한 사진 비트맵
     private var uid = -1                            // uid 값
     private var laseSelect = "변경 없음"             // 마지막으로 프로필 설정한 방법
 
@@ -68,7 +69,6 @@ class SettingFragment : Fragment() {
         // uid 받기
         val bundle = arguments
         if (bundle != null) uid = bundle.getInt("uid", -1)
-        Log.d("mmm setting", "$uid")
 
         // 사용자 정보 받아와서 설정하기
         if (uid != -1) startSetting(SettingData(uid))
@@ -98,37 +98,34 @@ class SettingFragment : Fragment() {
             val name = binding.editName.text.toString()
             val info = binding.editInfo.text.toString()
 
-//            val uidBody = RequestBody.create("text/plain".toMediaTypeOrNull(), uid.toString())
-//            val nameBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-//            val infoBody = RequestBody.create("text/plain".toMediaTypeOrNull(), info)
-//
-//            val map = HashMap<String, RequestBody>()
-//            map["UID"] = uidBody
-//            map["name"] = nameBody
-//            map["info"] = infoBody
-            val uidBody = MultipartBody.Part.createFormData("UID", uid.toString())
-            val nameBody = MultipartBody.Part.createFormData("name", name)
-            val infoBody = MultipartBody.Part.createFormData("info", info)
+            val uidBody = uid.toString().toRequestBody("text/plain".toMediaType())
+            val nameBody = name.toRequestBody("text/plain".toMediaType())
+            val infoBody = info.toRequestBody("text/plain".toMediaType())
 
-            // 프로필
+            val map : HashMap<String, RequestBody> = hashMapOf()
+            map["UID"] = uidBody
+            map["name"] = nameBody
+            map["info"] = infoBody
+
+//            val uidBody = MultipartBody.Part.createFormData("UID", uid.toString())
+//            val nameBody = MultipartBody.Part.createFormData("name", name)
+//            val infoBody = MultipartBody.Part.createFormData("info", info)
+
+            // 프로필 변경 확인
             when (laseSelect) {
-                "사진 찍기" -> {
+                "사진 찍기", "기존 사진 선택" -> {
                     val file = File(currentPhotoPath)
                     val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
                     val proPic = MultipartBody.Part.createFormData("proPic", file.name, photoBody)
-                    changeSetting(proPic, uidBody, nameBody, infoBody)
-                    Log.d("mmm", "사진 찍기")
-                }
-                "기존 사진 선택" -> {
-                    val file = File(currentPhotoPath)
-                    val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
-                    val proPic = MultipartBody.Part.createFormData("proPic", file.name, photoBody)
-                    changeSetting(proPic, uidBody, nameBody, infoBody)
-                    Log.d("mmm", "기존 사진 선택")
+                    // 서버에 보내기
+                    changeSetting(proPic, map, UserRewiteData(uid, null, name, info))
                 }
                 "기본 이미지로 변경" -> {
-                    //changeSetting(null, uidBody, nameBody, infoBody)
                     Log.d("mmm", "기본 이미지로 변경")
+                }
+                else -> {
+                    // 서버에 보내기
+                    changeSetting(null, map, UserRewiteData(uid, null, name, info))
                 }
             }
         }
@@ -222,22 +219,21 @@ class SettingFragment : Fragment() {
     }
 
     // 설정 변경 DB 연결(사용자가 수정한 정보 보냐기)
-    private fun changeSetting(proPic : MultipartBody.Part, UID : MultipartBody.Part, name : MultipartBody.Part, info : MultipartBody.Part) {
-        val call = RetrofitClient.serviceApiSetting.changeSetting(proPic, UID, name, info)
-        call.enqueue(object : retrofit2.Callback<SettingChangeResponse> {
+    // proPic : MultipartBody.Part, UID : MultipartBody.Part, name : MultipartBody.Part, info : MultipartBody.Part, data: HashMap<String, RequestBody>
+    private fun changeSetting(proPic : MultipartBody.Part?, map: HashMap<String, RequestBody>, data : UserRewiteData) {
+        val call = RetrofitClient.serviceApiUser.userRewrite1(data)
+        call.enqueue(object : retrofit2.Callback<UserRewiteResponse> {
             // 응답 성공 시
-            override fun onResponse(call: Call<SettingChangeResponse>, response: Response<SettingChangeResponse>) {
+            override fun onResponse(call: Call<UserRewiteResponse>, response: Response<UserRewiteResponse>) {
                 if (response.isSuccessful) {
-                    val result : SettingChangeResponse = response.body()!!
+                    val result : UserRewiteResponse = response.body()!!
 
                     // 설정 변경하기
-                    if (result.code == 200) {
-                        Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
-                    }
+                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
                 }
             }
             // 응답 실패 시
-            override fun onFailure(call: Call<SettingChangeResponse>, t: Throwable) {
+            override fun onFailure(call: Call<UserRewiteResponse>, t: Throwable) {
                 Toast.makeText(context, "설정 변경 에러 발생(기타 정보 오류) ${t.message}", Toast.LENGTH_LONG).show()
                 Log.d("mmm 설정 변경 fail", t.message.toString())
             }
@@ -260,7 +256,7 @@ class SettingFragment : Fragment() {
         }
     }
 
-    // 사진 찍기
+    // 프로필 변경 > 사진 찍기
     private fun takePhoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
@@ -281,8 +277,8 @@ class SettingFragment : Fragment() {
 
     // 이미지 파일 생성
     private fun createImageFile(): File? {
-        val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
-        val storeageDir : File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)  // 스트리지 디렉토리 경로
+        val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())        // 이미지 파일 이름
+        val storeageDir : File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)     // 스트리지 디렉토리 경로
 
         return File.createTempFile("JPEG_${timestamp}_", ".jpg", storeageDir).apply { currentPhotoPath = absolutePath}
     }
@@ -358,14 +354,14 @@ class SettingFragment : Fragment() {
         startActivityForResult(intent, PICK_FROM_ALBUM)
     }
 
-    // 갤러리에 저장하는 메소드(갤러리에서 확인하는데까지 시간 좀 걸림)
+    // 갤러리에 저장하는 메소드
     private fun savePhoto(bitmap: Bitmap) {
         // 사진 폴더로 저장하기 위한 경로 선언
         //val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/Travelencer/"  // /storage/emulated/0/Pictures/Travelencer/
         val folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/Travelencer/"
         val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) // 이미지 파일 이름
         val fileName = "Travelencer_profile_${timestamp}.jpeg"
-        folder = File(folderPath)
+        val folder = File(folderPath)
         if (!folder.isDirectory) {  // 해당 경로의 폴더가 존재하지 않으면
             folder.mkdir()          // 해당 경로에 폴더 생성
         }

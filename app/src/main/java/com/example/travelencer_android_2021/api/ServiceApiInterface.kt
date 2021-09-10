@@ -39,14 +39,19 @@ interface ServiceApiInterface {
 
     // 설정 변경
     @Multipart  // 프로필 이미지
-    @POST("/setting/change")
-//    fun changeSetting(@Part photo : MultipartBody.Part?, @PartMap map : HashMap<String, RequestBody>): Call<SettingChangeResponse>
-    fun changeSetting(@Part proPic : MultipartBody.Part?,
-                      @Part UID : MultipartBody.Part,
-                      @Part name : MultipartBody.Part,
-                      @Part info : MultipartBody.Part,
-                      ): Call<SettingChangeResponse>
-//    @POST("/setting/change")
-//    // 기타 정보 변경
-//    fun changeSetting(@Body data: SettingChangeData): Call<SettingChangeResponse>
+    @POST("/user/rewrite")
+    fun userRewrite(
+//            @Part("UID") UID : Int,
+//                    @Part("name") name : String,
+//                    @Part("info") info : String,
+            @Part proPic : MultipartBody.Part?,
+                      @PartMap data: HashMap<String, RequestBody>
+//                      @Part UID : MultipartBody.Part,
+//                      @Part name : MultipartBody.Part,
+//                      @Part info : MultipartBody.Part,
+                      ): Call<UserRewiteResponse>
+
+    @POST("/user/rewrite")
+    fun userRewrite1(@Body data: UserRewiteData): Call<UserRewiteResponse>
+
 }

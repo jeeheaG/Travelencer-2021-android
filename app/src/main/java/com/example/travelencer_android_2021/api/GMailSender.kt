@@ -10,8 +10,8 @@ import javax.mail.internet.MimeMessage
 
 class GMailSender : Authenticator() {
     // 보내는 사람 이메일과 비밀번호
-    val fromEmail = "Travelencer.noreply@gmail.com"
-    val password = "hanium2021"
+    private val fromEmail = "Travelencer.noreply@gmail.com"
+    private val password = "hanium2021"
 
     var code = "-1"
 
@@ -31,11 +31,11 @@ class GMailSender : Authenticator() {
             val props = Properties()
             props.setProperty("mail.transport.protocol", "smtp")
             props.setProperty("mail.host", "smtp.gmail.com")
-            props.put("mail.smtp.auth", "true")
-            props.put("mail.smtp.port", "465")
-            props.put("mail.smtp.socketFactory.port", "465")
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
-            props.put("mail.smtp.socketFactory.fallback", "false")
+            props["mail.smtp.auth"] = "true"
+            props["mail.smtp.port"] = "465"
+            props["mail.smtp.socketFactory.port"] = "465"
+            props["mail.smtp.socketFactory.class"] = "javax.net.ssl.SSLSocketFactory"
+            props["mail.smtp.socketFactory.fallback"] = "false"
             props.setProperty("mail.smtp.quitwait", "false")
 
             // 구글에서 지원하는 smtp 정보를 받아와 MimeMessage 객체에 전달

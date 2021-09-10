@@ -65,7 +65,7 @@ class PasswordFindActivity  : AppCompatActivity() {
             else Toast.makeText(applicationContext, "이메일이 유효하지 않습니다.", Toast.LENGTH_SHORT).show()
         }
 
-        // <확인> 버튼 입력(이메일 인증 코드 확인)
+        // <확인> 버튼 클릭(이메일 인증 코드 확인)
         binding.btnCodeCheck.setOnClickListener {
             // 인증 코드가 맞으면
             if (code == binding.editCode.text.toString()) {

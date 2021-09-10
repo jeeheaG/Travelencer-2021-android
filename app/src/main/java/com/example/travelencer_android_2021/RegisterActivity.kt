@@ -2,9 +2,11 @@ package com.example.travelencer_android_2021
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import com.example.travelencer_android_2021.api.GMailSender
 import com.example.travelencer_android_2021.api.RetrofitClient
 import com.example.travelencer_android_2021.data.JoinData
 import com.example.travelencer_android_2021.data.JoinResponse
@@ -22,6 +24,8 @@ class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
 
+    var code = "-1"     // 이메일 인증 코드
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -32,6 +36,33 @@ class RegisterActivity : AppCompatActivity() {
         // 뒤로가기 이미지 클릭
         imgBack.setOnClickListener {
             finish()
+        }
+
+        // <이메일 확인> 버튼 클릭
+        btnEmailCheck.setOnClickListener {
+            // 이메일 검사
+            val email = editEmailId.text.toString()
+            // 이메일 인증 코드 보내기
+            if (isEmailValid(email)) {
+                val mailSender = GMailSender()
+                code = mailSender.code          // 이메일 인증키 저장
+                mailSender.sendEmail(email)
+                Toast.makeText(applicationContext, "이메일을 성공적으로 보냈습니다.", Toast.LENGTH_SHORT).show()
+
+                binding.layoutStep1.visibility = View.GONE
+                binding.layoutStep2.visibility = View.VISIBLE
+            }
+            else Toast.makeText(applicationContext, "이메일이 유효하지 않습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        // <확인> 버튼 클릭(이메일 인증 코드 확인)
+        binding.btnEmailCodeCheck.setOnClickListener {
+            // 인증 코드가 맞으면
+            if (code == binding.editEmailCode.text.toString()) {
+                binding.layoutStep2.visibility = View.GONE
+                binding.layoutStep3.visibility = View.VISIBLE
+            }
+            else  Toast.makeText(applicationContext, "인증 코드를 정확히 입력해주세요.", Toast.LENGTH_SHORT).show()
         }
 
         // 비밀번호 일치하는지 확인

@@ -55,11 +55,9 @@ class GMailSender : Authenticator() {
 
     // 이메일 인증 코드 생성
     private fun createEmailCode() : String {
-        val str = arrayOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"
-            , "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
+        val str = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
         var code = ""
-        for (i in 0..8) code += str[(Math.random() * str.size).toInt()]
+        for (i in 1..6) code += str[(Math.random() * str.size).toInt()]
         return code
     }
 }

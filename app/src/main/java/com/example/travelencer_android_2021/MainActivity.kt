@@ -45,11 +45,19 @@ class MainActivity : AppCompatActivity() {
 
         // 설정 이미지 클릭
         binding.imgSetting.setOnClickListener {
+            if (uid == -1) {
+                Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             setNavi(R.id.settingFragment)
         }
 
         // 사람모양 이미지 선택 > QR 액티비티로 이동
         binding.imgQR.setOnClickListener {
+            if (uid == -1) {
+                Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val intent = Intent(this@MainActivity, QRActivity::class.java)
             intent.putExtra("uid", uid)
             startActivity(intent)
@@ -67,6 +75,10 @@ class MainActivity : AppCompatActivity() {
 
         // <나의 여행 일지> 클릭
         binding.btnMyPost.setOnClickListener {
+            if (uid == -1) {
+                Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             setNavi(R.id.postBlogFragment)
         }
 

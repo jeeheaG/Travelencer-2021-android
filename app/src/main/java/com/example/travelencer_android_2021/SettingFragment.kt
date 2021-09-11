@@ -32,11 +32,9 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
@@ -58,15 +56,13 @@ class SettingFragment : Fragment() {
     private lateinit var currentPhotoPath : String  //
     private var uid = -1                            // uid 값
     private var laseSelect = "변경 없음"             // 마지막으로 프로필 설정한 방법
+    private lateinit var profileBitmap : Bitmap     // 서버에 저장할 사진
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
-
-        Log.d("mmm1", activity?.applicationContext!!.filesDir.toString())
-        Log.d("mmm2", activity?.applicationContext!!.filesDir.name.toString())
 
         // uid 받기
         val bundle = arguments
@@ -99,22 +95,12 @@ class SettingFragment : Fragment() {
             val name = binding.editName.text.toString()
             val info = binding.editInfo.text.toString()
 
-//            val uidBody = uid.toString().toRequestBody("text/plain".toMediaType())
-//            val nameBody = name.toRequestBody("text/plain".toMediaType())
-//            val infoBody = info.toRequestBody("text/plain".toMediaType())
-//
-//            val map : HashMap<String, RequestBody> = hashMapOf()
-//            map["UID"] = uidBody
-//            map["name"] = nameBody
-//            map["info"] = infoBody
-
-//            val uidBody = MultipartBody.Part.createFormData("UID", uid.toString())
-//            val nameBody = MultipartBody.Part.createFormData("name", name)
-//            val infoBody = MultipartBody.Part.createFormData("info", info)
-
             // 프로필 변경 확인
             when (laseSelect) {
                 "카메라", "갤러리" -> {
+                    // 크롭한 프로필 사진 갤러리에 저장하기
+                    createImageFile()           // 파일 만들고
+                    savePhoto(profileBitmap)    // 갤러리에 저장
                     // 서버에 보낼 프로필 사진
                     val file = File(currentPhotoPath)
                     val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
@@ -282,6 +268,7 @@ class SettingFragment : Fragment() {
     }
 
     // 이미지 파일 생성
+    @Throws(IOException::class)
     private fun createImageFile(): File? {
         val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())        // 이미지 파일 이름
         val storeageDir : File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)     // 스트리지 디렉토리 경로
@@ -319,7 +306,7 @@ class SettingFragment : Fragment() {
         when(requestCode) {
             // 갤러리
             PICK_FROM_ALBUM -> {
-                if (resultCode == Activity.RESULT_OK && Build.VERSION.SDK_INT >= 19) {
+                if (resultCode == Activity.RESULT_OK) { // && Build.VERSION.SDK_INT >= 19
                     uri = data?.data    // 선택한 이미지의 주소
                     // 사용자가 이미지를 선택했으면(null이 아니면) 크롭하기
                     if (uri != null) cropImage(uri)
@@ -332,20 +319,17 @@ class SettingFragment : Fragment() {
                 // 올바르게 저장됐다면
                 if (resultCode == Activity.RESULT_OK) {
                     // 사진 받아오기
-                    val bitmap : Bitmap
                     val file = File(currentPhotoPath)   // createImageFile 실행 이후라 값이 들어와 있는 상태
 
                     // 버전에 따라 다른 비트맵
                     // 안드로이드 파이 버전보다 낮은 경우 (getBitmap)
-                    bitmap = if (Build.VERSION.SDK_INT < 28)
+                    profileBitmap = if (Build.VERSION.SDK_INT < 28)
                         MediaStore.Images.Media.getBitmap(activity?.contentResolver, Uri.fromFile(file))
                     // 안드로이드 파이 버전보다 높은 경우 (ImageDecoder)
                     else {
                         val decode = ImageDecoder.createSource(activity?.contentResolver!!, Uri.fromFile(file))
                         ImageDecoder.decodeBitmap(decode)
                     }
-                    // 갤러리에 저장
-                    savePhoto(bitmap)
                     uri = Uri.fromFile(file)
                     // uri가 null이 아니면 크롭하기
                     if (uri != null) cropImage(uri)
@@ -358,11 +342,8 @@ class SettingFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     result.uri?.let {
                         // 이미지 파일 읽어와서 설정하기
-                        val bitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(result.uri!!))
-                        imgProfile.setImageBitmap(bitmap)
-                        // 크롭한 사진 저장하기
-                        createImageFile()
-                        savePhoto(bitmap)
+                        profileBitmap = BitmapFactory.decodeStream(activity?.contentResolver!!.openInputStream(result.uri!!))
+                        imgProfile.setImageBitmap(profileBitmap)
                     }
                 }
                 else if (result == null) laseSelect = "변경 없음"

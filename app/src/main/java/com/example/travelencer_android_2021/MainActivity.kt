@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             loginResultLauncher.launch(intent)
         }
 
-
         // 설정 이미지 클릭
         binding.imgSetting.setOnClickListener {
             setNavi(R.id.settingFragment)
@@ -52,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         // 사람모양 이미지 선택 > QR 액티비티로 이동
         binding.imgQR.setOnClickListener {
             val intent = Intent(this@MainActivity, QRActivity::class.java)
+            intent.putExtra("uid", uid)
             startActivity(intent)
         }
 

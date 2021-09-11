@@ -65,6 +65,9 @@ class SettingFragment : Fragment() {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
+        Log.d("mmm1", activity?.applicationContext!!.filesDir.toString())
+        Log.d("mmm2", activity?.applicationContext!!.filesDir.name.toString())
+
         // uid 받기
         val bundle = arguments
         if (bundle != null) uid = bundle.getInt("uid", -1)
@@ -179,20 +182,6 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
-    // 설정하기
-    private fun setting(proPic: ArrayList<Double>?, name: String, info: String) {
-        // 프로필 사진
-        if (proPic == null) imgProfile.setImageResource(R.drawable.ic_user_gray)
-        else {
-            val bitmap = convertBitmap(proPic)
-            imgProfile.setImageBitmap(bitmap)
-        }
-        // 닉네임
-        binding.editName.setText(name)
-        // 계정 소개글
-        binding.editInfo.setText(info)
-    }
-
     // 설정 DB 연결(사용자 설정 정보 가져오기)
     private fun startSetting(data : SettingData) {
         val call = RetrofitClient.serviceApiSetting.setSetting(data)
@@ -252,6 +241,20 @@ class SettingFragment : Fragment() {
         }
     }
 
+    // 설정하기
+    private fun setting(proPic: ArrayList<Double>?, name: String, info: String) {
+        // 프로필 사진
+        if (proPic == null) imgProfile.setImageResource(R.drawable.ic_user_gray)
+        else {
+            val bitmap = convertBitmap(proPic)
+            imgProfile.setImageBitmap(bitmap)
+        }
+        // 닉네임
+        binding.editName.setText(name)
+        // 계정 소개글
+        binding.editInfo.setText(info)
+    }
+
     // 카메라(사진 찍기)
     private fun takePhoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -271,6 +274,13 @@ class SettingFragment : Fragment() {
         }
     }
 
+    // 갤러리 이미지 선택해서 가져오기
+    private fun getFromAlbum() {
+        val intent = Intent("android.intent.action.GET_CONTENT")
+        intent.type = "image/*"     // 모든 이미지
+        startActivityForResult(intent, PICK_FROM_ALBUM)
+    }
+
     // 이미지 파일 생성
     private fun createImageFile(): File? {
         val timestamp : String  = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())        // 이미지 파일 이름
@@ -284,13 +294,6 @@ class SettingFragment : Fragment() {
         CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)  // 크롭 위한 가이드 열어서 크롭할 이미지 받아오기
                 .setCropShape(CropImageView.CropShape.RECTANGLE)            // 사각형으로 자르기
                 .start(activity as NaviActivity, this@SettingFragment)
-    }
-
-    // 갤러리 이미지 선택해서 가져오기
-    private fun getFromAlbum() {
-        val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"     // 모든 이미지
-        startActivityForResult(intent, PICK_FROM_ALBUM)
     }
 
     // 갤러리에 저장하는 메소드

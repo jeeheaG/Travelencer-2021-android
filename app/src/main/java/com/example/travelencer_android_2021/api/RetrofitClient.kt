@@ -29,10 +29,8 @@ object RetrofitClient {
     // User 서버 연결
     private val retrofitUser = Retrofit.Builder()
             .baseUrl("http://152.70.95.197:3000")
-//            .baseUrl("http://152.70.95.197:3001")
             .client(client) //okhttp
             .addConverterFactory(GsonConverterFactory.create())
-
     val serviceApiUser: ServiceApiInterface by lazy {
         retrofitUser.build().create(ServiceApiInterface::class.java)
     }
@@ -42,7 +40,6 @@ object RetrofitClient {
         .baseUrl("http://152.70.95.197:3003")
         .client(client) //okhttp
         .addConverterFactory(GsonConverterFactory.create())
-
     val serviceApiSetting: ServiceApiInterface by lazy {
         retrofitSetting.build().create(ServiceApiInterface::class.java)
     }

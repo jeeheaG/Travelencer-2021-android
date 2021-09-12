@@ -1,7 +1,9 @@
 package com.example.travelencer_android_2021
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.*
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -77,7 +79,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             // 로그인 하기
-            startLogin(LoginData(email, password))
+            if (NetworkManager(this@LoginActivity).checkNetworkState()) startLogin(LoginData(email, password))
+            else Toast.makeText(this@LoginActivity, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
         }
 
         // <비밀번호 찾기> 텍스트뷰 클릭
@@ -107,6 +110,10 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
 
                     if (result.code == 200) {
+                        // uid 저장
+                        val pref = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE)
+                        val edit = pref.edit()
+                        edit.putInt("uid", result.uid).apply()
                         // uid 보내기
                         val outIntent = Intent(applicationContext, MainActivity::class.java)
                         outIntent.putExtra("uid", result.uid)

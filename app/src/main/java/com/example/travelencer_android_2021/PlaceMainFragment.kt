@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -37,6 +38,9 @@ class PlaceMainFragment : Fragment() {
         _binding = FragmentPlaceMainBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        // uid 불러오기
+        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
+
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         var keyword = ""
         var area1 = ""
@@ -53,10 +57,7 @@ class PlaceMainFragment : Fragment() {
             area2Code = bundle.getInt("area2Code").toString()    // 시군구 코드
             view.tvPlaceSmall.text = area2
             view.tvPlaceLarge.text = area1
-
-            uid = bundle.getInt("uid", -1)
         }
-        Log.d("mmm palce", "${uid}")
 
         binding.btnPlaceMainAddPlace.setOnClickListener {
             val intent = Intent(activity, AddPlaceActivity::class.java)

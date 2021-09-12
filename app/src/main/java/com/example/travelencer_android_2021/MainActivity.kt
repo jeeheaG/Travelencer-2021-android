@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        // uid 받기
-        uid = intent.getIntExtra("uid", -1)
+        // uid 불러오기
+        uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
 
         val loginResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {

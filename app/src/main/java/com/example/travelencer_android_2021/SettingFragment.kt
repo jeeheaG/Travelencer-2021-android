@@ -2,6 +2,7 @@ package com.example.travelencer_android_2021
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -64,9 +65,8 @@ class SettingFragment : Fragment() {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        // uid 받기
-        val bundle = arguments
-        if (bundle != null) uid = bundle.getInt("uid", -1)
+        // uid 불러오기
+        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
         // 사용자 정보 받아와서 설정하기
         if (uid != -1) startSetting(SettingData(uid))
 
@@ -122,9 +122,10 @@ class SettingFragment : Fragment() {
 
         // <로그아웃> 버튼 클릭
         binding.btnLogout.setOnClickListener {
+            val pref = activity?.getPreferences(Context.MODE_PRIVATE)!!
+            val edit = pref.edit()
+            edit.putInt("uid", -1).apply()
             Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
-            val intent = Intent(activity, MainActivity::class.java)
-            startActivity(intent)
             activity?.finish()
         }
 

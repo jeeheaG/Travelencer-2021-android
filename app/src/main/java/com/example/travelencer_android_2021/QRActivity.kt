@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,8 @@ class QRActivity : AppCompatActivity() {
         binding = ActivityQrBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val uid = intent.getIntExtra("uid", -1)
+        // uid 불러오기
+        val uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
         if (uid != -1) { getEmail(QRData(uid)) }
     }
 

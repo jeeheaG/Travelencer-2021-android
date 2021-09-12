@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -26,14 +27,15 @@ class FeedFragment : Fragment() {
     ): View {
         _binding = FragmentFeedBinding.inflate(inflater, container, false)
 
+        // uid 불러오기
+        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
+
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         val bundle = arguments
         if (bundle != null) {
             val keyword = bundle.getString("keyword").toString()    // 검색어
             binding.tvKeyword.text = keyword
-            uid = bundle.getInt("uid", -1)
         }
-        Log.d("mmm feed", "${uid}")
 
         // 어댑터 생성
         val feedAdapter = FeedAdapter(this@FeedFragment)

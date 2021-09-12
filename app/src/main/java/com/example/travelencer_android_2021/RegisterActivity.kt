@@ -167,6 +167,11 @@ class RegisterActivity : AppCompatActivity() {
 
     // 회원가입하기
     private fun startJoin(data : JoinData) {
+        if (!NetworkManager(applicationContext).checkNetworkState()) {
+            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClient.serviceApiUser.userJoin(data)
         call.enqueue(object : retrofit2.Callback<JoinResponse> {
             // 응답 성공 시
@@ -178,7 +183,6 @@ class RegisterActivity : AppCompatActivity() {
                     if (result.code == 200) finish()
                 }
             }
-
             // 응답 실패 시
             override fun onFailure(call: Call<JoinResponse>, t: Throwable) {
                 Toast.makeText(applicationContext, "회원가입 에러 발생", Toast.LENGTH_SHORT).show()

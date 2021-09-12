@@ -31,6 +31,11 @@ class QRActivity : AppCompatActivity() {
 
     // 이메일 요청 보내기
     private fun getEmail(data : QRData) {
+        if (!NetworkManager(applicationContext).checkNetworkState()) {
+            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClient.serviceApiUser.userQR(data)
         call.enqueue(object : retrofit2.Callback<QRResponse> {
             // 응답 성공 시

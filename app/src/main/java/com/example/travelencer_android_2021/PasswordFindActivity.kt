@@ -49,6 +49,11 @@ class PasswordFindActivity  : AppCompatActivity() {
 
         // <이메일 인증> 버튼 클릭
         binding.btnSendEmail.setOnClickListener {
+            if (!NetworkManager(applicationContext).checkNetworkState()) {
+                Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val email = binding.editEmailId.text.toString()
 
             if (emailCheck) {
@@ -133,6 +138,7 @@ class PasswordFindActivity  : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // 비밀번호 변경하기
             startChangePassword(PasswordFindData(email, password))
         }
 
@@ -140,6 +146,11 @@ class PasswordFindActivity  : AppCompatActivity() {
 
     // 비밀번호 변경하기
     private fun startChangePassword(data : PasswordFindData) {
+        if (!NetworkManager(applicationContext).checkNetworkState()) {
+            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClient.serviceApiUser.userPwchange(data)
         call.enqueue(object : retrofit2.Callback<PasswordFindResponse> {
             // 응답 성공 시
@@ -153,7 +164,6 @@ class PasswordFindActivity  : AppCompatActivity() {
                     }
                 }
             }
-
             // 응답 실패 시
             override fun onFailure(call: Call<PasswordFindResponse>, t: Throwable) {
                 Toast.makeText(applicationContext, "로그인 에러 발생", Toast.LENGTH_SHORT).show()

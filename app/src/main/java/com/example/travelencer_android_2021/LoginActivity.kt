@@ -79,21 +79,20 @@ class LoginActivity : AppCompatActivity() {
             }
 
             // 로그인 하기
-            if (NetworkManager(this@LoginActivity).checkNetworkState()) startLogin(LoginData(email, password))
-            else Toast.makeText(this@LoginActivity, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            startLogin(LoginData(email, password))
         }
 
         // <비밀번호 찾기> 텍스트뷰 클릭
         binding.tvPasswordFind.setOnClickListener {
             // PasswordFindActivity로 이동하기
-            val intent = Intent(this@LoginActivity, PasswordFindActivity::class.java)
+            val intent = Intent(applicationContext, PasswordFindActivity::class.java)
             startActivity(intent)
         }
 
         // <회원가입> 버튼 클릭
         binding.btnRegister.setOnClickListener {
             // RegisterActivity로 이동하기
-            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            val intent = Intent(applicationContext, RegisterActivity::class.java)
             startActivity(intent)
         }
 
@@ -101,6 +100,11 @@ class LoginActivity : AppCompatActivity() {
 
     // 로그인 하기
     private fun startLogin(data : LoginData) {
+        if (!NetworkManager(applicationContext).checkNetworkState()) {
+            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClient.serviceApiUser.userLogin(data)
         call.enqueue(object : retrofit2.Callback<LoginResponse> {
             // 응답 성공 시

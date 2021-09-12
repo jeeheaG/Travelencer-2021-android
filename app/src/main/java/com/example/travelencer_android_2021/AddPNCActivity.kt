@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.example.travelencer_android_2021.api.RetrofitClientPlace
 import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.data.PlaceRegisterResponse
@@ -156,6 +157,11 @@ class AddPNCActivity : AppCompatActivity() {
     }
 
     private fun postAddPlace(image: MultipartBody.Part?, data: HashMap<String, RequestBody>){
+        if (!NetworkManager(applicationContext).checkNetworkState()) {
+            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClientPlace.serviceApiPlace.placeRegister(image, data)
         call.enqueue(object : retrofit2.Callback<PlaceRegisterResponse> {
             override fun onResponse(call: Call<PlaceRegisterResponse>, response: Response<PlaceRegisterResponse>) {

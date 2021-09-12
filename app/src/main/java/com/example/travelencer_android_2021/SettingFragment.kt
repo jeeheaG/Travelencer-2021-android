@@ -171,6 +171,11 @@ class SettingFragment : Fragment() {
 
     // 설정 DB 연결(사용자 설정 정보 가져오기)
     private fun startSetting(data : SettingData) {
+        if (!NetworkManager(requireContext()).checkNetworkState()) {
+            Toast.makeText(requireContext(), "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClient.serviceApiSetting.setSetting(data)
         call.enqueue(object : retrofit2.Callback<SettingResponse> {
             // 응답 성공 시
@@ -194,6 +199,11 @@ class SettingFragment : Fragment() {
     // 설정 변경 DB 연결(사용자가 수정한 정보 보냐기)
     // proPic : MultipartBody.Part, UID : MultipartBody.Part, name : MultipartBody.Part, info : MultipartBody.Part, data: HashMap<String, RequestBody>
     private fun changeSetting(data : UserRewiteData) {
+        if (!NetworkManager(requireContext()).checkNetworkState()) {
+            Toast.makeText(context, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val call = RetrofitClient.serviceApiUser.userRewrite(data)
         call.enqueue(object : retrofit2.Callback<UserRewiteResponse> {
             // 응답 성공 시

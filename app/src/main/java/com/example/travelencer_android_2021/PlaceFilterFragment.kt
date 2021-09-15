@@ -26,18 +26,12 @@ private const val SP_PLACE_FILTERED: String = "placeFiltered"
 class PlaceFilterFragment : Fragment() {
     private var _binding: FragmentPlaceFilterBinding? = null
     private val binding get() = _binding!!
-    private var uid = -1                            // uid 값
 
     lateinit var spinner : Array<Spinner>   // 스피너 배열
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPlaceFilterBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        // uid 받기
-        val bundle = arguments
-        if (bundle != null) uid = bundle.getInt("uid", -1)
-        Log.d("mmm palce filter", "${uid}")
 
         //스피너 입력받은 값 가져오기
         spinner = arrayOf(view.findViewById(R.id.spinPlaceLarge), view.findViewById(R.id.spinPlaceSmall))
@@ -96,7 +90,6 @@ class PlaceFilterFragment : Fragment() {
                 bundle.putString("area2", area2)    // 시군구명
                 bundle.putInt("area1Code", area1Code)   // 지역 코드
                 bundle.putInt("area2Code", area2Code)   // 시군구 코드
-                bundle.putInt("uid", uid)
 
                 placeMainFrag.arguments = bundle
                 pft.add(R.id.flContainer, placeMainFrag, TAG_PLACE_MAIN)

@@ -23,17 +23,11 @@ private const val SP_FEED_FILTERED: String = "feedFiltered"
 class FeedFilterFragment : Fragment() {
     private var _binding: FragmentFeedFilterBinding? = null
     private val binding get() = _binding!!
-    private var uid = -1                            // uid 값
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentFeedFilterBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        // uid 받기
-        val bundle = arguments
-        if (bundle != null) uid = bundle.getInt("uid", -1)
-        Log.d("mmm feed filetrer", "${uid}")
 
         //이 화면으로 오면 필터 설정이 해제됨
         val pref = activity?.getSharedPreferences("pref", 0)
@@ -75,7 +69,6 @@ class FeedFilterFragment : Fragment() {
             val feedFrag = FeedFragment()
             val bundle = Bundle()
             bundle.putString("keyword", keyword)    //검색어
-            bundle.putInt("uid", uid)
             feedFrag.arguments = bundle
             pft.add(R.id.flContainer, feedFrag, TAG_FEED)
 

@@ -7,17 +7,27 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ServiceApiInterface {
+    // User 서버
     // 로그인
     @POST("/user/login")
     fun userLogin(@Body data: LoginData): Call<LoginResponse>
-
     // 회원가입
     @POST("/user/join")
     fun userJoin(@Body data: JoinData): Call<JoinResponse>
-
     // 비밀번호 찾기
     @POST("/user/pwchange")
     fun userPwchange(@Body data: PasswordFindData): Call<PasswordFindResponse>
+    // 설정 변경
+    @POST("/user/rewrite")
+    fun userRewrite(@Body data: UserRewiteData): Call<UserRewiteResponse>
+    // QR 코드
+    @POST("/user/qr")
+    fun userQR(@Body data : QRData) : Call<QRResponse>
+
+    // Setting 서버
+    // 설정
+    @POST("/setting/set")
+    fun setSetting(@Body data: SettingData): Call<SettingResponse>
 
     //장소 등록
     //사진은 MultipartBody.Part 로 보내야 하는데, 사진과 다른 텍스트 등의 데이터를 같이 보내고 싶으면 RequestBody로 만들어서 보내야 한다고 함.
@@ -33,20 +43,5 @@ interface ServiceApiInterface {
     @POST("/place/register")
     fun placeRegister(@Body data: PlaceRegisterData): Call<PlaceRegisterResponse>*/
 
-    // 설정
-    @POST("/setting/set")
-    fun setSetting(@Body data: SettingData): Call<SettingResponse>
 
-    // 설정 변경
-    @Multipart  // 프로필 이미지
-    @POST("/setting/change")
-//    fun changeSetting(@Part photo : MultipartBody.Part?, @PartMap map : HashMap<String, RequestBody>): Call<SettingChangeResponse>
-    fun changeSetting(@Part proPic : MultipartBody.Part?,
-                      @Part UID : MultipartBody.Part,
-                      @Part name : MultipartBody.Part,
-                      @Part info : MultipartBody.Part,
-                      ): Call<SettingChangeResponse>
-//    @POST("/setting/change")
-//    // 기타 정보 변경
-//    fun changeSetting(@Body data: SettingChangeData): Call<SettingChangeResponse>
 }

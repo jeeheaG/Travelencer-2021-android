@@ -1,10 +1,10 @@
 package com.example.travelencer_android_2021
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.travelencer_android_2021.databinding.ActivityMainBinding
@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        // uid 받기
-        uid = intent.getIntExtra("uid", -1)
+        // uid 불러오기
+        uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
 
         val loginResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -43,15 +43,23 @@ class MainActivity : AppCompatActivity() {
             loginResultLauncher.launch(intent)
         }
 
-
         // 설정 이미지 클릭
         binding.imgSetting.setOnClickListener {
+            if (uid == -1) {
+                Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             setNavi(R.id.settingFragment)
         }
 
         // 사람모양 이미지 선택 > QR 액티비티로 이동
         binding.imgQR.setOnClickListener {
+            if (uid == -1) {
+                Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val intent = Intent(this@MainActivity, QRActivity::class.java)
+            intent.putExtra("uid", uid)
             startActivity(intent)
         }
 
@@ -67,6 +75,10 @@ class MainActivity : AppCompatActivity() {
 
         // <나의 여행 일지> 클릭
         binding.btnMyPost.setOnClickListener {
+            if (uid == -1) {
+                Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             setNavi(R.id.postBlogFragment)
         }
 

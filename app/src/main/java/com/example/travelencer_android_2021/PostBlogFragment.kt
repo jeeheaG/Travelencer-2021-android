@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
@@ -37,10 +38,8 @@ class PostBlogFragment : Fragment() {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // uid 받기
-        val bundle = arguments
-        if (bundle != null) uid = bundle.getInt("uid", -1)
-        Log.d("mmm post", "${uid}")
+        // uid 불러오기
+        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
 
         val photoList = arrayListOf(
                 ModelPostBlogPhoto(R.drawable.dummy_haewoojae),

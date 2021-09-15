@@ -42,8 +42,6 @@ class Splash : AppCompatActivity() {
                         finish()
                     }
                 }, 1, TimeUnit.SECONDS)
-
-                Toast.makeText(this@Splash, "권한 허용", Toast.LENGTH_SHORT).show()
             }
 
             // 설정해놓은 권한을 거부됐을 때
@@ -63,8 +61,6 @@ class Splash : AppCompatActivity() {
                             }
                         }
                         .show()
-
-                Toast.makeText(this@Splash, "권한 거부", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -75,7 +71,7 @@ class Splash : AppCompatActivity() {
                 .setRationaleMessage("Travelencer를 이용하기 위해 권한을 허용해주세요.")
                 .setDeniedMessage("권한을 거부하셨습니다. [앱 설정]->[권한] 항목에서 허용해주세요.")
                 .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION) // 필수 권한만
+                        android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.CAMERA)
                 .check()
     }
 }

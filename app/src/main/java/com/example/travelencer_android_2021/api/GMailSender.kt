@@ -10,8 +10,8 @@ import javax.mail.internet.MimeMessage
 
 class GMailSender : Authenticator() {
     // 보내는 사람 이메일과 비밀번호
-    val fromEmail = "Travelencer.noreply@gmail.com"
-    val password = "hanium2021"
+    private val fromEmail = "Travelencer.noreply@gmail.com"
+    private val password = "hanium2021"
 
     var code = "-1"
 
@@ -31,11 +31,11 @@ class GMailSender : Authenticator() {
             val props = Properties()
             props.setProperty("mail.transport.protocol", "smtp")
             props.setProperty("mail.host", "smtp.gmail.com")
-            props.put("mail.smtp.auth", "true")
-            props.put("mail.smtp.port", "465")
-            props.put("mail.smtp.socketFactory.port", "465")
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
-            props.put("mail.smtp.socketFactory.fallback", "false")
+            props["mail.smtp.auth"] = "true"
+            props["mail.smtp.port"] = "465"
+            props["mail.smtp.socketFactory.port"] = "465"
+            props["mail.smtp.socketFactory.class"] = "javax.net.ssl.SSLSocketFactory"
+            props["mail.smtp.socketFactory.fallback"] = "false"
             props.setProperty("mail.smtp.quitwait", "false")
 
             // 구글에서 지원하는 smtp 정보를 받아와 MimeMessage 객체에 전달
@@ -55,11 +55,9 @@ class GMailSender : Authenticator() {
 
     // 이메일 인증 코드 생성
     private fun createEmailCode() : String {
-        val str = arrayOf("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"
-            , "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
+        val str = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
         var code = ""
-        for (i in 0..8) code += str[(Math.random() * str.size).toInt()]
+        for (i in 1..6) code += str[(Math.random() * str.size).toInt()]
         return code
     }
 }

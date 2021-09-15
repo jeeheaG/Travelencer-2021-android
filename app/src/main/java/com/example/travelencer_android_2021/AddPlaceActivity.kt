@@ -113,6 +113,9 @@ class AddPlaceActivity : AppCompatActivity() {
                     //uri 한 개 꺼내오기
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
+                    //val proj = {MediaStore.Images.Media.DATA} // TODO : MediaStore.Images.Media.DATA deprecated
+                    //val cursor = managedQuery(uri, proj, null, null, null)
+                    Log.d("로그 addPlaceUri-----","URI : ${uri}")
                 }
                 //이미지를 여러개 선택했을 경우
                 else{
@@ -120,6 +123,7 @@ class AddPlaceActivity : AppCompatActivity() {
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
                         photoList.add(uri)
+                        Log.d("로그 addPlaceUri-----","URI : ${uri}")
                     }
                 }
 

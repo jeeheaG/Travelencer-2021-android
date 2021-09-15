@@ -90,6 +90,7 @@ class AddPNCActivity : AppCompatActivity() {
                     // TODO : 이미지 여러장 전송하려면 MultipartBody.Part를 담는 ArrayList로 보내야 한대.. 일단 한장만 보내보고 서버도 잘 되면 코드 바꿀까?
                     var multiBody: MultipartBody.Part? = null
                     for(uri in plcPicture){
+                        Log.d("로그 addPNC multi uri----", "URI : ${uri}")
 
                         val bitmap = BitmapFactory.decodeFile(uri.toString()) //이미지 bitmap 데이터 가져오기
                         val bos = ByteArrayOutputStream()
@@ -103,7 +104,7 @@ class AddPNCActivity : AppCompatActivity() {
                         fos.close() // FileOutputStream 종료
 
                         val reqBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                        multiBody = MultipartBody.Part.createFormData("upload", file.name, reqBody)
+                        multiBody = MultipartBody.Part.createFormData("upload", file.name+".png", reqBody)
                     }
 
 
@@ -122,7 +123,7 @@ class AddPNCActivity : AppCompatActivity() {
                     finish()
                 }
                 "add" -> {
-
+                    // TODO : 코드 고치세유
                     //서버에 넘겨줄 데이터 만듦
                     val placeData = PlaceRegisterData(
                             plcName = intent.getStringExtra("placeName") ?: "",

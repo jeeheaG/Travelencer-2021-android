@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -37,6 +38,15 @@ class PlaceFilterFragment : Fragment() {
         spinner = arrayOf(view.findViewById(R.id.spinPlaceLarge), view.findViewById(R.id.spinPlaceSmall))
 
         // 스피너 설정
+//        if (!NetworkManager(requireContext()).checkNetworkState()) {
+//            Toast.makeText(context, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+//
+//            // MainActivity로 이동
+//            val intent = Intent(context, MainActivity::class.java)
+//            startActivity(intent)
+//            activity?.finish()
+//        }
+
         val spinnerSetting = FetxhXML(spinner, context as NaviActivity)
         spinnerSetting.fetchXML("http://api.visitkorea.or.kr/upload/manual/sample/areaCode_sample1.xml", 0)
 

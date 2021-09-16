@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage
 class GMailSender : Authenticator() {
     // 보내는 사람 이메일과 비밀번호
     private val fromEmail = "Travelencer.noreply@gmail.com"
-    private val password = "hanium2021"
+    private val password = "fgyvihkptxkrdstq"
 
     var code = "-1"
 

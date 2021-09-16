@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -49,9 +50,27 @@ class NaviActivity : AppCompatActivity() {
                     finish()
                 }
                 R.id.feedFragment -> setFragment(TAG_FEED, FeedFragment())
-                R.id.placeMainFragment -> setFragment(TAG_PLACE_MAIN, PlaceMainFragment())
-                R.id.postBlogFragment -> setFragment(TAG_POST_BLOG, PostBlogFragment())
-                R.id.settingFragment -> setFragment(TAG_SETTING, SettingFragment())
+                R.id.placeMainFragment -> {
+                    if (!NetworkManager(applicationContext).checkNetworkState()) {
+                        Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+                        return@setOnNavigationItemSelectedListener false
+                    }
+                    setFragment(TAG_PLACE_MAIN, PlaceMainFragment())
+                }
+                R.id.postBlogFragment -> {
+                    if (uid == -1) {
+                        Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                        return@setOnNavigationItemSelectedListener false
+                    }
+                    setFragment(TAG_POST_BLOG, PostBlogFragment())
+                }
+                R.id.settingFragment -> {
+                    if (uid == -1) {
+                        Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
+                        return@setOnNavigationItemSelectedListener false
+                    }
+                    setFragment(TAG_SETTING, SettingFragment())
+                }
             }
             true
         }

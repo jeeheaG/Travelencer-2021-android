@@ -122,7 +122,8 @@ class SettingFragment : Fragment() {
 
         // <로그아웃> 버튼 클릭
         binding.btnLogout.setOnClickListener {
-            val pref = activity?.getPreferences(Context.MODE_PRIVATE)!!
+            // uid 삭제
+            val pref = context?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!
             val edit = pref.edit()
             edit.putInt("uid", -1).apply()
             Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()

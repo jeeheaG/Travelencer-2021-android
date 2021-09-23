@@ -47,6 +47,7 @@ import kotlin.collections.ArrayList
 
 private const val PICK_FROM_ALBUM = 0
 private const val IMAGE_CAPTURE = 1
+private const val TAG = "mmm"
 
 // 설정 프레그먼트
 class SettingFragment : Fragment() {
@@ -54,7 +55,7 @@ class SettingFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var uri : Uri? = null                   // 이미지 파일 경로
-    private lateinit var currentPhotoPath : String  //
+    private lateinit var currentPhotoPath : String  // 사진 절대경로
     private var uid = -1                            // uid 값
     private var laseSelect = "변경 없음"             // 마지막으로 프로필 설정한 방법
     private lateinit var profileBitmap : Bitmap     // 서버에 저장할 사진
@@ -99,12 +100,12 @@ class SettingFragment : Fragment() {
             when (laseSelect) {
                 "카메라", "갤러리" -> {
                     // 크롭한 프로필 사진 갤러리에 저장하기
-                    createImageFile()           // 파일 만들고
-                    savePhoto(profileBitmap)    // 갤러리에 저장
+                    val savedFileName = savePhoto(profileBitmap)    // 갤러리에 저장, 저장한 파일 이름 리턴받기
                     // 서버에 보낼 프로필 사진
-                    val file = File(currentPhotoPath)
+                    val file = File(savedFileName)
                     val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
                     val proPic = MultipartBody.Part.createFormData("proPic", file.name, photoBody)
+
                     // 서버에 보내기
                     changeSetting(UserRewiteData(uid, null, name, info))
                 }
@@ -299,7 +300,7 @@ class SettingFragment : Fragment() {
     }
 
     // 갤러리에 저장하는 메소드
-    private fun savePhoto(bitmap: Bitmap) {
+    private fun savePhoto(bitmap: Bitmap) : String{
         // 사진 폴더로 저장하기 위한 경로 선언
         //val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/Travelencer/"  // /storage/emulated/0/Pictures/Travelencer/
         val folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/Travelencer/"
@@ -312,6 +313,8 @@ class SettingFragment : Fragment() {
         // 최종 저장
         val out = FileOutputStream(folderPath + fileName)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)   // 비트맵 압축
+
+        return folderPath + fileName // 저장한 파일 이름
     }
 
     // 읍답 받은 액티비티
@@ -345,7 +348,7 @@ class SettingFragment : Fragment() {
                         val decode = ImageDecoder.createSource(activity?.contentResolver!!, Uri.fromFile(file))
                         ImageDecoder.decodeBitmap(decode)
                     }
-                    uri = Uri.fromFile(file)
+                    uri = Uri.fromFile(file) // 찍은 사진 uri 저장
                     // uri가 null이 아니면 크롭하기
                     if (uri != null) cropImage(uri)
                 }

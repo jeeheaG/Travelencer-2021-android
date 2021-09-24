@@ -65,6 +65,8 @@ class AddPNCActivity : AppCompatActivity() {
                             locY = intent.getFloatExtra("placeLongitude", 0f)
                             //plcPicture = photoList
                     )*/
+                    //코드뒤집기!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    /*
                     //extra로 넘어온 데이터들 RequestBody로 변환해서 받음. 숫자형 데이터들은 다 String으로 바꿈
                     val plcName = (intent.getStringExtra("placeName") ?: "").toRequestBody("text/plain".toMediaType())
                     val plcProduce = (intent.getStringExtra("placeExplain") ?: "").toRequestBody("text/plain".toMediaType())
@@ -91,6 +93,7 @@ class AddPNCActivity : AppCompatActivity() {
                     // TODO : 이미지 여러장 전송하려면 MultipartBody.Part를 담는 ArrayList로 보내야 한대.. 일단 한장만 보내보고 서버도 잘 되면 코드 바꿀까?
                     var multiBody: MultipartBody.Part? = null
                     for(uri in plcPicture){
+                        Log.d("로그 addPNC multi uri----", "URI : ${uri}")
 
                         val bitmap = BitmapFactory.decodeFile(uri.toString()) //이미지 bitmap 데이터 가져오기
                         val bos = ByteArrayOutputStream()
@@ -104,12 +107,14 @@ class AddPNCActivity : AppCompatActivity() {
                         fos.close() // FileOutputStream 종료
 
                         val reqBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                        multiBody = MultipartBody.Part.createFormData("upload", file.name, reqBody)
+                        multiBody = MultipartBody.Part.createFormData("upload", file.name+".png", reqBody)
                     }
 
 
                     // 서버에 장소등록 요청 보냄(<다음으로> 버튼을 눌러 placeData 데이터가 만들어진 상태여야 함)
                     postAddPlace(multiBody, placeData)
+                    */*/ //이래도 되는 건가..
+
                     setResult(RESULT_CODE_MAIN)
                     finish()
                 }
@@ -123,7 +128,7 @@ class AddPNCActivity : AppCompatActivity() {
                     finish()
                 }
                 "add" -> {
-
+                    // TODO : 코드 고치세유
                     //서버에 넘겨줄 데이터 만듦
                     val placeData = PlaceRegisterData(
                             plcName = intent.getStringExtra("placeName") ?: "",
@@ -131,8 +136,8 @@ class AddPNCActivity : AppCompatActivity() {
                             plcAddress = intent.getStringExtra("placeAddress") ?: "",
                             plcCategory = intent.getIntExtra("placeCategory", 1),
                             plcPicture = intent.getSerializableExtra("placeImage") as ArrayList<Uri>? ?: arrayListOf<Uri>(),
-                            plcGood = binding.etPlaceRegisterCons.text.toString(),
-                            plcBad = binding.etPlaceRegisterPros.text.toString(),
+//                            plcGood = binding.etPlaceRegisterCons.text.toString(),
+//                            plcBad = binding.etPlaceRegisterPros.text.toString(),
                             locX = intent.getFloatExtra("placeLatitude", 0f),
                             locY = intent.getFloatExtra("placeLongitude", 0f)
                             //plcPicture = photoList
@@ -155,7 +160,8 @@ class AddPNCActivity : AppCompatActivity() {
             finish()
         }
     }
-
+    //코드 뒤집기
+/*
     private fun postAddPlace(image: MultipartBody.Part?, data: HashMap<String, RequestBody>){
         if (!NetworkManager(applicationContext).checkNetworkState()) {
             Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
@@ -185,4 +191,5 @@ class AddPNCActivity : AppCompatActivity() {
             }
         })
     }
+    */
 }

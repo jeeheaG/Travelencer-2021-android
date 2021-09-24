@@ -35,8 +35,10 @@ interface ServiceApiInterface {
     //**RequestBody에는 int, double등의 숫자형 데이터가 안 들어가서 문자로 변환 후 넣어줘야 한다고 함.
     @Multipart
     @POST("/place/register")
-    fun placeRegister(@Part image: MultipartBody.Part?,
+/*    fun placeRegister(@Part image: MultipartBody.Part?,
                       @PartMap data: HashMap<String, RequestBody>)
+    : Call<PlaceRegisterResponse>*/
+    fun placeRegister(@Part image: MultipartBody.Part?)
     : Call<PlaceRegisterResponse>
 
 /*    //장소 등록

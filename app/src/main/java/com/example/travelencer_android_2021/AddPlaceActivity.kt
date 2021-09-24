@@ -31,6 +31,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+//미러링 테스트
 class AddPlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceBinding
     private val codePlaceName = "placeName"

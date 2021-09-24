@@ -23,21 +23,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
-import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.SettingData
-import com.example.travelencer_android_2021.data.SettingResponse
-import com.example.travelencer_android_2021.data.UserRewiteData
-import com.example.travelencer_android_2021.data.UserRewiteResponse
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -68,8 +58,8 @@ class SettingFragment : Fragment() {
 
         // uid 불러오기
         uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
-        // 사용자 정보 받아와서 설정하기
-        if (uid != -1) startSetting(SettingData(uid))
+        // TODO : 사용자 정보 받아와서 설정하기
+        // if (uid != -1) startSetting(SettingData(uid))
 
         // 동그란 이미지
         binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {
@@ -103,20 +93,15 @@ class SettingFragment : Fragment() {
                     val savedFileName = savePhoto(profileBitmap)    // 갤러리에 저장, 저장한 파일 이름 리턴받기
                     // 서버에 보낼 프로필 사진
                     val file = File(savedFileName)
-                    val photoBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
-                    val proPic = MultipartBody.Part.createFormData("proPic", file.name, photoBody)
 
-                    // 서버에 보내기
-                    changeSetting(UserRewiteData(uid, null, name, info))
+                    // TODO : 서버에 보내기
                 }
                 "삭제" -> {
-                    // 서버에 보내기
-                    changeSetting(UserRewiteData(uid, null, name, info))
+                    // TODO : 서버에 보내기
                 }
                 // 변경 없음
                 else -> {
-                    // 서버에 보내기
-                    changeSetting(UserRewiteData(uid, null, name, info))
+                    // TODO : 서버에 보내기
                 }
             }
         }
@@ -172,59 +157,6 @@ class SettingFragment : Fragment() {
                     .show()
         }
         return binding.root
-    }
-
-    // 설정 DB 연결(사용자 설정 정보 가져오기)
-    private fun startSetting(data : SettingData) {
-        if (!NetworkManager(requireContext()).checkNetworkState()) {
-            Toast.makeText(requireContext(), "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val call = RetrofitClient.serviceApiSetting.setSetting(data)
-        call.enqueue(object : retrofit2.Callback<SettingResponse> {
-            // 응답 성공 시
-            override fun onResponse(call: Call<SettingResponse>, response: Response<SettingResponse>) {
-                if (response.isSuccessful) {
-                    val result : SettingResponse = response.body()!!
-                    // 설정 변경하기
-                    if (result.code == 200) {
-                        setting(result.proPic, result.name, result.info ?: "안녕하세요")
-                    }
-                }
-            }
-            // 응답 실패 시
-            override fun onFailure(call: Call<SettingResponse>, t: Throwable) {
-                Toast.makeText(context, "설정 에러 발생 ${t.message}", Toast.LENGTH_LONG).show()
-                Log.d("mmm 설정 fail", t.message.toString())
-            }
-        })
-    }
-
-    // 설정 변경 DB 연결(사용자가 수정한 정보 보냐기)
-    // proPic : MultipartBody.Part, UID : MultipartBody.Part, name : MultipartBody.Part, info : MultipartBody.Part, data: HashMap<String, RequestBody>
-    private fun changeSetting(data : UserRewiteData) {
-        if (!NetworkManager(requireContext()).checkNetworkState()) {
-            Toast.makeText(context, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val call = RetrofitClient.serviceApiUser.userRewrite(data)
-        call.enqueue(object : retrofit2.Callback<UserRewiteResponse> {
-            // 응답 성공 시
-            override fun onResponse(call: Call<UserRewiteResponse>, response: Response<UserRewiteResponse>) {
-                if (response.isSuccessful) {
-                    val result : UserRewiteResponse = response.body()!!
-                    // 설정 변경하기
-                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
-                }
-            }
-            // 응답 실패 시
-            override fun onFailure(call: Call<UserRewiteResponse>, t: Throwable) {
-                Toast.makeText(context, "설정 변경 에러 발생 ${t.message}", Toast.LENGTH_LONG).show()
-                Log.d("mmm 설정 변경 fail", t.message.toString())
-            }
-        })
     }
 
     private fun exByte(list: ArrayList<Double>): ByteArray {

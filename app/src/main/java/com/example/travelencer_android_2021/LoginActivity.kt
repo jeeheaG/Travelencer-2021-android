@@ -1,7 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.*
 import android.os.Bundle
@@ -9,14 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.LoginData
-import com.example.travelencer_android_2021.data.LoginResponse
 import com.example.travelencer_android_2021.databinding.ActivityLoginBinding
 import kotlinx.android.synthetic.main.activity_login.*
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Response
 
 // 로그인 액티비티
 class LoginActivity : AppCompatActivity() {
@@ -28,7 +20,6 @@ class LoginActivity : AppCompatActivity() {
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        RetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         // 뒤로가기 이미지 클릭
         binding.imgBack.setOnClickListener {
@@ -78,8 +69,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 로그인 하기
-            startLogin(LoginData(email, password))
+            // TODO : 로그인 하기
         }
 
         // <비밀번호 찾기> 텍스트뷰 클릭
@@ -96,43 +86,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-    }
-
-    // 로그인 하기
-    private fun startLogin(data : LoginData) {
-        if (!NetworkManager(applicationContext).checkNetworkState()) {
-            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val call = RetrofitClient.serviceApiUser.userLogin(data)
-        call.enqueue(object : retrofit2.Callback<LoginResponse> {
-            // 응답 성공 시
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
-                    val result : LoginResponse = response.body()!!
-                    Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
-
-                    if (result.code == 200) {
-                        // uid 저장
-                        val pref = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE)
-                        val edit = pref.edit()
-                        edit.putInt("uid", result.uid).apply()
-                        // uid 보내기
-                        val outIntent = Intent(applicationContext, MainActivity::class.java)
-                        outIntent.putExtra("uid", result.uid)
-                        setResult(Activity.RESULT_OK, outIntent)
-                        finish()
-                    }
-                }
-            }
-
-            // 응답 실패 시
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(applicationContext, "로그인 에러 발생", Toast.LENGTH_SHORT).show()
-                Log.d("mmm 로그인 fail", t.message.toString())
-            }
-        })
     }
 
     // 이메일 형식 체크

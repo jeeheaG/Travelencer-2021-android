@@ -7,17 +7,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.example.travelencer_android_2021.api.GMailSender
-import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.JoinData
-import com.example.travelencer_android_2021.data.JoinResponse
 import com.example.travelencer_android_2021.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.btnRegister
 import kotlinx.android.synthetic.main.activity_register.imgBack
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Response
 
 // 회원가입 액티비티
 class RegisterActivity : AppCompatActivity() {
@@ -31,7 +25,6 @@ class RegisterActivity : AppCompatActivity() {
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        RetrofitClient.interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         // 뒤로가기 이미지 클릭
         imgBack.setOnClickListener {
@@ -148,8 +141,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 회원가입 하기
-            startJoin(JoinData(nickname, email, password))
+            // TODO : 회원가입 하기
         }
 
     }
@@ -163,32 +155,6 @@ class RegisterActivity : AppCompatActivity() {
     // 비밀번호 6자리 이상인지 확인
     private fun isPasswordValid(password : String) : Boolean {
         return password.length >= 6
-    }
-
-    // 회원가입하기
-    private fun startJoin(data : JoinData) {
-        if (!NetworkManager(applicationContext).checkNetworkState()) {
-            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val call = RetrofitClient.serviceApiUser.userJoin(data)
-        call.enqueue(object : retrofit2.Callback<JoinResponse> {
-            // 응답 성공 시
-            override fun onResponse(call: Call<JoinResponse>, response: Response<JoinResponse>) {
-                if (response.isSuccessful) {
-                    val result : JoinResponse = response.body()!!
-                    Toast.makeText(applicationContext, result.message, Toast.LENGTH_SHORT).show()
-
-                    if (result.code == 200) finish()
-                }
-            }
-            // 응답 실패 시
-            override fun onFailure(call: Call<JoinResponse>, t: Throwable) {
-                Toast.makeText(applicationContext, "회원가입 에러 발생", Toast.LENGTH_SHORT).show()
-                Log.d("mmm 회원가입 fail", t.message.toString())
-            }
-        })
     }
 
 }

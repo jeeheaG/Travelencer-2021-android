@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
 import com.example.travelencer_android_2021.databinding.FragmentFeedFoodBinding
-import com.example.travelencer_android_2021.databinding.FragmentFeedSightsBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 여행 피드 - 맛집 탭

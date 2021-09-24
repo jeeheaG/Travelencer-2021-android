@@ -7,14 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.travelencer_android_2021.api.RetrofitClient
-import com.example.travelencer_android_2021.data.QRData
-import com.example.travelencer_android_2021.data.QRResponse
 import com.example.travelencer_android_2021.databinding.ActivityQrBinding
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import retrofit2.Call
-import retrofit2.Response
 
 class QRActivity : AppCompatActivity() {
     private lateinit var binding: ActivityQrBinding
@@ -26,32 +21,18 @@ class QRActivity : AppCompatActivity() {
 
         // uid 불러오기
         val uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
-        if (uid != -1) { getEmail(QRData(uid)) }
+        // TODO : uid 이용해서 이메일 받아오기
+        if (uid != -1) { getEmail() }
     }
 
     // 이메일 요청 보내기
-    private fun getEmail(data : QRData) {
+    private fun getEmail() {
         if (!NetworkManager(applicationContext).checkNetworkState()) {
             Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val call = RetrofitClient.serviceApiUser.userQR(data)
-        call.enqueue(object : retrofit2.Callback<QRResponse> {
-            // 응답 성공 시
-            override fun onResponse(call: Call<QRResponse>, response: Response<QRResponse>) {
-                if (response.isSuccessful) {
-                    val result : QRResponse = response.body()!!
-                    // QR 코드 생성
-                    if (result.code == 200) { createQRCode(result.email) }
-                }
-            }
-            // 응답 실패 시
-            override fun onFailure(call: Call<QRResponse>, t: Throwable) {
-                Toast.makeText(this@QRActivity, "QR 코드를 생성 실패", Toast.LENGTH_LONG).show()
-                Log.d("mmm qr code fail", t.message.toString())
-            }
-        })
+        // TODO : 받아온 이메일로 QR 코드 생성하기 (createQRCode(email)이용)
     }
 
     // QR 코드 생성

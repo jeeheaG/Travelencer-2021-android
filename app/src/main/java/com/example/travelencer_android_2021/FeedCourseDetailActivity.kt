@@ -17,14 +17,14 @@ class FeedCourseDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_feed_course_detail)
 
         // 코스 배열
-        // TODO : 서버 연결 되면 코스 ID 받아오기
+        // TODO : 코스 ID 받아오기
         val course = intent.getStringArrayListExtra("course")
         // 리사이클러뷰 매니저 설정
         val layoutManager = LinearLayoutManager(this@FeedCourseDetailActivity)
         rcFeedCourseDetail.layoutManager = layoutManager
         // 리사이클러뷰에 어댑터 달기
         val feedCourseDetailAdapter = FeedCourseDetailAdapter()
-        // TODO : 서버 연결 되면 코스 ID로 코스 이름, 위치, 날짜 배열 얻어와서 설정
+        // TODO : 받아온 ID로 코스 이름, 위치, 날짜 배열 얻어와서 설정
         feedCourseDetailAdapter.courseName = course!!           // 코스 배열 설정
         rcFeedCourseDetail.adapter = feedCourseDetailAdapter
 

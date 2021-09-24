@@ -1,17 +1,35 @@
 package com.example.travelencer_android_2021
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
+import com.example.travelencer_android_2021.api.RetrofitClientPlace
+import com.example.travelencer_android_2021.data.PlaceRegisterResponse
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class AddPlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceBinding
@@ -25,18 +43,10 @@ class AddPlaceActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        //미리 선언해둬야하는 변수들
-//        var placeName: String
-//        var placeExplain: String
-//        var placeAddress: String
-//        var placeLatitude: Float
-//        var placeLongitude: Float
-//        var placeCategory: String
-//        var placeImageList: ArrayList<Uri>
-/*        var placeData: PlaceRegisterData? = null*/
         var latitude = 0f
         var longitude = 0f
         var photoList = arrayListOf<Uri>()
+        var photoRealPathList = arrayListOf<String>()
 
 
         //사진 RecyclerView 설정
@@ -99,7 +109,6 @@ class AddPlaceActivity : AppCompatActivity() {
 
         // 사진 선택 후 돌아왔을 때 실행되는 launcher. 사진 목록 리스트 photoList에 uri값들을 추가함
         // TODO : 처음에 사진 넣는 게 bind가 됐다 안됐다 하는데 이건 뭐람 ㅋㅋㅋㅋㅋㅋ 일단 푸시.. 내 폰 성능 문제일수도
-        //  -> uri말고 비트맵으로 하면 되려나? 나중에 고쳐보자
         val addPhotoResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             // reult.data에는 선택한 사진들의 uri 가 들어있음
             val imageData = result.data
@@ -113,8 +122,6 @@ class AddPlaceActivity : AppCompatActivity() {
                     //uri 한 개 꺼내오기
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
-                    //val proj = {MediaStore.Images.Media.DATA} // TODO : MediaStore.Images.Media.DATA deprecated
-                    //val cursor = managedQuery(uri, proj, null, null, null)
                     Log.d("로그 addPlaceUri-----","URI : ${uri}")
                 }
                 //이미지를 여러개 선택했을 경우
@@ -129,6 +136,15 @@ class AddPlaceActivity : AppCompatActivity() {
 
                 //TODO : 이거 호출하는 부분이 문제인가? 음..
                 photoAdapter.notifyDataSetChanged()
+
+                //이미지 몇 장을 선택했든 실행되는 코드!!!!!
+                //uri정보가 들어있는 photoList를 이용해 이미지들의 절대 경로 구함!!!!!!!
+                //갤러리DB정보인 uri로부터 이미지의 실제 경로 가져오기
+                for(i in 0 until photoList.size){
+                    photoRealPathList.add(getRealPath(photoList[i], this) ?: "") //null일 경우 빈 문자열 반환
+                }
+
+                Log.d("로그 AddPlace uri to 경로--", "all번쩨 : ${photoRealPathList}")
             }
 
             //아무 이미지도 선택하지 않고 돌아왔을 경우
@@ -152,26 +168,75 @@ class AddPlaceActivity : AppCompatActivity() {
             addPhotoResultLauncher.launch(photoIntent)
         }
 
+        // TODO : <장소등록>으로 버튼 이름 바꾸기
         // <다음으로> 클릭
         binding.btnPlaceRegisterNext.setOnClickListener {
+            //카테고리 라디오 버튼 선택에 따라 데이터 만듦
             var categoryChecked: Int = 1
             when(binding.rgPlaceRegisterCategory.checkedRadioButtonId){
                 R.id.rbtnPlaceRegisterCategoryFood -> {categoryChecked = 0}
                 //R.id.rbtnPlaceRegisterCategorySights -> {radioChecked = 1}
             }
 
-            // AddPlace화면에서 입력한 정보들 다 넘겨줌. 서버로 보내는 건 AddPNC에서 함.
+            // TODO : 장소등록 요청
+            //데이터들 RequestBody로 변환. 숫자형 데이터들은 다 String으로 바꿈
+            val plcName = (binding.etPlaceRegisterName.text.toString() ?: "").toRequestBody("text/plain".toMediaType())
+            val plcProduce = (binding.etPlaceRegisterExplain.text.toString() ?: "").toRequestBody("text/plain".toMediaType())
+            val plcAddress = (binding.tvPlaceRegisterAddressInput.text.toString() ?: "").toRequestBody("text/plain".toMediaType())
+            val plcCategory = (categoryChecked).toString().toRequestBody("text/plain".toMediaType())
+            val plcPicture = photoRealPathList ?: arrayListOf<String>()
+            val locX = (latitude).toString().toRequestBody("text/plain".toMediaType())
+            val locY = (longitude).toString().toRequestBody("text/plain".toMediaType())
+
+            //이미지 데이터 제외하고 모두 HashMap에 넣음. 이 때 키값이 서버 변수값이랑 똑같아야 함.
+            val placeData: HashMap<String, RequestBody> = hashMapOf()
+            placeData["plcName"] = plcName
+            placeData["plcProduce"] = plcProduce
+            placeData["plcAddress"] = plcAddress
+            placeData["plcCategory"] = plcCategory
+            placeData["locX"] = locX
+            placeData["locY"] = locY
+
+            //이미지 uri들로 이미지를 서버에 보낼 수 있는 형태인 MultipartBody.Part 로 만듦
+            // TODO : 이미지 여러장 전송하려면 MultipartBody.Part를 담는 ArrayList로 보내야 한대.. 일단 한장만 보내보고 서버도 잘 되면 코드 바꿀까?
+            var multiBody: MultipartBody.Part? = null
+            for(realPath in plcPicture){ //plcPicture 뭐가 들었어? -절대경로
+                //Log.d("로그 addPNC multi uri----", "URI : ${uri}")
+//                D/로그 addPlaceUri-----: URI : content://media/external/images/media/84
+//                D/로그 AddPlace uri to 경로--: all번쩨 : [/data/user/0/com.example.travelencer_android_2021/1631794432818]
+
+                val bitmap = BitmapFactory.decodeFile(realPath) //이미지 bitmap 데이터 가져오기
+
+                val bos = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) //확장자를 PNG로 하고 압축 정도를 0으로 해 ByteArrayOutputStream에 넣음
+                val byteArray = bos.toByteArray() //byteArray로 변환
+
+                val file = File(applicationContext.filesDir, applicationContext.filesDir.name+System.currentTimeMillis()+"_forByteArray.png") //file 객체 생성
+                Log.d("로그 AddPlace File--", "file 경로")
+                val fos = FileOutputStream(file) // file의 경로을 가진 FileOutputStream 생성
+                fos.write(byteArray) // FileOutputStream에 byteArray데이터 담음
+                fos.flush() // file의 경로에 byteArray데이터 저장
+                fos.close() // FileOutputStream 종료
+
+                val reqBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                multiBody = MultipartBody.Part.createFormData("file", file.name, reqBody)
+                Log.d("로그 AddPlace 장소등록Post요청", "filename : ${file.name}")
+
+
+                //val reqBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+/*                val f = File(realPath)
+                val reqBody = f.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                multiBody = MultipartBody.Part.createFormData("file", f.name, reqBody)
+                Log.d("로그 AddPlace 장소등록Post요청", "filename : ${f.name}")*/
+            }
+
+            // 서버에 장소등록 요청 보냄. 사진, 텍스트 데이터들 묶음
+            postAddPlace(multiBody, placeData)
+
+            //코드 뒤집기.. 일단 장소명이랑 주소, 어디서 왔는지만 넘겨주자 나중에 손보기
             val pncIntent = Intent(this, AddPNCActivity::class.java)
             pncIntent.putExtra("placeName", binding.etPlaceRegisterName.text.toString())
-            pncIntent.putExtra("placeExplain", binding.etPlaceRegisterExplain.text.toString())
             pncIntent.putExtra("placeAddress", binding.tvPlaceRegisterAddressInput.text.toString())
-            pncIntent.putExtra("placeCategory", categoryChecked)
-            //pncIntent.putExtra("placeImage", photoList)
-            // **photoList는 이미지들의 uri가 담긴 ArrayLsit<Uri> 임.
-            //원래는 intent로 arrayList전달 시 arrayList가 담는 자료형에 Precelable 를 추가로 구현해 줘야 하지만 Uri는 이미 구현이 되어있어서 나는 그냥 쓸 수 있었음!
-            pncIntent.putParcelableArrayListExtra("placeImage", photoList)
-            pncIntent.putExtra("placeLatitude", latitude)
-            pncIntent.putExtra("placeLongitude", longitude)
             pncIntent.putExtra("from", intent.getStringExtra("from"))
             pncResultLauncher.launch(pncIntent)
 
@@ -182,8 +247,44 @@ class AddPlaceActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun postAddPlace(data: PlaceRegisterData){
-        val call = RetrofitClientPlace.serviceApiPlace.placeRegister(data)
+    //갤러리DB정보인 uri를 이용해 이미지의 실제 절대 경로 가져오는 함수 : 새 경로를 만들어 이미지를 복사해 새 경로에 복사본을 만들고 목사본의 경로를 가져옴
+    private fun getRealPath(uri: Uri, context: Context): String? {
+        //새 경로 만들기
+        val filePath = context.applicationInfo.dataDir + File.separator + System.currentTimeMillis()
+        val file = File(filePath)
+
+        try{
+            //uri로 이미지 복사에 필요한 데이터 가져옴
+            val contentResolver = context.contentResolver ?: return null
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            if (inputStream != null) {
+                //가져온 데이터를 새로 만든 경로로 내보냄
+                val outputStream = FileOutputStream(file)
+                val buf = ByteArray(1024)
+                var len: Int
+                while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
+                outputStream.close()
+                inputStream.close()
+            }else{
+                Log.d("로그--AddPlace path", "inputStream == null")
+                return null
+            }
+        } catch (e: IOException){
+            Log.d("로그--AddPlace ERROR path", "${e.printStackTrace()}")
+            return null
+        }
+        return file.absolutePath
+    }
+
+
+    private fun postAddPlace(image: MultipartBody.Part?, data: HashMap<String, RequestBody>){
+        if (!NetworkManager(applicationContext).checkNetworkState()) {
+            Toast.makeText(applicationContext, "네트워트 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        //val call = RetrofitClientPlace.serviceApiPlace.placeRegister(image, data)
+        val call = RetrofitClientPlace.serviceApiPlace.placeRegister(image)
         call.enqueue(object : retrofit2.Callback<PlaceRegisterResponse> {
             override fun onResponse(call: Call<PlaceRegisterResponse>, response: Response<PlaceRegisterResponse>) {
                 if (response.isSuccessful) {
@@ -205,5 +306,5 @@ class AddPlaceActivity : AppCompatActivity() {
 
             }
         })
-    }*/
+    }
 }

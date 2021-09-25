@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions' //익스텐션 플러그인 적용 - id값으로 바로 접근 가능
     id 'androidx.navigation.safeargs.kotlin' //뷰바인딩
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -55,6 +56,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"     // 코루틴
     implementation "io.github.ParkSangGwon:tedpermission:2.3.0"         // 권한 설정
     implementation "androidx.viewpager2:viewpager2:1.0.0"               // viewpager2
+
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     
     // QR 코드 생성
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "21749306444",
+    "project_id": "travelencer-ds",
+    "storage_bucket": "travelencer-ds.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21749306444:android:a22c4d05b668badbe710e9",
+        "android_client_info": {
+          "package_name": "com.example.travelencer_android_2021"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21749306444-jsuha9ou0k6mg9miau80vq0gvnj1l676.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-r2seHFaMEmSUygOWJAfUuhgFySrtGRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21749306444-jsuha9ou0k6mg9miau80vq0gvnj1l676.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

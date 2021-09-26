@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.example.travelencer_android_2021.databinding.ActivityLoginBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 
 // 로그인 액티비티
@@ -15,11 +18,15 @@ class LoginActivity : AppCompatActivity() {
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        auth = Firebase.auth
 
         // 뒤로가기 이미지 클릭
         binding.imgBack.setOnClickListener {
@@ -69,7 +76,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // TODO : 로그인 하기
+            // 로그인 하기
+            startLogin(email, password)
         }
 
         // <비밀번호 찾기> 텍스트뷰 클릭
@@ -86,6 +94,18 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    // 로그인 하기
+    private fun startLogin(email : String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val uid = auth.currentUser!!.uid
+                        Toast.makeText(baseContext, "로그인 성공!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else Toast.makeText(applicationContext, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
     }
 
     // 이메일 형식 체크

@@ -1,6 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,8 +10,9 @@ import com.example.travelencer_android_2021.api.GMailSender
 import com.example.travelencer_android_2021.data.RegisterData
 import com.example.travelencer_android_2021.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.btnRegister
@@ -160,8 +160,16 @@ class RegisterActivity : AppCompatActivity() {
 
     // 회원가입 하기
     private fun startRegister(email : String, password : String, name : String) {
-        val ref = fbFiresotre?.collection("userT")?.document()
-        val uid = ref?.id!!
+        val auth = Firebase.auth
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Toast.makeText(baseContext, "회원가입에 실패했습니다...", Toast.LENGTH_SHORT).show()
+                return@addOnCompleteListener
+            }
+        }
+
+        val ref = fbFiresotre?.collection("userT")?.document()!!
+        val uid = ref.id
         val data = RegisterData(uid, email, password, null, name, null)
         ref.set(data)
                 .addOnSuccessListener {

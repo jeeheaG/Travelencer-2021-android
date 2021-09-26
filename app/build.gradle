@@ -59,6 +59,9 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
     
     // QR 코드 생성
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'

@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,7 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.example.travelencer_android_2021.api.GMailSender
+import com.example.travelencer_android_2021.data.RegisterData
 import com.example.travelencer_android_2021.databinding.ActivityRegisterBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_register.btnRegister
@@ -20,11 +25,17 @@ class RegisterActivity : AppCompatActivity() {
 
     var code = "-1"     // 이메일 인증 코드
 
+    var fbAuth : FirebaseAuth? = null
+    var fbFiresotre : FirebaseFirestore? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        fbAuth = FirebaseAuth.getInstance()
+        fbFiresotre = FirebaseFirestore.getInstance()
 
         // 뒤로가기 이미지 클릭
         imgBack.setOnClickListener {
@@ -110,8 +121,8 @@ class RegisterActivity : AppCompatActivity() {
         // <가입하기> 버튼 클릭
         btnRegister.setOnClickListener {
             // 닉네임 검사
-            val nickname = editNickname.text.toString()
-            if (nickname.isEmpty()) {
+            val name = editNickname.text.toString()
+            if (name.isEmpty()) {
                 Toast.makeText(applicationContext, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -141,9 +152,23 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // TODO : 회원가입 하기
+            // 회원가입 하기
+            startRegister(email, password, name)
         }
 
+    }
+
+    // 회원가입 하기
+    private fun startRegister(email : String, password : String, name : String) {
+        val ref = fbFiresotre?.collection("userT")?.document()
+        val uid = ref?.id!!
+        val data = RegisterData(uid, email, password, null, name, null)
+        ref.set(data)
+                .addOnSuccessListener {
+                    Toast.makeText(applicationContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener { Toast.makeText(applicationContext, "회원가입에 실패했습니다...", Toast.LENGTH_SHORT).show() }
     }
 
     // 이메일 형식 체크

@@ -25,17 +25,19 @@ private const val TAG_SETTING = "setting_fragment"
 private const val SP_PLACE_FILTERED: String = "placeFiltered"
 private const val SP_FEED_FILTERED: String = "feedFiltered"
 
+private const val NO_LOGIN = "X"
+
 class NaviActivity : AppCompatActivity() {
     private var placeFiltered: Boolean = false
     private var feedFiltered: Boolean = false
-    private var uid = -1
+    private var login = "X"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navi)
 
-        // uid 불러오기
-        uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
+        // 로그인 여부 불러오기
+        login = applicationContext.getSharedPreferences("login", Context.MODE_PRIVATE).getString("login", NO_LOGIN).toString()
 
         //처음 보여줄 프래그먼트 설정
         //setFragment(TAG_FEED, FeedFragment())
@@ -45,7 +47,7 @@ class NaviActivity : AppCompatActivity() {
             when(item.itemId) {
                 R.id.homeFragment -> {
                     val intent = Intent(this@NaviActivity, MainActivity::class.java)
-                    intent.putExtra("uid", uid)
+                    intent.putExtra("login", login)
                     startActivity(intent)
                     finish()
                 }
@@ -58,14 +60,14 @@ class NaviActivity : AppCompatActivity() {
                     setFragment(TAG_PLACE_MAIN, PlaceMainFragment())
                 }
                 R.id.postBlogFragment -> {
-                    if (uid == -1) {
+                    if (login == NO_LOGIN) {
                         Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
                         return@setOnNavigationItemSelectedListener false
                     }
                     setFragment(TAG_POST_BLOG, PostBlogFragment())
                 }
                 R.id.settingFragment -> {
-                    if (uid == -1) {
+                    if (login == NO_LOGIN) {
                         Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
                         return@setOnNavigationItemSelectedListener false
                     }

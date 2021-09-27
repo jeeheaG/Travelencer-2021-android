@@ -5,17 +5,20 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.travelencer_android_2021.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+
+private const val NO_LOGIN = "X"
 
 // 홈 액티비티
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private var uid = -1
+    var login = "X"
 
     // 뒤로가기 연속 클릭 대기 시간
     private var mBackWait : Long = 0
@@ -26,13 +29,14 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        // uid 불러오기
-        uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
+        // 로그인 여부 불러오기
+        login = applicationContext.getSharedPreferences("login", Context.MODE_PRIVATE).getString("login", NO_LOGIN).toString()
 
         val loginResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
-                if (data != null) uid = data.getIntExtra("uid", -1)
+                if (data != null) login = data.getStringExtra("login").toString()
+                Log.d("mmm", login)
             }
         }
 
@@ -45,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         // 설정 이미지 클릭
         binding.imgSetting.setOnClickListener {
-            if (uid == -1) {
+            if (login == NO_LOGIN) {
                 Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -54,12 +58,12 @@ class MainActivity : AppCompatActivity() {
 
         // 사람모양 이미지 선택 > QR 액티비티로 이동
         binding.imgQR.setOnClickListener {
-            if (uid == -1) {
+            if (login == NO_LOGIN) {
                 Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val intent = Intent(this@MainActivity, QRActivity::class.java)
-            intent.putExtra("uid", uid)
+            intent.putExtra("login", login)
             startActivity(intent)
         }
 
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         // <나의 여행 일지> 클릭
         binding.btnMyPost.setOnClickListener {
-            if (uid == -1) {
+            if (login == NO_LOGIN) {
                 Toast.makeText(applicationContext, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -87,7 +91,7 @@ class MainActivity : AppCompatActivity() {
     private fun setNavi(fregmentId : Int) {
         val intent = Intent(this@MainActivity, NaviActivity::class.java)
         intent.putExtra("selectFragId", fregmentId)
-        intent.putExtra("uid", uid)
+        intent.putExtra("login", login)
         startActivity(intent)
         finish()
     }

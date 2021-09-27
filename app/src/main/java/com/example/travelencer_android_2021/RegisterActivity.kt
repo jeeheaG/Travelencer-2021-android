@@ -1,8 +1,10 @@
 package com.example.travelencer_android_2021
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -160,23 +162,27 @@ class RegisterActivity : AppCompatActivity() {
 
     // 회원가입 하기
     private fun startRegister(email : String, password : String, name : String) {
+        // 사용자 계정 만들기
         val auth = Firebase.auth
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Toast.makeText(baseContext, "회원가입에 실패했습니다...", Toast.LENGTH_SHORT).show()
                 return@addOnCompleteListener
+            } else {
+                // 사용자 정보 저장하기
+                val uid = auth.currentUser!!.uid //ref.id
+                val ref = fbFiresotre?.collection("userT")?.document(uid)!!
+                val data = RegisterData(uid, email, password, null, name, null)
+                ref.set(data)
+                        .addOnSuccessListener {
+                            Toast.makeText(applicationContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(applicationContext, "회원가입에 실패했습니다...", Toast.LENGTH_SHORT).show()
+                        }
             }
         }
-
-        val ref = fbFiresotre?.collection("userT")?.document()!!
-        val uid = ref.id
-        val data = RegisterData(uid, email, password, null, name, null)
-        ref.set(data)
-                .addOnSuccessListener {
-                    Toast.makeText(applicationContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .addOnFailureListener { Toast.makeText(applicationContext, "회원가입에 실패했습니다...", Toast.LENGTH_SHORT).show() }
     }
 
     // 이메일 형식 체크

@@ -1,6 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.example.travelencer_android_2021.databinding.ActivityQrBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 
@@ -20,9 +20,9 @@ class QRActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // uid 불러오기
-        val uid = applicationContext.getSharedPreferences("uid", Context.MODE_PRIVATE).getInt("uid", -1)
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
         // TODO : uid 이용해서 이메일 받아오기
-        if (uid != -1) { getEmail() }
+        getEmail()
     }
 
     // 이메일 요청 보내기

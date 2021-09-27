@@ -1,6 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,22 +12,19 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 
+
 // 여행 피드 프레그먼트(여행 피드 필터 결과)
 // 사진, 코스, 맛집, 관광지 탭
 class FeedFragment : Fragment() {
     private var _binding : FragmentFeedBinding? = null
     private val binding get() = _binding!!
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
-    private var uid = -1
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFeedBinding.inflate(inflater, container, false)
-
-        // uid 불러오기
-        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
 
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         val bundle = arguments

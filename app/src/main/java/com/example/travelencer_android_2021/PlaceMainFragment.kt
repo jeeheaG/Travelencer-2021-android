@@ -22,13 +22,12 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
+
 //뷰바인딩 사용
 
 class PlaceMainFragment : Fragment() {
     private var _binding: FragmentPlaceMainBinding? = null
     private val binding get() = _binding!!
-
-    private var uid = -1
 
     var placeList = arrayListOf<ModelCasePlaceCard>()
     private lateinit var mAdapter: PlaceMainAdapter
@@ -37,9 +36,6 @@ class PlaceMainFragment : Fragment() {
         //val view = inflater.inflate(R.layout.fragment_place_main, container, false) //setContentView행위를 프래그먼트버전으로 한 것
         _binding = FragmentPlaceMainBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        // uid 불러오기
-        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
 
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         var keyword = ""

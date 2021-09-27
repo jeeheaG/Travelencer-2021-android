@@ -1,5 +1,7 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.*
 import android.os.Bundle
@@ -101,7 +103,16 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val uid = auth.currentUser!!.uid
+                        // 로그인 여부 저장
+                        val pref = applicationContext.getSharedPreferences("login", Context.MODE_PRIVATE)
+                        val edit = pref.edit()
+                        edit.putString("login", "O").apply()
+
+                        // 로그인 여부 보내기
+                        val outIntent = Intent(applicationContext, MainActivity::class.java)
+                        outIntent.putExtra("login", "O")
+                        setResult(Activity.RESULT_OK, outIntent)
+
                         Toast.makeText(baseContext, "로그인 성공!", Toast.LENGTH_SHORT).show()
                         finish()
                     } else Toast.makeText(applicationContext, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()

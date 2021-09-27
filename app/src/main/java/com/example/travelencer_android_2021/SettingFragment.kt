@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
@@ -38,6 +39,7 @@ import kotlin.collections.ArrayList
 private const val PICK_FROM_ALBUM = 0
 private const val IMAGE_CAPTURE = 1
 private const val TAG = "mmm"
+private const val NO_LOGIN = "X"
 
 // 설정 프레그먼트
 class SettingFragment : Fragment() {
@@ -46,7 +48,6 @@ class SettingFragment : Fragment() {
 
     private var uri : Uri? = null                   // 이미지 파일 경로
     private lateinit var currentPhotoPath : String  // 사진 절대경로
-    private var uid = -1                            // uid 값
     private var laseSelect = "변경 없음"             // 마지막으로 프로필 설정한 방법
     private lateinit var profileBitmap : Bitmap     // 서버에 저장할 사진
 
@@ -56,10 +57,9 @@ class SettingFragment : Fragment() {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        // uid 불러오기
-        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
+        // 로그인 여부 불러오기
         // TODO : 사용자 정보 받아와서 설정하기
-        // if (uid != -1) startSetting(SettingData(uid))
+        // if (login != NO_LOGIN) startSetting(SettingData(uid))
 
         // 동그란 이미지
         binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {
@@ -109,9 +109,12 @@ class SettingFragment : Fragment() {
         // <로그아웃> 버튼 클릭
         binding.btnLogout.setOnClickListener {
             // uid 삭제
-            val pref = context?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!
+            val pref = context?.getSharedPreferences("login", Context.MODE_PRIVATE)!!
             val edit = pref.edit()
-            edit.putInt("uid", -1).apply()
+            edit.putString("login", NO_LOGIN).apply()
+
+            FirebaseAuth.getInstance().signOut()
+
             Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
             // MainActivity로 이동
             val intent = Intent(context, MainActivity::class.java)

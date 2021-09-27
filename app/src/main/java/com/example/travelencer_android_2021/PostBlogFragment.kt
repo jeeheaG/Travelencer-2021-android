@@ -1,6 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
@@ -20,6 +19,7 @@ import com.example.travelencer_android_2021.databinding.FragmentPostBlogBinding
 import com.example.travelencer_android_2021.model.ModelPostBlog
 import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 
@@ -31,15 +31,10 @@ class PostBlogFragment : Fragment() {
 
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
 
-    private var uid = -1    // uid 값
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        // uid 불러오기
-        uid = activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getInt("uid", -1)
 
         val photoList = arrayListOf(
                 ModelPostBlogPhoto(R.drawable.dummy_haewoojae),

@@ -14,6 +14,11 @@ import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
 import com.example.travelencer_android_2021.adapter.PostWritePlaceAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
+import com.example.travelencer_android_2021.model.ModelPostT
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.text.SimpleDateFormat
 import java.util.*
 
 //뷰바인딩 사용
@@ -22,10 +27,20 @@ class PostWriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostWriteBinding
     private val codePlaceName = "placeName"
     private val codePlaceLoc = "placeLoc"
+    private lateinit var auth: FirebaseAuth
+    var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+    var ModelPostT = ModelPostT()
+    private var storage : FirebaseStorage? = null
+    var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
+    var imgFileName = "pImage_" + timeStamp + "_"+imgcnt+"_.jpg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
+        auth = FirebaseAuth.getInstance()
+        storage = FirebaseStorage.getInstance()
+
         val view = binding.root
         setContentView(view)
 
@@ -34,6 +49,8 @@ class PostWriteActivity : AppCompatActivity() {
         var year = calendar.get(Calendar.YEAR)
         var month = calendar.get(Calendar.MONTH) //JANUARY == 0 임
         var day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
 
         //작성일
         binding.tvPostWritePostDate.text = "작성일 ${year} ${month+1} ${day}"
@@ -151,6 +168,16 @@ class PostWriteActivity : AppCompatActivity() {
         // <등록 하기> 버튼 클릭
         binding.btnPostWritePost.setOnClickListener {
             // TODO : DB : DB로 게시글 데이터 보내기
+            //게시글 테이블 업로드
+            ModelPostT.uid = auth?.currentUser?.uid
+            ModelPostT.postId = auth?.currentUser?.uid + "_"+timeStamp
+            ModelPostT.updateDate = timeStamp
+            ModelPostT.title = binding.tvPostWriteTitle.text.toString()
+            ModelPostT.startDate = binding.tvPostWriteStartDate.text.toString()
+            ModelPostT.EndDate = binding.tvPostWriteEndDate.text.toString()
+            ModelPostT.content = binding.tvPostWriteWriting.text.toString()
+            firestore?.collection("postT")?.document("${auth?.currentUser?.uid + "_"+timeStamp}")?.set(ModelPostT)
+
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
             finish()

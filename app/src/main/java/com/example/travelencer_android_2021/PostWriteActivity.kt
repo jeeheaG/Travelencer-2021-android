@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Display
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,7 +37,7 @@ class PostWriteActivity : AppCompatActivity() {
     private var storage : FirebaseStorage? = null
     var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
-    var imgFileName = "postImage_" + timeStamp + "_"+imgcnt+"_.jpg"
+    var imgFileName = ""/*"postImage_" + timeStamp + "_"+imgcnt+"_.jpg"*/
     var photoList = arrayListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,17 +149,19 @@ class PostWriteActivity : AppCompatActivity() {
             }
         }
 
+
         //사진 스토리지 등록 코드
         fun photoUpload(){
             imgcnt = 0
-            val ref = FirebaseStorage.getInstance().getReference("/post/$imgFileName")
             for (uri in photoList){
+                imgFileName = "postImage_" + timeStamp + "_"+imgcnt+"_.jpg"
+                val ref = FirebaseStorage.getInstance().getReference("/post/$imgFileName")
                 ref.putFile(uri).addOnSuccessListener {
                     ref.downloadUrl.addOnSuccessListener {
                         it.toString()
                         ModelPostPhotoT.postPhoto = imgFileName
                         ModelPostPhotoT.postId = auth?.currentUser?.uid + "_" + timeStamp
-                        firestore.collection("postPhotoT").document("${auth?.currentUser?.uid + "_" + timeStamp}")?.set(ModelPostPhotoT)
+                        firestore.collection("postPhotoT").document()?.set(ModelPostPhotoT)
                     }
                 }
                 imgcnt ++

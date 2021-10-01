@@ -23,18 +23,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.databinding.FragmentSettingBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 private const val PICK_FROM_ALBUM = 0
 private const val IMAGE_CAPTURE = 1
@@ -51,15 +60,24 @@ class SettingFragment : Fragment() {
     private var laseSelect = "변경 없음"             // 마지막으로 프로필 설정한 방법
     private lateinit var profileBitmap : Bitmap     // 서버에 저장할 사진
 
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageRef : StorageReference
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        // 로그인 여부 불러오기
+        storage = Firebase.storage
+        storageRef = storage.reference
+
         // TODO : 사용자 정보 받아와서 설정하기
-        // if (login != NO_LOGIN) startSetting(SettingData(uid))
+        val uid : String = (Firebase.auth.uid ?: activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getString("uid", "-1")) as String
+        if (uid != "-1") {
+            getSetting(uid)
+            getSettingProPic(uid)
+        }
 
         // 동그란 이미지
         binding.imgProfile.background = ShapeDrawable(OvalShape()).apply {
@@ -92,16 +110,20 @@ class SettingFragment : Fragment() {
                     // 크롭한 프로필 사진 갤러리에 저장하기
                     val savedFileName = savePhoto(profileBitmap)    // 갤러리에 저장, 저장한 파일 이름 리턴받기
                     // 서버에 보낼 프로필 사진
-                    val file = File(savedFileName)
-
-                    // TODO : 서버에 보내기
+                    val proPicFile = File(savedFileName)
+                    // 수정하기
+                    setSettingProPic(uid, proPicFile)
+                    setSetting(uid, name, info)
                 }
                 "삭제" -> {
-                    // TODO : 서버에 보내기
+                    // 수정하기
+                    setDeleteProPic(uid)
+                    setSetting(uid, name, info)
                 }
                 // 변경 없음
                 else -> {
-                    // TODO : 서버에 보내기
+                    // 수정하기
+                    setSetting(uid, name, info)
                 }
             }
         }
@@ -162,34 +184,84 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
-    private fun exByte(list: ArrayList<Double>): ByteArray {
-        val list2: MutableList<Byte> = mutableListOf()
-        for (i in 0 until list.size) {
-            list2.add(list[i].toInt().toByte())
-        }
-        return list2.toByteArray()
+    // 설정 정보 가져오기
+    private fun getSetting(uid : String) {
+        val db = Firebase.firestore
+        val docRef = db.collection("userT").document(uid)
+
+        // 데이터 가져오기(프로필 사진 제외)
+        docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val map = document.data as HashMap<String, Any>
+//                        val proPic : ArrayList<Double>? = map["proPic"] as ArrayList<Double>?
+                        val name : String = map["name"] as String
+                        val info : String = (map["info"] ?: "안녕하세요") as String
+
+                        // 설정하기
+//                        // 프로필 사진
+//                        if (proPic == null) imgProfile.setImageResource(R.drawable.ic_user_gray)
+//                        else {
+//                            val bitmap = convertBitmap(proPic)
+//                            imgProfile.setImageBitmap(bitmap)
+//                        }
+                        // 닉네임
+                        binding.editName.setText(name)
+                        // 계정 소개글
+                        binding.editInfo.setText(info)
+                    } else {
+                        Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(context, "설정 화면을 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "get failed with ", exception)
+                }
     }
-    private fun convertBitmap(input: ArrayList<Double>): Bitmap {
-        val arr = exByte(input)
-        try {
-            return BitmapFactory.decodeByteArray(arr, 0, arr.size)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
+    // 프로필 사진 가져오기
+    private fun getSettingProPic(uid : String) {
+        val proPicFile = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/prifile_img")!!
+        if (!proPicFile.isDirectory) proPicFile.mkdir()
+
+        // 이미지 다운로드해서 가져오기
+        storageRef.child("proPic_$uid").downloadUrl
+                .addOnSuccessListener { uri ->
+                    Glide.with(activity?.applicationContext!!)
+                            .load(uri)
+                            .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+                            .apply(RequestOptions().centerCrop())
+                            .into(imgProfile)
+                    // imgProfile.setImageURI(uri)
+                }
     }
 
-    // 설정하기
-    private fun setting(proPic: ArrayList<Double>?, name: String, info: String) {
-        // 프로필 사진
-        if (proPic == null) imgProfile.setImageResource(R.drawable.ic_user_gray)
-        else {
-            val bitmap = convertBitmap(proPic)
-            imgProfile.setImageBitmap(bitmap)
-        }
-        // 닉네임
-        binding.editName.setText(name)
-        // 계정 소개글
-        binding.editInfo.setText(info)
+    // <수정완료> 버튼 클릭 > 설정 정보 수정하기
+   private fun setSetting(uid : String, name : String, info : String) {
+        val firestore = Firebase.firestore
+        val map= mutableMapOf<String,Any>()
+        map["name"] = name
+        map["info"] = info
+        firestore.collection("userT").document(uid).update(map)
+                .addOnCompleteListener {
+                    if(it.isSuccessful) Toast.makeText(context, "수정 완료하였습니다.", Toast.LENGTH_SHORT).show()
+                    else Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+
+    }
+    // 프로필 사진 변경/수정하기
+    private fun setSettingProPic(uid : String, proPicFile : File) {
+        // 기존 프로필 사진 지우기
+        setDeleteProPic(uid)
+
+        val mountainsRef = storageRef.child("proPic_$uid")
+        val stream = FileInputStream(proPicFile)
+        val uploadTask = mountainsRef.putStream(stream)
+        uploadTask.addOnFailureListener { Toast.makeText(context, "프로필 사진 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show() }
+    }
+    // 프로필 사진 삭제하기
+    private fun setDeleteProPic(uid : String) {
+        val deserRef = storageRef.child("proPic_$uid")
+        deserRef.delete().addOnFailureListener { Toast.makeText(context, "프로필 사진 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show() }
     }
 
     // 카메라(사진 찍기)

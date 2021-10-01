@@ -172,7 +172,7 @@ class RegisterActivity : AppCompatActivity() {
                 // 사용자 정보 저장하기
                 val uid = auth.currentUser!!.uid //ref.id
                 val ref = fbFiresotre?.collection("userT")?.document(uid)!!
-                val data = RegisterData(uid, email, password, null, name, null)
+                val data = RegisterData(uid, email, null, name, null)
                 ref.set(data)
                         .addOnSuccessListener {
                             Toast.makeText(applicationContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()

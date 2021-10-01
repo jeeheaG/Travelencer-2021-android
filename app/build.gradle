@@ -65,6 +65,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
     
     // QR 코드 생성
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'

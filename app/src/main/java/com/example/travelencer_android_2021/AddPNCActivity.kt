@@ -54,11 +54,12 @@ class AddPNCActivity : AppCompatActivity() {
                             plcProduce = intent.getStringExtra("placeExplain") ?: "",
                             plcAddress = intent.getStringExtra("placeAddress") ?: "",
                             plcCategory = intent.getIntExtra("placeCategory", 1),
-                            plcPicture = intent.getSerializableExtra("placeImage") as ArrayList<Uri>? ?: arrayListOf<Uri>(),
+                            //plcPicture = intent.getSerializableExtra("placeImage") as ArrayList<Uri>? ?: arrayListOf<Uri>(),
 //                            plcGood = binding.etPlaceRegisterCons.text.toString(),
 //                            plcBad = binding.etPlaceRegisterPros.text.toString(),
                             locX = intent.getFloatExtra("placeLatitude", 0f),
-                            locY = intent.getFloatExtra("placeLongitude", 0f)
+                            locY = intent.getFloatExtra("placeLongitude", 0f),
+                            plcId = ""
                             //plcPicture = photoList
                     )
                     // 서버에 장소등록 요청 보냄(<다음으로> 버튼을 눌러 placeData 데이터가 만들어진 상태여야 함)

@@ -13,8 +13,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
+import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 //미러링 테스트
 class AddPlaceActivity : AppCompatActivity() {
@@ -22,6 +27,9 @@ class AddPlaceActivity : AppCompatActivity() {
     private val codePlaceName = "placeName"
     private val codePlaceLoc = "placeLoc"
     //private val codeAddress = "address"
+
+    //var auth : FirebaseAuth? = null
+    var firestore : FirebaseFirestore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +40,9 @@ class AddPlaceActivity : AppCompatActivity() {
         var latitude = 0f
         var longitude = 0f
         var photoList = arrayListOf<Uri>()
+
+        //auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
 
         //사진 RecyclerView 설정
@@ -155,16 +166,22 @@ class AddPlaceActivity : AppCompatActivity() {
             val plcName = binding.etPlaceRegisterName.text.toString() ?: ""
             val plcProduce = binding.etPlaceRegisterExplain.text.toString() ?: ""
             val plcAddress = binding.tvPlaceRegisterAddressInput.text.toString() ?: ""
-            val plcCategory = categoryChecked.toString()
-            val plcPicture = photoList ?: arrayListOf<Uri>()
-            val locX = latitude.toString()
-            val locY = longitude.toString()
+            val plcCategory = categoryChecked
+            //val plcPicture = photoList ?: arrayListOf<Uri>()
+            val locX = latitude
+            val locY = longitude
+            val timestamp = SimpleDateFormat("yyMMdd'T'HHmmss.SSS").format(Date())
 
+            val plcId = "${timestamp}_${locX}_${locY}"
+            val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId)
 
-            //코드 뒤집기.. 일단 장소명이랑 주소, 어디서 왔는지만 넘겨주자 나중에 손보기
+            postAddPlace(placeData)
+
+            //장소명이랑 주소, 장소id, 어디서 왔는지 넘겨주자
             val pncIntent = Intent(this, AddPNCActivity::class.java)
-            pncIntent.putExtra("placeName", binding.etPlaceRegisterName.text.toString())
-            pncIntent.putExtra("placeAddress", binding.tvPlaceRegisterAddressInput.text.toString())
+            pncIntent.putExtra("placeName", plcName)
+            pncIntent.putExtra("placeAddress", plcAddress)
+            pncIntent.putExtra("placeId", plcId)
             pncIntent.putExtra("from", intent.getStringExtra("from"))
             pncResultLauncher.launch(pncIntent)
 
@@ -173,6 +190,16 @@ class AddPlaceActivity : AppCompatActivity() {
         binding.ivBack.setOnClickListener{
             finish()
         }
+    }
+
+    private fun postAddPlace(placeData: PlaceRegisterData){
+        firestore?.collection("placeT")?.document()?.set(placeData)
+            ?.addOnSuccessListener {
+                Log.d("로그-placeRegister 성공-----", "성공!")
+            }
+            ?.addOnFailureListener {
+                    e -> Log.w("로그-placeRegister 실패 . . .", "실 패 . .", e)
+            }
     }
 
 

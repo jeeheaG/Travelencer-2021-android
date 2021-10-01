@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Display
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
 import com.example.travelencer_android_2021.adapter.PostWritePlaceAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
+import com.example.travelencer_android_2021.model.ModelPostPhotoT
 import com.example.travelencer_android_2021.model.ModelPostT
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,10 +32,12 @@ class PostWriteActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
     var ModelPostT = ModelPostT()
+    var ModelPostPhotoT = ModelPostPhotoT()
     private var storage : FirebaseStorage? = null
     var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
-    var imgFileName = "pImage_" + timeStamp + "_"+imgcnt+"_.jpg"
+    var imgFileName = "postImage_" + timeStamp + "_"+imgcnt+"_.jpg"
+    var photoList = arrayListOf<Uri>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +125,7 @@ class PostWriteActivity : AppCompatActivity() {
         }
 
         // 사진 추가 launcher, 사진 목록 리스트
-        var photoList = arrayListOf<Uri>()
+        //var photoList = arrayListOf<Uri>()
 
         val addPhotoResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             val imageData = result.data
@@ -143,6 +147,26 @@ class PostWriteActivity : AppCompatActivity() {
                 binding.rvPostWritePhotoList.adapter = PostWritePhotoUriAdapter(photoList, this)
             }
         }
+
+        //사진 스토리지 등록 코드
+        fun photoUpload(){
+            imgcnt = 0
+            val ref = FirebaseStorage.getInstance().getReference("/post/$imgFileName")
+            for (uri in photoList){
+                ref.putFile(uri).addOnSuccessListener {
+                    ref.downloadUrl.addOnSuccessListener {
+                        it.toString()
+                        ModelPostPhotoT.postPhoto = imgFileName
+                        ModelPostPhotoT.postId = auth?.currentUser?.uid + "_" + timeStamp
+                        firestore.collection("postPhotoT").document("${auth?.currentUser?.uid + "_" + timeStamp}")?.set(ModelPostPhotoT)
+                    }
+                }
+                imgcnt ++
+            }
+        }
+
+        //사진 파이어스토어 컬렉션에 넣기
+
 
         // <여행지 추가> 버튼 클릭
         binding.btnPostWriteAddPlace.setOnClickListener {
@@ -177,7 +201,7 @@ class PostWriteActivity : AppCompatActivity() {
             ModelPostT.EndDate = binding.tvPostWriteEndDate.text.toString()
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
             firestore?.collection("postT")?.document("${auth?.currentUser?.uid + "_"+timeStamp}")?.set(ModelPostT)
-
+            photoUpload()
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
             finish()

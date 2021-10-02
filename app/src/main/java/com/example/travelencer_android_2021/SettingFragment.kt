@@ -72,7 +72,7 @@ class SettingFragment : Fragment() {
         storage = Firebase.storage
         storageRef = storage.reference
 
-        // TODO : 사용자 정보 받아와서 설정하기
+        // 사용자 정보 받아와서 설정하기
         val uid : String = (Firebase.auth.uid ?: activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getString("uid", "-1")) as String
         if (uid != "-1") {
             getSetting(uid)
@@ -174,7 +174,24 @@ class SettingFragment : Fragment() {
             AlertDialog.Builder(context)
                     .setMessage("정말 탈퇴하시겠습니까?")
                     .setPositiveButton("네") { _, _ ->
-                        Toast.makeText(context, "탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
+                        val user = Firebase.auth.currentUser!!
+                        user.delete()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        // uid 삭제
+                                        val pref = context?.getSharedPreferences("login", Context.MODE_PRIVATE)!!
+                                        val edit = pref.edit()
+                                        edit.putString("login", NO_LOGIN).apply()
+
+                                        Toast.makeText(context, "탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
+
+                                        // MainActivity로 이동
+                                        val intent = Intent(context, MainActivity::class.java)
+                                        startActivity(intent)
+                                        activity?.finish()
+                                    }
+                                    else Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                                }
                     }
                     .setNegativeButton("아니오") { _, _ ->
                         Toast.makeText(context, "취소되었습니다.", Toast.LENGTH_SHORT).show()
@@ -194,17 +211,10 @@ class SettingFragment : Fragment() {
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         val map = document.data as HashMap<String, Any>
-//                        val proPic : ArrayList<Double>? = map["proPic"] as ArrayList<Double>?
                         val name : String = map["name"] as String
                         val info : String = (map["info"] ?: "안녕하세요") as String
 
                         // 설정하기
-//                        // 프로필 사진
-//                        if (proPic == null) imgProfile.setImageResource(R.drawable.ic_user_gray)
-//                        else {
-//                            val bitmap = convertBitmap(proPic)
-//                            imgProfile.setImageBitmap(bitmap)
-//                        }
                         // 닉네임
                         binding.editName.setText(name)
                         // 계정 소개글
@@ -224,14 +234,13 @@ class SettingFragment : Fragment() {
         if (!proPicFile.isDirectory) proPicFile.mkdir()
 
         // 이미지 다운로드해서 가져오기
-        storageRef.child("proPic_$uid").downloadUrl
+        storageRef.child("user/proPic_$uid").downloadUrl
                 .addOnSuccessListener { uri ->
                     Glide.with(activity?.applicationContext!!)
                             .load(uri)
                             .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
                             .apply(RequestOptions().centerCrop())
                             .into(imgProfile)
-                    // imgProfile.setImageURI(uri)
                 }
     }
 
@@ -241,6 +250,7 @@ class SettingFragment : Fragment() {
         val map= mutableMapOf<String,Any>()
         map["name"] = name
         map["info"] = info
+        // map["proPic"] = "user/proPic_$uid"
         firestore.collection("userT").document(uid).update(map)
                 .addOnCompleteListener {
                     if(it.isSuccessful) Toast.makeText(context, "수정 완료하였습니다.", Toast.LENGTH_SHORT).show()
@@ -253,14 +263,13 @@ class SettingFragment : Fragment() {
         // 기존 프로필 사진 지우기
         setDeleteProPic(uid)
 
-        val mountainsRef = storageRef.child("proPic_$uid")
+        val mountainsRef = storageRef.child("user/proPic_$uid")
         val stream = FileInputStream(proPicFile)
-        val uploadTask = mountainsRef.putStream(stream)
-        uploadTask.addOnFailureListener { Toast.makeText(context, "프로필 사진 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show() }
+        mountainsRef.putStream(stream).addOnFailureListener { Toast.makeText(context, "프로필 사진 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show() }
     }
     // 프로필 사진 삭제하기
     private fun setDeleteProPic(uid : String) {
-        val deserRef = storageRef.child("proPic_$uid")
+        val deserRef = storageRef.child("user/proPic_$uid")
         deserRef.delete().addOnFailureListener { Toast.makeText(context, "프로필 사진 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show() }
     }
 

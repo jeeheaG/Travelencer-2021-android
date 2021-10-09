@@ -9,6 +9,8 @@ import android.util.Log
 import android.widget.Toast
 import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.databinding.ActivityAddPNCBinding
+import com.example.travelencer_android_2021.model.ModelPNCT
+import com.google.firebase.firestore.FirebaseFirestore
 
 // Main에서 왔는지 Write에서 왔는지 resultCode로 구분
 const val RESULT_CODE_MAIN = Activity.RESULT_FIRST_USER + 0 //1
@@ -18,6 +20,7 @@ class AddPNCActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPNCBinding
     private val codePlaceName = "placeName"
     private val codePlaceLoc = "placeLoc"
+    lateinit var firestore: FirebaseFirestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +29,22 @@ class AddPNCActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        // placeMain의 여행지 등록 / postWrite의 여행지 검색 / 여행지 등록 -> 셋 중 어디서 온 건 지 알아야 함
+        firestore = FirebaseFirestore.getInstance()
+
+        // placeMain의 여행지 등록 : placeMain / postWrite의 여행지 검색 : write / 여행지 등록 : add -> 셋 중 어디서 온 건 지 알아야 함
         val from = intent.getStringExtra("from")
 
+        // 등록 완료
         binding.btnPlaceRegisterDone.setOnClickListener {
+            val pros = binding.etPlaceRegisterPros.text.toString()
+            val cons = binding.etPlaceRegisterCons.text.toString()
+
             when(from){
                 "placeMain" -> {
-                    //서버통신
+                    //방금 등록한 장소의 placeID가져오기
+                    val placeId = intent.getStringExtra("placeId") ?: "id없음"
+                    //업로드
+                    postPNC(placeId, pros, cons)
 
                     setResult(RESULT_CODE_MAIN)
                     finish()
@@ -48,22 +60,6 @@ class AddPNCActivity : AppCompatActivity() {
                 }
                 "add" -> {
                     // TODO : 코드 고치세유
-                    //서버에 넘겨줄 데이터 만듦
-                    val placeData = PlaceRegisterData(
-                            plcName = intent.getStringExtra("placeName") ?: "",
-                            plcProduce = intent.getStringExtra("placeExplain") ?: "",
-                            plcAddress = intent.getStringExtra("placeAddress") ?: "",
-                            plcCategory = intent.getIntExtra("placeCategory", 1),
-                            //plcPicture = intent.getSerializableExtra("placeImage") as ArrayList<Uri>? ?: arrayListOf<Uri>(),
-//                            plcGood = binding.etPlaceRegisterCons.text.toString(),
-//                            plcBad = binding.etPlaceRegisterPros.text.toString(),
-                            locX = intent.getFloatExtra("placeLatitude", 0f),
-                            locY = intent.getFloatExtra("placeLongitude", 0f),
-                            plcId = ""
-                            //plcPicture = photoList
-                    )
-                    // 서버에 장소등록 요청 보냄(<다음으로> 버튼을 눌러 placeData 데이터가 만들어진 상태여야 함)
-                    //잠시 주석
                     //postAddPlace(placeData)
 
                     val writeIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
@@ -79,6 +75,13 @@ class AddPNCActivity : AppCompatActivity() {
         binding.ivBack.setOnClickListener{
             finish()
         }
+    }
+
+    private fun postPNC(placeId: String, pros: String, cons: String) {
+        val modelPNCT = ModelPNCT(placeId, pros, cons)
+        firestore.collection("pncT").document().set(modelPNCT)
+                .addOnSuccessListener { Log.d("로그--addPlace","성공~~") }
+                .addOnFailureListener { Log.e("로그--addPlace","실패 . . . .") }
     }
 
 }

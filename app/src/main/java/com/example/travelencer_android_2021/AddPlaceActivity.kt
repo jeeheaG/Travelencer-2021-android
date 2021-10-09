@@ -1,34 +1,32 @@
 package com.example.travelencer_android_2021
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
+import com.example.travelencer_android_2021.adapter.PhotoBitmapAdapter
 import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.travelencer_android_2021.model.ModelPlacePhotoT
 import com.google.firebase.firestore.FirebaseFirestore
-import java.io.IOException
+import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
 
-//미러링 테스트
 class AddPlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceBinding
     private val codePlaceName = "placeName"
     private val codePlaceLoc = "placeLoc"
     //private val codeAddress = "address"
 
-    //var auth : FirebaseAuth? = null
+    //var auth : FirebaseAuth? = null // 장소등록 시 등록한 사람 정보 안 남음
     var firestore : FirebaseFirestore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +37,9 @@ class AddPlaceActivity : AppCompatActivity() {
 
         var latitude = 0f
         var longitude = 0f
+        val timestamp = SimpleDateFormat("yyMMdd'T'HHmmss.SSS").format(Date())
         var photoList = arrayListOf<Uri>()
+        var photoBitmapList = arrayListOf<Bitmap>()
 
         //auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -50,7 +50,7 @@ class AddPlaceActivity : AppCompatActivity() {
         binding.rvPlaceRegisterPhotoList.setHasFixedSize(true)
 
         // 사진 recyclerView adapter 설정
-        val photoAdapter = PostWritePhotoUriAdapter(photoList, this)
+        val photoAdapter = PhotoBitmapAdapter(photoBitmapList, this)
         binding.rvPlaceRegisterPhotoList.adapter = photoAdapter
 
 
@@ -99,7 +99,6 @@ class AddPlaceActivity : AppCompatActivity() {
 
 
         // 사진 선택 후 돌아왔을 때 실행되는 launcher. 사진 목록 리스트 photoList에 uri값들을 추가함
-        // TODO : 처음에 사진 넣는 게 bind가 됐다 안됐다 하는데 이건 뭐람 ㅋㅋㅋㅋㅋㅋ 일단 푸시.. bitmap으로 바꿔보자
         val addPhotoResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             // reult.data에는 선택한 사진들의 uri 가 들어있음
             val imageData = result.data
@@ -113,6 +112,8 @@ class AddPlaceActivity : AppCompatActivity() {
                     //uri 한 개 꺼내오기
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
+                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                    uri?.let{ photoBitmapList.add(bitmap) }
                     Log.d("로그 addPlaceUri-----","URI : ${uri}")
                 }
                 //이미지를 여러개 선택했을 경우
@@ -121,11 +122,12 @@ class AddPlaceActivity : AppCompatActivity() {
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
                         photoList.add(uri)
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                        uri?.let{ photoBitmapList.add(bitmap) }
                         Log.d("로그 addPlaceUri-----","URI : ${uri}")
                     }
                 }
 
-                //TODO : 이거 호출하는 부분이 문제인가? 음..
                 photoAdapter.notifyDataSetChanged()
 
             }
@@ -144,7 +146,8 @@ class AddPlaceActivity : AppCompatActivity() {
 
         // <사진 추가> 버튼 클릭
         binding.btnPlaceRegisterAddPhoto.setOnClickListener {
-            val photoIntent = Intent(Intent.ACTION_PICK)
+            //val photoIntent = Intent(Intent.ACTION_PICK) // 기본 갤러리 앱으로 선택 - 일부 기기에서 사진이 한 장밖에 선택 안 됨
+            val photoIntent = Intent(Intent.ACTION_GET_CONTENT) // 구글 갤러리 앱으로 선택
             photoIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI //선택한 사진 uri 를 intent의 data에 저장
             photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
             photoIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -170,17 +173,18 @@ class AddPlaceActivity : AppCompatActivity() {
             //val plcPicture = photoList ?: arrayListOf<Uri>()
             val locX = latitude
             val locY = longitude
-            val timestamp = SimpleDateFormat("yyMMdd'T'HHmmss.SSS").format(Date())
 
             val plcId = "${timestamp}_${locX}_${locY}"
+            Log.d("로그 addPlace----locXY", "locX : ${locX}, locY : ${locY}")
+            Log.d("로그 addPlace----plcId", "plcId : ${plcId}")
             val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId)
 
-            postAddPlace(placeData)
+            postAddPlace(placeData, photoList, timestamp)
 
             //장소명이랑 주소, 장소id, 어디서 왔는지 넘겨주자
             val pncIntent = Intent(this, AddPNCActivity::class.java)
-            pncIntent.putExtra("placeName", plcName)
-            pncIntent.putExtra("placeAddress", plcAddress)
+//            pncIntent.putExtra("placeName", plcName)
+//            pncIntent.putExtra("placeAddress", plcAddress)
             pncIntent.putExtra("placeId", plcId)
             pncIntent.putExtra("from", intent.getStringExtra("from"))
             pncResultLauncher.launch(pncIntent)
@@ -192,7 +196,7 @@ class AddPlaceActivity : AppCompatActivity() {
         }
     }
 
-    private fun postAddPlace(placeData: PlaceRegisterData){
+    private fun postAddPlace(placeData: PlaceRegisterData, photoList: ArrayList<Uri>, timeStamp: String){
         firestore?.collection("placeT")?.document()?.set(placeData)
             ?.addOnSuccessListener {
                 Log.d("로그-placeRegister 성공-----", "성공!")
@@ -200,6 +204,22 @@ class AddPlaceActivity : AppCompatActivity() {
             ?.addOnFailureListener {
                     e -> Log.w("로그-placeRegister 실패 . . .", "실 패 . .", e)
             }
+        photoUpload(photoList, placeData.plcId, timeStamp)
+
+    }
+
+    //placePhotoT에 사진 목록 만들고 이미지파일을 storage에 업로드
+    private fun photoUpload(photoList: ArrayList<Uri>, placeId: String, timeStamp: String){
+        for ((imgCount, uri) in photoList.withIndex()){ //photoList 각 데이터에 인덱스번호를 붙여서 imgCount라는 이름으로 사용
+            val imgFileName = "${placeId}_${imgCount}.jpg"
+            val storage = FirebaseStorage.getInstance().getReference("/place/$imgFileName")
+            storage.putFile(uri).addOnSuccessListener {
+                storage.downloadUrl.addOnSuccessListener {
+                    val modelPlacePhotoT = ModelPlacePhotoT(placeId, imgFileName)
+                    firestore?.collection("placePhotoT")?.document()?.set(modelPlacePhotoT)
+                }
+            }
+        }
     }
 
 

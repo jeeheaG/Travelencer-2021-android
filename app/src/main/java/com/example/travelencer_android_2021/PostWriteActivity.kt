@@ -3,6 +3,7 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +13,7 @@ import android.view.Display
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
+import com.example.travelencer_android_2021.adapter.PhotoBitmapAdapter
 import com.example.travelencer_android_2021.adapter.PostWritePlaceAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
@@ -39,6 +40,7 @@ class PostWriteActivity : AppCompatActivity() {
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
     var imgFileName = ""/*"postImage_" + timeStamp + "_"+imgcnt+"_.jpg"*/
     var photoList = arrayListOf<Uri>()
+    var photoBitmapList = arrayListOf<Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,16 +138,18 @@ class PostWriteActivity : AppCompatActivity() {
                 // 이미지를 한 개만 선택했을 경우
                 if(clipData == null){
                     val uri = imageData.data
-                    uri?.let{ photoList.add(uri) }
+                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                    uri?.let{ photoBitmapList.add(bitmap) }
                 }
                 //이미지를 여러개 선택했을 경우
                 else{
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
-                        photoList.add(uri)
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                        uri?.let{ photoBitmapList.add(bitmap) }
                     }
                 }
-                binding.rvPostWritePhotoList.adapter = PostWritePhotoUriAdapter(photoList, this)
+                binding.rvPostWritePhotoList.adapter = PhotoBitmapAdapter(photoBitmapList, this)
             }
         }
 
@@ -186,7 +190,7 @@ class PostWriteActivity : AppCompatActivity() {
 
         // <사진 추가> 버튼 클릭
         binding.btnPostWriteAddPhoto.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
+            val intent = Intent(Intent.ACTION_GET_CONTENT) // 구글 갤러리 앱으로 선택
             intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             intent.type = MediaStore.Images.Media.CONTENT_TYPE
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)

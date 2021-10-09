@@ -3,6 +3,7 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -112,7 +113,7 @@ class AddPlaceActivity : AppCompatActivity() {
                     //uri 한 개 꺼내오기
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
-                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                    val bitmap = uriToBitmapRotate(uri)
                     uri?.let{ photoBitmapList.add(bitmap) }
                     Log.d("로그 addPlaceUri-----","URI : ${uri}")
                 }
@@ -122,7 +123,7 @@ class AddPlaceActivity : AppCompatActivity() {
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
                         photoList.add(uri)
-                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                        val bitmap = uriToBitmapRotate(uri)
                         uri?.let{ photoBitmapList.add(bitmap) }
                         Log.d("로그 addPlaceUri-----","URI : ${uri}")
                     }
@@ -194,6 +195,15 @@ class AddPlaceActivity : AppCompatActivity() {
         binding.ivBack.setOnClickListener{
             finish()
         }
+    }
+
+    private fun uriToBitmapRotate(uri: Uri?): Bitmap {
+        val matrix =  Matrix()
+        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
+        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
+
+        return bitmap
     }
 
     private fun postAddPlace(placeData: PlaceRegisterData, photoList: ArrayList<Uri>, timeStamp: String){

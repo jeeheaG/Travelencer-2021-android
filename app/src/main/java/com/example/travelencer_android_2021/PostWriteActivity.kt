@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -135,17 +136,18 @@ class PostWriteActivity : AppCompatActivity() {
             // 이미지를 한 개라도 선택했을 경우
             if(result.resultCode == Activity.RESULT_OK && imageData != null){
                 val clipData = imageData.clipData
+
                 // 이미지를 한 개만 선택했을 경우
                 if(clipData == null){
                     val uri = imageData.data
-                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                    val bitmap = uriToBitmapRotate(uri)
                     uri?.let{ photoBitmapList.add(bitmap) }
                 }
                 //이미지를 여러개 선택했을 경우
                 else{
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
-                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                        val bitmap = uriToBitmapRotate(uri)
                         uri?.let{ photoBitmapList.add(bitmap) }
                     }
                 }
@@ -221,4 +223,14 @@ class PostWriteActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun uriToBitmapRotate(uri: Uri?): Bitmap {
+        val matrix =  Matrix()
+        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
+        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
+
+        return bitmap
+    }
+
 }

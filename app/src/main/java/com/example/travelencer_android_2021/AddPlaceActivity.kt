@@ -1,23 +1,19 @@
 package com.example.travelencer_android_2021
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.travelencer_android_2021.adapter.PostWritePhotoUriAdapter
+import com.example.travelencer_android_2021.adapter.PhotoBitmapAdapter
 import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,7 +35,8 @@ class AddPlaceActivity : AppCompatActivity() {
 
         var latitude = 0f
         var longitude = 0f
-        var photoList = arrayListOf<Uri>()
+//        var photoList = arrayListOf<Uri>()
+        var photoList = arrayListOf<Bitmap>()
 
         //auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -50,7 +47,7 @@ class AddPlaceActivity : AppCompatActivity() {
         binding.rvPlaceRegisterPhotoList.setHasFixedSize(true)
 
         // 사진 recyclerView adapter 설정
-        val photoAdapter = PostWritePhotoUriAdapter(photoList, this)
+        val photoAdapter = PhotoBitmapAdapter(photoList, this)
         binding.rvPlaceRegisterPhotoList.adapter = photoAdapter
 
 
@@ -112,7 +109,9 @@ class AddPlaceActivity : AppCompatActivity() {
                 if(clipData == null){
                     //uri 한 개 꺼내오기
                     val uri = imageData.data
-                    uri?.let{ photoList.add(uri) }
+                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                    uri?.let{ photoList.add(bitmap) }
+//                    uri?.let{ photoList.add(uri) }
                     Log.d("로그 addPlaceUri-----","URI : ${uri}")
                 }
                 //이미지를 여러개 선택했을 경우
@@ -120,7 +119,9 @@ class AddPlaceActivity : AppCompatActivity() {
                     //uri 여러 개일 때 꺼내오기 result.data.clipData.getItemAt(i).uri
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
-                        photoList.add(uri)
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                        uri?.let{ photoList.add(bitmap) }
+//                        photoList.add(uri)
                         Log.d("로그 addPlaceUri-----","URI : ${uri}")
                     }
                 }
@@ -144,7 +145,8 @@ class AddPlaceActivity : AppCompatActivity() {
 
         // <사진 추가> 버튼 클릭
         binding.btnPlaceRegisterAddPhoto.setOnClickListener {
-            val photoIntent = Intent(Intent.ACTION_PICK)
+            //val photoIntent = Intent(Intent.ACTION_PICK) // 기본 갤러리 앱으로 선택 - 일부 기기에서 사진이 한 장밖에 선택 안 됨
+            val photoIntent = Intent(Intent.ACTION_GET_CONTENT) // 구글 갤러리 앱으로 선택
             photoIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI //선택한 사진 uri 를 intent의 data에 저장
             photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
             photoIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)

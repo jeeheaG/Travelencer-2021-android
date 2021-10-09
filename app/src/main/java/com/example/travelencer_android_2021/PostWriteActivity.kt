@@ -155,7 +155,7 @@ class PostWriteActivity : AppCompatActivity() {
 
 
         //사진 스토리지 등록 코드
-        fun photoUpload(){
+        fun photoUpload(content : String){
             imgcnt = 0
             for (uri in photoList){
                 imgFileName = "postImage_" + timeStamp + "_"+imgcnt+"_.jpg"
@@ -165,6 +165,7 @@ class PostWriteActivity : AppCompatActivity() {
                         it.toString()
                         ModelPostPhotoT.postPhoto = imgFileName
                         ModelPostPhotoT.postId = auth?.currentUser?.uid + "_" + timeStamp
+                        ModelPostPhotoT.content = content
                         firestore.collection("postPhotoT").document()?.set(ModelPostPhotoT)
                     }
                 }
@@ -208,7 +209,7 @@ class PostWriteActivity : AppCompatActivity() {
             ModelPostT.EndDate = binding.tvPostWriteEndDate.text.toString()
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
             firestore?.collection("postT")?.document("${auth?.currentUser?.uid + "_"+timeStamp}")?.set(ModelPostT)
-            photoUpload()
+            photoUpload(binding.tvPostWriteWriting.text.toString())
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
             finish()

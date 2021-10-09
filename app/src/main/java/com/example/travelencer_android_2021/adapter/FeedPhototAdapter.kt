@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelFeedPhoto
 import kotlinx.android.synthetic.main.list_item_feed_photo.view.*
+
+private const val TAG = "mmm"
 
 // 여행 피드 - 사진 탭 어댑터
 class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
@@ -32,7 +35,7 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                Toast.makeText(parent.context, "${items[position].str} 클릭", Toast.LENGTH_SHORT).show()
+                Toast.makeText(parent.context, "${items[position].postId} 클릭", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -50,10 +53,10 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setItem(item: ModelFeedPhoto) {
             Glide.with(itemView)
-                .load(item.imgUrl)
-                .error(R.drawable.ic_x_red)                  // 오류 시 이미지
-                .apply(RequestOptions().centerCrop())
-                .into(itemView.imgFeedPhoto)
+                    .load(item.uri)
+                    .error(R.drawable.ic_x_red)                  // 오류 시 이미지
+                    .apply(RequestOptions().centerCrop())
+                    .into(itemView.imgFeedPhoto)
         }
     }
 }

@@ -28,15 +28,14 @@ class FeedFragment : Fragment() {
 
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         val bundle = arguments
-        if (bundle != null) {
-            val keyword = bundle.getString("keyword").toString()    // 검색어
-            binding.tvKeyword.text = keyword
-        }
+        // 검색어
+        val keyword = bundle?.getString("keyword")?.toString() ?: "오류"
+        binding.tvKeyword.text = keyword
 
         // 어댑터 생성
         val feedAdapter = FeedAdapter(this@FeedFragment)
         // 프레그먼트, 탭 타이틀 넣기
-        feedAdapter.addFragment(FeedPhotoFragment())
+        feedAdapter.addFragment(FeedPhotoFragment(keyword))
         feedAdapter.addFragment(FeedCourseFragment())
         feedAdapter.addFragment(FeedFoodFragment())
         feedAdapter.addFragment(FeedSightsFragment())

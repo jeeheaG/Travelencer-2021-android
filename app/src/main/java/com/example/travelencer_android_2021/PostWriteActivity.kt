@@ -21,6 +21,7 @@ import com.example.travelencer_android_2021.model.ModelCourseSpot
 import com.example.travelencer_android_2021.model.ModelPostPhotoT
 import com.example.travelencer_android_2021.model.ModelPostT
 import com.example.travelencer_android_2021.model.ModelCourseT
+import com.example.travelencer_android_2021.model.ModelPostPlaceT
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -39,6 +40,7 @@ class PostWriteActivity : AppCompatActivity() {
     var ModelPostT = ModelPostT()
     var ModelPostPhotoT = ModelPostPhotoT()
     var ModelCourseT = ModelCourseT()
+    var ModelPostPlaceT = ModelPostPlaceT()
     private var storage : FirebaseStorage? = null
     var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
@@ -47,6 +49,7 @@ class PostWriteActivity : AppCompatActivity() {
     var photoBitmapList = arrayListOf<Bitmap>()
     lateinit var courseName : ArrayList<String>
     lateinit var courseDate : ArrayList<String>
+    lateinit var placeIdList : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,6 +104,8 @@ class PostWriteActivity : AppCompatActivity() {
                 if (data != null) {
                     val placeName = data.getStringExtra(codePlaceName).toString()
                     val placeLoc = data.getStringExtra(codePlaceLoc).toString()
+                    val placeId = data.getStringExtra("placeId").toString()
+                    placeIdList.add(placeId) //선택 장소 리스트에 추가
                     placeList.add(ModelCourseSpot(placeName, placeLoc))
                     binding.rvPostWritePlaceList.adapter = PostWritePlaceAdapter(placeList, this)
                 }
@@ -133,6 +138,14 @@ class PostWriteActivity : AppCompatActivity() {
                 binding.llPostWriteCourse.removeAllViews()                            // 이전 코스 지우기
                 CourseMaker().makeCourse(courseName!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
 
+            }
+        }
+
+        //장소 DB 저장하는 함수
+        fun postPlaceUpload(){
+            for (i in (0 until placeIdList.size)){
+                ModelPostPlaceT.postId = auth?.currentUser?.uid + "_" + timeStamp
+                ModelPostPlaceT.placeId = placeIdList[i]
             }
         }
 
@@ -219,7 +232,6 @@ class PostWriteActivity : AppCompatActivity() {
 
         // <등록 하기> 버튼 클릭
         binding.btnPostWritePost.setOnClickListener {
-            // TODO : DB : DB로 게시글 데이터 보내기
             //게시글 테이블 업로드
             ModelPostT.uid = auth?.currentUser?.uid
             ModelPostT.postId = auth?.currentUser?.uid + "_"+timeStamp
@@ -231,6 +243,7 @@ class PostWriteActivity : AppCompatActivity() {
             firestore?.collection("postT")?.document("${auth?.currentUser?.uid + "_"+timeStamp}")?.set(ModelPostT)
             photoUpload(binding.tvPostWriteWriting.text.toString())
             courseUpload(courseName, courseDate)
+            postPlaceUpload()
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
             finish()

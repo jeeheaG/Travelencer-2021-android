@@ -28,8 +28,8 @@ interface TourApiInterface {
     @GET("searchKeyword")
     fun getTourKeywordData(
             @Query("keyword") keyword: String,
-            @Query("areaCode") area: String,
-            @Query("sigunguCode") sigungu: String,
+            @Query("areaCode") area: String?,
+            @Query("sigunguCode") sigungu: String?,
 
             @Query("ServiceKey") serviceKey: String = TourApi.API_KEY_D,
             @Query("MobileOS") os: String = TourApi.OS,

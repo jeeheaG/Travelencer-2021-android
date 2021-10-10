@@ -57,7 +57,7 @@ class AddPNCActivity : AppCompatActivity() {
                     postPNC(contentId, pros, cons)
 
                     // postWrite에서 온 "search" 나 "add"일 경우 장소명과 장소주소를 가지고 돌아감
-                    val writeIntent = Intent(this, PostWriteActivity::class.java)
+                    val writeIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
                     writeIntent.putExtra(codePlaceId, contentId)
                     writeIntent.putExtra(codePlaceName, intent.getStringExtra(codePlaceName))
                     writeIntent.putExtra(codePlaceLoc, intent.getStringExtra(codePlaceLoc))

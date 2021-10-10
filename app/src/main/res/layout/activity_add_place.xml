@@ -134,6 +134,72 @@
                 app:layout_constraintStart_toStartOf="@+id/tvPlaceRegisterAddressInput"
                 app:layout_constraintTop_toBottomOf="@+id/tvPlaceRegisterAddressInput" />
 
+
+            <TextView
+                android:id="@+id/tvPlaceSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/hcmalang"
+                android:text="지역 범위 선택"
+                android:textColor="@color/blue"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnPlaceRegisterAddressSearch" />
+            <LinearLayout
+                android:id="@+id/llPlaceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPlaceSelect"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tvPlaceLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/hcmalang"
+                    android:text="첫 번째 범위"
+                    android:textColor="@color/blue"
+                    android:textSize="25sp"/>
+                <Spinner
+                    android:id="@+id/spinAddPlaceLarge"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:textAlignment="center"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llPlaceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llPlaceLarge"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tvPlaceSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/hcmalang"
+                    android:text="두 번째 범위"
+                    android:textColor="@color/blue"
+                    android:textSize="25sp"/>
+                <Spinner
+                    android:id="@+id/spinAddPlaceSmall"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvPlaceRegisterCategory"
                 android:layout_width="wrap_content"
@@ -146,7 +212,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnPlaceRegisterAddressSearch" />
+                app:layout_constraintTop_toBottomOf="@+id/llPlaceSmall" />
 
             <RadioGroup
                 android:id="@+id/rgPlaceRegisterCategory"

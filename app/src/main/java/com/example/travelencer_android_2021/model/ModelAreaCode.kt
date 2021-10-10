@@ -104,7 +104,7 @@ class FetxhXML(spinner : Array<Spinner>, context : Context) {
                             // 이 url 주소 가지고 xml에서 데이터 파싱하기
                             fetchXML(requstUrl + "&areaCode=" + areaCodeArray[option][position].areaCode, 1)
                         }
-                        Log.d("mmm 스피너 선택",  areaCodeArray[option].get(position).areaName + ", " +areaCodeArray[option].get(position).areaCode)
+//                        Log.d("mmm 스피너 선택",  areaCodeArray[option].get(position).areaName + ", " +areaCodeArray[option].get(position).areaCode)
                     }
                 }
                 spinnerArr[option].onItemSelectedListener = areaSpinnerAdapter

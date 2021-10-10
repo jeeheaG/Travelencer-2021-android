@@ -9,12 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.PhotoBitmapAdapter
 import com.example.travelencer_android_2021.data.PlaceRegisterData
 import com.example.travelencer_android_2021.databinding.ActivityAddPlaceBinding
+import com.example.travelencer_android_2021.model.FetxhXML
 import com.example.travelencer_android_2021.model.ModelPlacePhotoT
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -25,6 +28,8 @@ class AddPlaceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPlaceBinding
     private val codePlaceName = "placeName"
     private val codePlaceLoc = "placeLoc"
+    lateinit var spinner : Array<Spinner>   // 스피너 배열
+    lateinit var spinnerSetting : FetxhXML
     //private val codeAddress = "address"
 
     //var auth : FirebaseAuth? = null // 장소등록 시 등록한 사람 정보 안 남음
@@ -35,6 +40,12 @@ class AddPlaceActivity : AppCompatActivity() {
         binding = ActivityAddPlaceBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        //스피너 배열 생성
+        spinner = arrayOf(view.findViewById(R.id.spinAddPlaceLarge), view.findViewById(R.id.spinAddPlaceSmall))
+        // 스피너 설정
+        spinnerSetting = FetxhXML(spinner, applicationContext)
+        spinnerSetting.fetchXML("http://api.visitkorea.or.kr/upload/manual/sample/areaCode_sample1.xml", 0)
 
         var latitude = 0f
         var longitude = 0f
@@ -179,6 +190,20 @@ class AddPlaceActivity : AppCompatActivity() {
             Log.d("로그 addPlace----locXY", "locX : ${locX}, locY : ${locY}")
             Log.d("로그 addPlace----plcId", "plcId : ${plcId}")
             val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId)
+
+            // 지역명, 시군구명 변수
+            var area1 : String? = ""
+            var area2 : String? = ""
+            try {
+                area1 = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"   // 지역명
+                area2 = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"   // 시군구명
+            }
+            catch (e : NullPointerException) {
+                Toast.makeText(applicationContext, "지역을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            catch (e : ArrayIndexOutOfBoundsException) {
+                Toast.makeText(applicationContext, "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+            }
 
             postAddPlace(placeData, photoList, timestamp)
 

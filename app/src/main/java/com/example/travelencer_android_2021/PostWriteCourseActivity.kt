@@ -95,7 +95,8 @@ class PostWriteCourseActivity : AppCompatActivity() {
         // <입력 완료> 버튼 클릭
         binding.btnPostWriteCourseDone.setOnClickListener {
             val outIntent = Intent(applicationContext, PostWriteActivity::class.java)
-            outIntent.putStringArrayListExtra("course", courseAdapter.courseName)
+            outIntent.putStringArrayListExtra("courseName", courseAdapter.courseName)
+            outIntent.putStringArrayListExtra("courseDate", courseAdapter.courseDate)
             setResult(Activity.RESULT_OK, outIntent)
             finish()
         }

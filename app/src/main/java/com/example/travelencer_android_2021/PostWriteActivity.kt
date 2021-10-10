@@ -20,11 +20,13 @@ import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 import com.example.travelencer_android_2021.model.ModelPostPhotoT
 import com.example.travelencer_android_2021.model.ModelPostT
+import com.example.travelencer_android_2021.model.ModelCourseT
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 //뷰바인딩 사용
 
@@ -36,12 +38,15 @@ class PostWriteActivity : AppCompatActivity() {
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
     var ModelPostT = ModelPostT()
     var ModelPostPhotoT = ModelPostPhotoT()
+    var ModelCourseT = ModelCourseT()
     private var storage : FirebaseStorage? = null
     var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
-    var imgFileName = ""/*"postImage_" + timeStamp + "_"+imgcnt+"_.jpg"*/
+    var imgFileName = ""
     var photoList = arrayListOf<Uri>()
     var photoBitmapList = arrayListOf<Bitmap>()
+    lateinit var courseName : ArrayList<String>
+    lateinit var courseDate : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,9 +127,21 @@ class PostWriteActivity : AppCompatActivity() {
         // 코스 추가 버튼 클릭 시 동작
         val addCourseResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
-                val course = result.data!!.getStringArrayListExtra("course")   // 코스 정보 받기
+                courseName = result.data!!.getStringArrayListExtra("courseName") as ArrayList<String>   // 코스이름 정보 받기
+                courseDate = result.data!!.getStringArrayListExtra("courseDate") as ArrayList<String>   // 코스 날짜 정보 받기
                 binding.llPostWriteCourse.removeAllViews()                            // 이전 코스 지우기
-                CourseMaker().makeCourse(course!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
+                CourseMaker().makeCourse(courseName!!, binding.llPostWriteCourse, applicationContext)   // 코스 만들기
+
+            }
+        }
+
+        //코스 DB 저장하는 함수
+        fun courseUpload(courseName:ArrayList<String>, courseDate:ArrayList<String>){
+            for(i in (0 until courseName.size)){
+                ModelCourseT.courseDate = courseDate[i]
+                ModelCourseT.coursePlaceName = courseName[i]
+                ModelCourseT.postId = auth?.currentUser?.uid + "_" + timeStamp
+                firestore.collection("postCourseT").document()?.set(ModelCourseT)
             }
         }
 
@@ -212,6 +229,7 @@ class PostWriteActivity : AppCompatActivity() {
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
             firestore?.collection("postT")?.document("${auth?.currentUser?.uid + "_"+timeStamp}")?.set(ModelPostT)
             photoUpload(binding.tvPostWriteWriting.text.toString())
+            courseUpload(courseName, courseDate)
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
             finish()

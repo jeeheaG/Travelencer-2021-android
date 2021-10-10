@@ -111,14 +111,15 @@ class PostWriteActivity : AppCompatActivity() {
             if(result.resultCode == Activity.RESULT_OK){
                 val howAddPlace = result.data?.getStringExtra("how")
                 when(howAddPlace) {
+                    "search" -> {
+                        val searchIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                        searchIntent.putExtra("from", "search")
+                        placeResultLauncher.launch(searchIntent)
+                    }
                     "add" -> {
                         val addIntent = Intent(this, AddPlaceActivity::class.java)
                         addIntent.putExtra("from", "add")
                         placeResultLauncher.launch(addIntent)
-                    }
-                    "search" -> {
-                        val searchIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
-                        placeResultLauncher.launch(searchIntent)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,8 @@ import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
 import com.example.travelencer_android_2021.model.modelTourApiDetailCommon.ModelTourApiDetailCommon
 import com.example.travelencer_android_2021.model.modelTourApiDetailImage.ModelTourApiDetailImage
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_place_detail.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -28,9 +31,12 @@ import retrofit2.Call
 import retrofit2.Response
 
 //뷰바인딩 사용
+const val NO_ID = "none"
 
 class PlaceDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlaceDetailBinding
+    lateinit var firebase: FirebaseFirestore
+    lateinit var auth: FirebaseAuth
 
     var photoList = arrayListOf<ModelCasePhotoOnly>()
     var recentPostList = arrayListOf<ModelPlaceDetailRecentPost>()
@@ -43,8 +49,11 @@ class PlaceDetailActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val contentId = intent.getStringExtra("contentId") ?: "-1" //null이면 "-1"값(말이 안되는 값임)으로 대체
+        firebase = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
 
+        val contentId = intent.getStringExtra("contentId") ?: NO_ID
+        val placeId = intent.getStringExtra("placeId") ?: NO_ID
 
 /*        val photoList = arrayListOf(
                 ModelCasePhotoOnly(R.drawable.dummy_hwasung),
@@ -54,14 +63,14 @@ class PlaceDetailActivity : AppCompatActivity() {
                 ModelCasePhotoOnly(R.drawable.dummy_hwasung),
                 ModelCasePhotoOnly(R.drawable.dummy_hwasung)
         )*/
-        //더미데이터
+/*        //더미데이터
         recentPostList = arrayListOf(
                 ModelPlaceDetailRecentPost("날 좋은 날 화성 나들이", "jeehea", R.drawable.dummy_haewoojae),
                 ModelPlaceDetailRecentPost("수원화성 놀러감", "yoojin", R.drawable.dummy_haewoojae),
                 ModelPlaceDetailRecentPost("수원으로 소풍", "yoonkung", R.drawable.dummy_hwasung),
                 ModelPlaceDetailRecentPost("수원 놀기 좋은 코스 추천", "sewon", R.drawable.dummy_hwasung),
                 ModelPlaceDetailRecentPost("놀러가자 수원", "minyeong", R.drawable.dummy_haewoojae)
-        )
+        )*/
 
         binding.rvPlaceDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvPlaceDetailRecentPostList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -104,30 +113,7 @@ class PlaceDetailActivity : AppCompatActivity() {
             }
         })
 
-
-        /*// 지도126.8982600224, 37.5264158054
-        val latitude = 37.28730797086605
-        val longitude = 127.01192716921177
-        val placeName = "수원 화성"
-//        val latitude = 126.8982600224
-//        val longitude = 37.5264158054
-//        val placeName = "갈비가"
-
-        val mapView = MapView(this)
-        val mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longitude)
-
-        mapView.setMapCenterPoint(mapPoint, false)
-        mapView.setZoomLevel(1, true)
-
-        val marker = MapPOIItem()
-        marker.itemName = placeName
-        marker.mapPoint = mapPoint
-        marker.markerType = MapPOIItem.MarkerType.BluePin
-        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-
-        mapView.addPOIItem(marker)
-        binding.clPlaceDetailMapView.addView(mapView)*/
-
+        //지도는 callTourDetailCommon 안에
 
         // <PNC더보기 버튼> 클릭
         binding.ivPlaceDetailPNCMore.setOnClickListener{

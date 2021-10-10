@@ -20,6 +20,7 @@ class AddPNCActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddPNCBinding
     private val codePlaceName = "placeName"
     private val codePlaceLoc = "placeLoc"
+    private val codePlaceId = "placeId"
     lateinit var firestore: FirebaseFirestore
 
 
@@ -50,8 +51,14 @@ class AddPNCActivity : AppCompatActivity() {
                     finish()
                 }
                 "search" -> {
+                    // 선택한 장소의 contentID 가져오기
+                    val contentId = intent.getStringExtra("contentId") ?: "-1" //null이면 "-1"값(말이 안되는 값임)으로 대체
+                    // 업로드
+                    postPNC(contentId, pros, cons)
+
                     // postWrite에서 온 "search" 나 "add"일 경우 장소명과 장소주소를 가지고 돌아감
-                    val writeIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                    val writeIntent = Intent(this, PostWriteActivity::class.java)
+                    writeIntent.putExtra(codePlaceId, contentId)
                     writeIntent.putExtra(codePlaceName, intent.getStringExtra(codePlaceName))
                     writeIntent.putExtra(codePlaceLoc, intent.getStringExtra(codePlaceLoc))
                     setResult(RESULT_CODE_WRITE, writeIntent)
@@ -59,10 +66,13 @@ class AddPNCActivity : AppCompatActivity() {
                     finish()
                 }
                 "add" -> {
-                    // TODO : 코드 고치세유
-                    //postAddPlace(placeData)
+                    //방금 등록한 장소의 placeID가져오기
+                    val placeId = intent.getStringExtra("placeId") ?: "id없음"
+                    //업로드
+                    postPNC(placeId, pros, cons)
 
-                    val writeIntent = Intent(this, PostWritePlaceSearchActivity::class.java)
+                    val writeIntent = Intent(this, PostWriteActivity::class.java)
+                    writeIntent.putExtra(codePlaceId, placeId)
                     writeIntent.putExtra(codePlaceName, intent.getStringExtra(codePlaceName))
                     writeIntent.putExtra(codePlaceLoc, intent.getStringExtra(codePlaceLoc))
                     setResult(RESULT_CODE_WRITE, writeIntent)

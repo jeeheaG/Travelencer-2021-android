@@ -16,6 +16,7 @@ import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.FragmentPlaceMainBinding
 import com.example.travelencer_android_2021.model.ModelCasePlaceCard
 import com.example.travelencer_android_2021.model.modelTourApiKeyword.ModelTourApiKeyword
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_place_main.view.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
@@ -29,13 +30,18 @@ class PlaceMainFragment : Fragment() {
     private var _binding: FragmentPlaceMainBinding? = null
     private val binding get() = _binding!!
 
-    var placeList = arrayListOf<ModelCasePlaceCard>()
+    lateinit var firebase: FirebaseFirestore
+
+    var placeList = arrayListOf<ModelCasePlaceCard>() //TourApi에서 가져온 장소정보
+    var placeDataList = arrayListOf<ModelCasePlaceCard>() // FirebaseDB에서 가져온 장소 정보
     private lateinit var mAdapter: PlaceMainAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //val view = inflater.inflate(R.layout.fragment_place_main, container, false) //setContentView행위를 프래그먼트버전으로 한 것
         _binding = FragmentPlaceMainBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        firebase = FirebaseFirestore.getInstance()
 
         // 전달받은 필터 선택된 값으로 텍스트뷰 변경
         var keyword = ""
@@ -70,18 +76,24 @@ class PlaceMainFragment : Fragment() {
         //interceptor설정과 데이터 요청 함수
         TourApiRetrofitClient.tourInterceptor.level = HttpLoggingInterceptor.Level.BODY
         callTourKeyword(keyword, area1Code, area2Code)
+        getPlaceData(keyword, area1Code, area2Code)
         Log.d("로그 Tour검색", "$keyword, $area1Code, $area2Code")
 
         return view
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    // Firebase 데이터 가져오기
+    private fun getPlaceData(keyword: String, area1Code: String, area2Code: String) {
+        //firebase.collection("placeT")
+    }
 
-    // 데이터 받아오기
+    // TourApi 데이터 받아오기
     private val tourApi = TourApiRetrofitClient.tourApiService
 
     private fun callTourKeyword(keyword: String, areaCode: String, sigunguCode: String) {

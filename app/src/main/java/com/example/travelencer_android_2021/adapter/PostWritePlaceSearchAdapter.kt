@@ -29,6 +29,7 @@ class PostWritePlaceSearchAdapter(private val placeList: ArrayList<ModelCasePlac
                 val intent = Intent(mContext, AddPNCActivity::class.java)
                 intent.putExtra("placeName", place.name)
                 intent.putExtra("placeLoc", place.loc)
+                intent.putExtra("placeId", place.contentId)
                 intent.putExtra("from", "search")
                 launcher.launch(intent)
             }

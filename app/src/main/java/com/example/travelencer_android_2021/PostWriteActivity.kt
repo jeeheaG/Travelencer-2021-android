@@ -14,6 +14,8 @@ import android.view.Display
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.adapter.PhotoBitmapAdapter
 import com.example.travelencer_android_2021.adapter.PostWritePlaceAdapter
 import com.example.travelencer_android_2021.databinding.ActivityPostWriteBinding
@@ -25,6 +27,7 @@ import com.example.travelencer_android_2021.model.ModelPostPlaceT
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_setting.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,13 +52,14 @@ class PostWriteActivity : AppCompatActivity() {
     var photoBitmapList = arrayListOf<Bitmap>()
     lateinit var courseName : ArrayList<String>
     lateinit var courseDate : ArrayList<String>
-    lateinit var placeIdList : ArrayList<String>
+    var placeIdList = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
+        //placeIdList.clear()
 
         val view = binding.root
         setContentView(view)
@@ -67,6 +71,22 @@ class PostWriteActivity : AppCompatActivity() {
         var day = calendar.get(Calendar.DAY_OF_MONTH)
 
 
+        //tvPostWriteNickname
+        firestore?.collection("userT")?.document(auth.currentUser!!.uid).get()
+                .addOnSuccessListener { doc->
+                    binding.tvPostWriteNickname.text = doc?.data?.get("name").toString()
+                }
+        // 이미지 다운로드해서 가져오기
+        var storageRef = storage?.reference?.child("user")
+                ?.child("proPic_${auth.currentUser!!.uid}")
+        storageRef?.downloadUrl
+                ?.addOnSuccessListener { uri ->
+                    Glide.with(applicationContext)
+                            .load(uri)
+                            .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+                            .apply(RequestOptions().centerCrop())
+                            .into(binding.ivPostWriteProfileImg)
+                }
 
         //작성일
         binding.tvPostWritePostDate.text = "작성일 ${year} ${month+1} ${day}"
@@ -146,17 +166,27 @@ class PostWriteActivity : AppCompatActivity() {
             for (i in (0 until placeIdList.size)){
                 ModelPostPlaceT.postId = auth?.currentUser?.uid + "_" + timeStamp
                 ModelPostPlaceT.placeId = placeIdList[i]
+                //db 업로드
+                firestore?.collection("postPlaceT").document().set(ModelPostPlaceT)
             }
         }
 
         //코스 DB 저장하는 함수
         fun courseUpload(courseName:ArrayList<String>, courseDate:ArrayList<String>){
-            for(i in (0 until courseName.size)){
-                ModelCourseT.courseDate = courseDate[i]
-                ModelCourseT.coursePlaceName = courseName[i]
-                ModelCourseT.postId = auth?.currentUser?.uid + "_" + timeStamp
-                firestore.collection("postCourseT").document()?.set(ModelCourseT)
-            }
+            //파베 호출문 안에 포문 넣기
+            firestore?.collection("userT")?.document(auth.currentUser!!.uid)
+                    .get().addOnSuccessListener { doc->
+                        for(i in (0 until courseName.size)){
+                            ModelCourseT.courseDate = courseDate[i]
+                            ModelCourseT.coursePlaceName = courseName[i]
+                            ModelCourseT.postId = auth?.currentUser?.uid + "_" + timeStamp
+                            ModelCourseT.uid = auth?.currentUser?.uid
+                            ModelCourseT.sequence = i
+                            ModelCourseT.nickname = doc?.data?.get("name").toString()
+                            firestore.collection("postCourseT").document()?.set(ModelCourseT)
+                        }
+                    }
+
         }
 
         // 사진 추가 launcher, 사진 목록 리스트
@@ -264,5 +294,6 @@ class PostWriteActivity : AppCompatActivity() {
 
         return bitmap
     }
+
 
 }

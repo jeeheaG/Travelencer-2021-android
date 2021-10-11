@@ -21,7 +21,11 @@ class PNCAdapter(private val pncList: ArrayList<ModelPNC>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: PNCAdapter.CustomViewHolder, position: Int) {
-        holder.icon.setImageResource(pncList[position].icon)
+        if(pncList[position].icon == 0){
+            holder.icon.setImageResource(R.drawable.ic_thumb_up)
+        }else if(pncList[position].icon == 1){
+            holder.icon.setImageResource(R.drawable.ic_thumb_down)
+        }
         holder.comment.text = pncList[position].comment
     }
 

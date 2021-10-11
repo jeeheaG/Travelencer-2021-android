@@ -1,6 +1,5 @@
 package com.example.travelencer_android_2021
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +36,7 @@ class PlaceDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlaceDetailBinding
     lateinit var firebase: FirebaseFirestore
     lateinit var auth: FirebaseAuth
+    var isTour: Boolean = false // 관광데이터 장소정보면 true 사용자등록 장소정보면 false
 
     var photoList = arrayListOf<ModelCasePhotoOnly>()
     var recentPostList = arrayListOf<ModelPlaceDetailRecentPost>()
@@ -52,25 +52,14 @@ class PlaceDetailActivity : AppCompatActivity() {
         firebase = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        val contentId = intent.getStringExtra("contentId") ?: NO_ID
-        val placeId = intent.getStringExtra("placeId") ?: NO_ID
-
-/*        val photoList = arrayListOf(
-                ModelCasePhotoOnly(R.drawable.dummy_hwasung),
-                ModelCasePhotoOnly(R.drawable.dummy_haewoojae),
-                ModelCasePhotoOnly(R.drawable.dummy_haewoojae),
-                ModelCasePhotoOnly(R.drawable.dummy_hwasung),
-                ModelCasePhotoOnly(R.drawable.dummy_hwasung),
-                ModelCasePhotoOnly(R.drawable.dummy_hwasung)
-        )*/
-/*        //더미데이터
-        recentPostList = arrayListOf(
-                ModelPlaceDetailRecentPost("날 좋은 날 화성 나들이", "jeehea", R.drawable.dummy_haewoojae),
-                ModelPlaceDetailRecentPost("수원화성 놀러감", "yoojin", R.drawable.dummy_haewoojae),
-                ModelPlaceDetailRecentPost("수원으로 소풍", "yoonkung", R.drawable.dummy_hwasung),
-                ModelPlaceDetailRecentPost("수원 놀기 좋은 코스 추천", "sewon", R.drawable.dummy_hwasung),
-                ModelPlaceDetailRecentPost("놀러가자 수원", "minyeong", R.drawable.dummy_haewoojae)
-        )*/
+        // 관광데이터 정보일 경우
+        var placeId = intent.getStringExtra("contentId") ?: NO_ID
+        // 관광데이터 정보가 아니라 사용자 등록 장소정보인 경우
+        if(placeId == NO_ID){
+            placeId = intent.getStringExtra("placeId") ?: NO_ID
+        }else{
+            isTour = true
+        }
 
         binding.rvPlaceDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvPlaceDetailRecentPostList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -115,9 +104,16 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         //지도는 callTourDetailCommon 안에
 
+        // 이 장소의 최근 게시물
+
+
+        // 장단점 한마디
+        getAndSetPNC(placeId)
+
         // <PNC더보기 버튼> 클릭
         binding.ivPlaceDetailPNCMore.setOnClickListener{
             val intent = Intent(this, PNCActivity::class.java)
+            intent.putExtra("placeId", placeId)
             startActivity(intent)
         }
 
@@ -127,9 +123,27 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         //interceptor설정과 데이터 요청 함수
         TourApiRetrofitClient.tourInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        callTourDetailCommon(contentId, this)
-        callTourDetailImage(contentId, this)
+        callTourDetailCommon(placeId, this)
+        callTourDetailImage(placeId, this)
 
+    }
+
+    private fun getAndSetPNC(placeId: String) {
+        val document = firebase.collection("pncT").whereEqualTo("placeId", placeId).limit(1).get()
+        document.addOnSuccessListener { documents ->
+            for (doc in documents){
+                val map = doc.data as HashMap<String, Any>
+                val pros : String = (map["pros"] ?: "아직 입력된 장단점이 없습니다.") as String
+                val cons : String = (map["cons"] ?: "아직 입력된 장단점이 없습니다.") as String
+
+                // 설정하기
+                binding.tvPlaceDetailPNCItem1.text = pros
+                binding.tvPlaceDetailPNCItem2.text = cons
+            }
+        }
+                .addOnFailureListener {
+                    Log.d("로그 PlaceDetailGetSetPNC","실패 . . .")
+                }
     }
 
 

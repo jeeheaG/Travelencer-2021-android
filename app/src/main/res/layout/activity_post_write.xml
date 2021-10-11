@@ -42,10 +42,10 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/dummy_haewoojae"
                 android:scaleType="centerCrop"
+                android:src="@drawable/dummy_haewoojae"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvPostWritePostDate"

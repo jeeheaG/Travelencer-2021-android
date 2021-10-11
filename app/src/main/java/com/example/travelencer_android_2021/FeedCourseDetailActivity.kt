@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
@@ -56,6 +57,17 @@ class FeedCourseDetailActivity : AppCompatActivity() {
         setProPic(uid)
         // 제목 설정
         setPostTitle(postId)
+
+        // 닉네임, 프로필 사진 누르면 게시글로 아동
+        tvCourseDetailNickname.setOnClickListener {
+            val intent = Intent(this@FeedCourseDetailActivity, PostDetailActivity::class.java)
+            intent.putExtra("postId", postId)
+            intent.putExtra("uid", uid)
+            startActivity(intent)
+        }
+        imgCourseDetailProfileImg.setOnClickListener {
+            tvCourseDetailNickname.callOnClick()
+        }
 
         // 뒤로가기 이미지 클릭
         imgBack.setOnClickListener {

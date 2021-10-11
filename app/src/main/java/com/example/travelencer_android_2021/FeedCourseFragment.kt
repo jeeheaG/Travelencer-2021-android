@@ -52,7 +52,9 @@ class FeedCourseFragment(val keyword : String) : Fragment() {
                         if (content.contains(keyword)) {
                             // 해당 postId의 코스 데이터 가져오기(시간 오름차순으로)
                             val postId: String = map["postId"] as String
-                            getCourse(postId)
+                            // uid도 가져오기
+                            val uid : String = map["uid"] as String
+                            getCourse(postId, uid)
                         }
                         else continue
                     }
@@ -65,9 +67,9 @@ class FeedCourseFragment(val keyword : String) : Fragment() {
     }
 
     // 해당 postId의 코스 데이터 가져오기(시간 오름차순으로)
-    private fun getCourse(postId : String) {
+    private fun getCourse(postId : String, uid : String) {
         val db = Firebase.firestore
-        val spotNameList = ArrayList<String>()
+        val courseNameList = ArrayList<String>()
 
         db.collection("postCourseT")
                 .whereEqualTo("postId", postId)
@@ -77,12 +79,13 @@ class FeedCourseFragment(val keyword : String) : Fragment() {
                     for (document in result) {
                         val map = document.data as HashMap<String, Any>
                         val coursePlaceName: String = map["coursePlaceName"] as String
-                        spotNameList.add(coursePlaceName)
+                        courseNameList.add(coursePlaceName)
                     }
                     // 코스 데이터가 있다면 추가~~
-                    if (!spotNameList.isEmpty()) {
-                        feedCourseAdapter.items.add(spotNameList)
+                    if (!courseNameList.isEmpty()) {
                         feedCourseAdapter.postIds.add(postId)
+                        feedCourseAdapter.placeNames.add(courseNameList)
+                        feedCourseAdapter.uids.add(uid)
                         feedCourseAdapter.notifyDataSetChanged()
                     }
                 }

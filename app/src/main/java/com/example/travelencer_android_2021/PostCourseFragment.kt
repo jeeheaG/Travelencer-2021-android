@@ -33,10 +33,10 @@ class PostCourseFragment : Fragment() {
         val spotNameList3 : ArrayList<String> = arrayListOf("팔달마을", "수원화성", "행굴동 벽화마을", "지동 벽화마을", "방화 수류청")
         val spotNameList4 : ArrayList<String> = arrayListOf("노을빛 전망대", "통닭거리", "지동 시장", "수원 화성 박물관", "연무대")
 
-        feedCourseAdapter!!.items.add(spotNameList1)
-        feedCourseAdapter.items.add(spotNameList2)
-        feedCourseAdapter.items.add(spotNameList3)
-        feedCourseAdapter.items.add(spotNameList4)
+        feedCourseAdapter!!.placeNames.add(spotNameList1)
+        feedCourseAdapter.placeNames.add(spotNameList2)
+        feedCourseAdapter.placeNames.add(spotNameList3)
+        feedCourseAdapter.placeNames.add(spotNameList4)
 
         return view
     }

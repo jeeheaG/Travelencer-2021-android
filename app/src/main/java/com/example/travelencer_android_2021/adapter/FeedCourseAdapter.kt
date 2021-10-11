@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.list_item_feed_course.view.*
 class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourseAdapter.ViewHolder>() {
     // ArrayList<String> = 코스 이름 배열
     var items = ArrayList<ArrayList<String>>()
+    var postIds = ArrayList<String>()
 
     // 뷰홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedCourseAdapter.ViewHolder {
@@ -24,13 +25,12 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                // 코스 정보 전달
-                // TODO : 서버 연결 되면 코스 ID만 넘기기
+                // postId 전달
                 val intent = Intent(context, FeedCourseDetailActivity::class.java)
-                intent.putExtra("course", items[position])
+                intent.putExtra("postId", postIds[position])
                 context.startActivity(intent)
 
-                Toast.makeText(parent.context, "${position} 클릭", Toast.LENGTH_SHORT).show()
+                Toast.makeText(parent.context, "${postIds[position]} 클릭", Toast.LENGTH_SHORT).show()
             }
         }
     }

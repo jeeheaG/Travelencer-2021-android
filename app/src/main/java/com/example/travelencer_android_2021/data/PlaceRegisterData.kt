@@ -9,7 +9,11 @@ data class PlaceRegisterData(
         val plcCategory: Int,
         val locX: Float,
         val locY: Float,
-        val plcId: String
+        val plcId: String,
+        val area1: String,
+        val area2: String,
+        val area1Code: Int,
+        val area2Code: Int
 //        val plcPicture: ArrayList<Uri>,
 //        val plcGood: String,
 //        val plcBad: String,

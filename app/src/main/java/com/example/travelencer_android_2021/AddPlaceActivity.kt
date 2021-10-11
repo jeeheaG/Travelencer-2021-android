@@ -189,14 +189,18 @@ class AddPlaceActivity : AppCompatActivity() {
             val plcId = "${timestamp}_${locX}_${locY}"
             Log.d("로그 addPlace----locXY", "locX : ${locX}, locY : ${locY}")
             Log.d("로그 addPlace----plcId", "plcId : ${plcId}")
-            val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId)
 
             // 지역명, 시군구명 변수
-            var area1 : String? = ""
-            var area2 : String? = ""
+            var area1 : String = ""
+            var area2 : String = ""
+            var area1Code = -1
+            var area2Code = -1
             try {
                 area1 = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"   // 지역명
                 area2 = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"   // 시군구명
+                // TODO : 지역 코드 이거 맞나....
+                area1Code = spinnerSetting.areaCodeArray[0][(spinner[0].selectedItemPosition)].areaCode // 지역 코드
+                area2Code = spinnerSetting.areaCodeArray[1][(spinner[1].selectedItemPosition)].areaCode // 시군구 코드
             }
             catch (e : NullPointerException) {
                 Toast.makeText(applicationContext, "지역을 선택해주세요.", Toast.LENGTH_SHORT).show()
@@ -205,6 +209,7 @@ class AddPlaceActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
             }
 
+            val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId, area1, area2, area1Code, area2Code)
             postAddPlace(placeData, photoList, timestamp)
 
             //장소명이랑 주소, 장소id, 어디서 왔는지 넘겨주자

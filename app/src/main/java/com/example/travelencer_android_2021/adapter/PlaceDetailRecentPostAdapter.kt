@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021.adapter
 
+import android.content.Context
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
@@ -10,10 +11,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
+import kotlinx.android.synthetic.main.fragment_setting.*
 
-class PlaceDetailRecentPostAdapter(private val postList: ArrayList<ModelPlaceDetailRecentPost>) : RecyclerView.Adapter<PlaceDetailRecentPostAdapter.CustomViewHolder>() {
+class PlaceDetailRecentPostAdapter(private val postList: ArrayList<ModelPlaceDetailRecentPost>, private val mContext: Context) : RecyclerView.Adapter<PlaceDetailRecentPostAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_place_detail_recent_post, parent, false)
@@ -30,7 +34,12 @@ class PlaceDetailRecentPostAdapter(private val postList: ArrayList<ModelPlaceDet
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.title.text = postList[position].title
         holder.nickname.text = "by ".plus(postList[position].nickname)
-        holder.profileImg.setImageResource(postList[position].profileImg)
+//        holder.profileImg.setImageResource(postList[position].profileImg)
+        Glide.with(mContext)
+                .load(postList[position].profileImgUri)
+                .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+                .apply(RequestOptions().centerCrop())
+                .into(holder.profileImg)
 
         holder.setProfileImgRound()
     }

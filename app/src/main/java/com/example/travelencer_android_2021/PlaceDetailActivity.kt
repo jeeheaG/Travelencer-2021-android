@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.adapter.PlaceDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PlaceDetailRecentPostAdapter
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
@@ -20,7 +23,12 @@ import com.example.travelencer_android_2021.model.modelTourApiDetailCommon.Model
 import com.example.travelencer_android_2021.model.modelTourApiDetailImage.ModelTourApiDetailImage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_place_detail.*
+import kotlinx.android.synthetic.main.fragment_setting.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -36,6 +44,8 @@ class PlaceDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlaceDetailBinding
     lateinit var firebase: FirebaseFirestore
     lateinit var auth: FirebaseAuth
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageRef : StorageReference
     var isTour: Boolean = false // 관광데이터 장소정보면 true 사용자등록 장소정보면 false
 
     var photoList = arrayListOf<ModelCasePhotoOnly>()
@@ -51,6 +61,8 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         firebase = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        storage = Firebase.storage
+        storageRef = storage.reference
 
         // 관광데이터 정보일 경우
         var placeId = intent.getStringExtra("contentId") ?: NO_ID
@@ -60,6 +72,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         }else{
             isTour = true
         }
+        Log.d("로그 PlaceDetail", "placeId : ${placeId}")
 
         binding.rvPlaceDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvPlaceDetailRecentPostList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -68,7 +81,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         binding.rvPlaceDetailRecentPostList.setHasFixedSize(true)
 
         photoAdapter = PlaceDetailPhotoAdapter(photoList, this)
-        recentPostAdapter = PlaceDetailRecentPostAdapter(recentPostList)
+        recentPostAdapter = PlaceDetailRecentPostAdapter(recentPostList, applicationContext)
         binding.rvPlaceDetailPhotoList.adapter = photoAdapter
         binding.rvPlaceDetailRecentPostList.adapter = recentPostAdapter
         
@@ -105,7 +118,16 @@ class PlaceDetailActivity : AppCompatActivity() {
         //지도는 callTourDetailCommon 안에
 
         // 이 장소의 최근 게시물
-
+        Log.d("로그 RecentPost", "호출")
+        getRecentPostId(placeId)
+/*        val recentPostId = getRecentPostId(placeId)
+        for(id in recentPostId){
+            getRecentPostData(id)
+//            val postData = getRecentPostData(id)
+//            // TODO : 프로필사진 더미데이터 넣어뒀음
+//            recentPostList.add(ModelPlaceDetailRecentPost(postData[0], postData[1], R.drawable.dummy_haewoojae))
+        }*/
+//        recentPostAdapter.notifyDataSetChanged()
 
         // 장단점 한마디
         getAndSetPNC(placeId)
@@ -128,10 +150,124 @@ class PlaceDetailActivity : AppCompatActivity() {
 
     }
 
+
+    // 프로필 사진 가져오기 - 민영님 코드
+    private fun getRecentPostUserProPic(uid : String, title: String, name: String) {
+        val proPicFile = this?.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/prifile_img")!!
+        if (!proPicFile.isDirectory) proPicFile.mkdir()
+
+        // 이미지 다운로드해서 가져오기
+        storageRef.child("user/proPic_$uid").downloadUrl
+                .addOnSuccessListener { uri ->
+
+                    // TODO : 프로필사진 더미데이터 넣어뒀음
+                    recentPostList.add(ModelPlaceDetailRecentPost(title, name, uri))
+//                Log.d("로그 RecentPost", "postData : ${postData}")
+                    Log.d("로그 RecentPost", "noti")
+                    recentPostAdapter.notifyDataSetChanged()
+                }
+    }
+
+
+    private fun getRecentPostUser(uid: String, title: String): String {
+        var name :String = ""
+        val document = firebase.collection("userT")
+                .whereEqualTo("uid", uid)
+                .get()
+        document.addOnSuccessListener { documents ->
+            for (doc in documents){
+                val map = doc.data as HashMap<String, Any>
+                name = map["name"] as String
+
+
+                // TODO : 프로필사진 가져오기
+                getRecentPostUserProPic(uid, title, name)
+//
+//                // TODO : 프로필사진 더미데이터 넣어뒀음
+//                recentPostList.add(ModelPlaceDetailRecentPost(title, name, R.drawable.dummy_haewoojae))
+////                Log.d("로그 RecentPost", "postData : ${postData}")
+            }
+//            Log.d("로그 RecentPost", "noti")
+//            recentPostAdapter.notifyDataSetChanged()
+        }
+                .addOnFailureListener {
+                    Log.d("로그 PlaceDetailGetSetRecentPost","실패 . . .")
+                }
+        return name
+    }
+
+    private fun getRecentPostData(postId: String): ArrayList<String> {
+        Log.d("로그 RecentPostData", "호춯")
+        var postData :ArrayList<String> = arrayListOf<String>()
+        val document = firebase.collection("postT")
+                .whereEqualTo("postId", postId)
+                .get()
+        document.addOnSuccessListener { documents ->
+            Log.d("로그 RecentPostData", "successListener")
+            for (doc in documents){
+                Log.d("로그 RecentPostData", "doc : ${doc}")
+                val map = doc.data as HashMap<String, Any>
+                val title : String = map["title"] as String
+                val postUid : String = map["uid"] as String
+
+//                val postUserName = getRecentPostUser(postUid)
+                getRecentPostUser(postUid, title)
+
+//                postData = arrayListOf(title, postUserName)
+//
+//                // TODO : 프로필사진 더미데이터 넣어뒀음
+//                recentPostList.add(ModelPlaceDetailRecentPost(postData[0], postData[1], R.drawable.dummy_haewoojae))
+//                Log.d("로그 RecentPost", "postData : ${postData}")
+
+            }
+//            Log.d("로그 RecentPost", "noti")
+//            recentPostAdapter.notifyDataSetChanged()
+        }
+                .addOnFailureListener {
+                    Log.d("로그 PlaceDetailGetSetRecentPost","실패 . . .")
+                }
+        return postData
+    }
+
+    //TODO : 왜안돼...
+    private fun getRecentPostId(placeId: String): ArrayList<String> {
+        var postIdList: ArrayList<String> = arrayListOf()
+        val document = firebase.collection("postPlaceT")
+                .whereEqualTo("placeId", placeId)
+                .limit(5)
+                .get()
+        document.addOnSuccessListener { documents ->
+            if(documents != null){
+                Log.d("로그 RecentPost", "documents != null")
+                for (doc in documents){
+                    val map = doc.data as HashMap<String, Any>
+                    val postId : String = map["postId"] as String
+                    Log.d("로그 RecentPost", "doc : ${doc}")
+
+                    postIdList.add(postId)
+                }
+
+                for(id in postIdList) {
+                    getRecentPostData(id)
+                }
+
+            }else{
+//                Log.d("로그", "recentPost가 없습니다")
+            }
+
+        }
+                .addOnFailureListener {
+                    Log.d("로그 PlaceDetailGetSetRecentPost","실패 . . .")
+                }
+        Log.d("로그 RecentPost", "postIdList : ${postIdList}")
+        return postIdList
+    }
+
     private fun getAndSetPNC(placeId: String) {
         val document = firebase.collection("pncT").whereEqualTo("placeId", placeId).limit(1).get()
         document.addOnSuccessListener { documents ->
             for (doc in documents){
+                Log.d("로그 PlaceDetailGetSetPNC","doc : ${doc}")
                 val map = doc.data as HashMap<String, Any>
                 val pros : String = (map["pros"] ?: "아직 입력된 장단점이 없습니다.") as String
                 val cons : String = (map["cons"] ?: "아직 입력된 장단점이 없습니다.") as String
@@ -140,10 +276,14 @@ class PlaceDetailActivity : AppCompatActivity() {
                 binding.tvPlaceDetailPNCItem1.text = pros
                 binding.tvPlaceDetailPNCItem2.text = cons
             }
+
+
         }
                 .addOnFailureListener {
                     Log.d("로그 PlaceDetailGetSetPNC","실패 . . .")
                 }
+
+        Log.d("로그 PlaceDetailGetSetPNC","끝")
     }
 
 

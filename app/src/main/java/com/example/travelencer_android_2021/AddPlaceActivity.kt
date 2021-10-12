@@ -161,7 +161,8 @@ class AddPlaceActivity : AppCompatActivity() {
             //val photoIntent = Intent(Intent.ACTION_PICK) // 기본 갤러리 앱으로 선택 - 일부 기기에서 사진이 한 장밖에 선택 안 됨
             val photoIntent = Intent(Intent.ACTION_GET_CONTENT) // 구글 갤러리 앱으로 선택
             photoIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI //선택한 사진 uri 를 intent의 data에 저장
-            photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+//            photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+            photoIntent.type = "image/*"      // 모든 이미지
             photoIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             addPhotoResultLauncher.launch(photoIntent)
         }
@@ -228,11 +229,12 @@ class AddPlaceActivity : AppCompatActivity() {
     }
 
     private fun uriToBitmapRotate(uri: Uri?): Bitmap {
-        val matrix =  Matrix()
-        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
-        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
+//        val matrix =  Matrix()
+//        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
+//        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+//        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
 
+        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         return bitmap
     }
 

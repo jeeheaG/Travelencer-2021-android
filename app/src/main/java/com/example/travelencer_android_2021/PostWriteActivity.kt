@@ -255,7 +255,8 @@ class PostWriteActivity : AppCompatActivity() {
         binding.btnPostWriteAddPhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT) // 구글 갤러리 앱으로 선택
             intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+//            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.type = "image/*"     // 모든 이미지
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             addPhotoResultLauncher.launch(intent)
         }
@@ -287,11 +288,12 @@ class PostWriteActivity : AppCompatActivity() {
     }
 
     private fun uriToBitmapRotate(uri: Uri?): Bitmap {
-        val matrix =  Matrix()
-        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
-        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
+//        val matrix =  Matrix()
+//        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
+//        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+//        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
 
+        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         return bitmap
     }
 

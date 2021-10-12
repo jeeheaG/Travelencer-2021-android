@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.adapter.FeedAdapter
 import com.example.travelencer_android_2021.adapter.PostBlogAdapter
 import com.example.travelencer_android_2021.databinding.FragmentPostBlogBinding
@@ -20,6 +22,8 @@ import com.example.travelencer_android_2021.model.ModelPostBlog
 import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 
@@ -28,7 +32,13 @@ import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 class PostBlogFragment : Fragment() {
     private var _binding: FragmentPostBlogBinding? = null
     private val binding get() = _binding!!
-
+    var ModelPostBlog = ModelPostBlog()
+    var ModelPostBlogPhoto = ModelPostBlogPhoto()
+    var auth = FirebaseAuth.getInstance()
+    var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+    var storage : FirebaseStorage? = FirebaseStorage.getInstance()
+    var photoList = arrayListOf<ModelPostBlogPhoto>()
+    var postList = arrayListOf<ModelPostBlog>()
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -36,34 +46,43 @@ class PostBlogFragment : Fragment() {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val photoList = arrayListOf(
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung),
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung),
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung),
+        firestore?.collection("userT")?.document(auth.currentUser!!.uid).get()
+                .addOnSuccessListener { doc->
+                    binding.tvPostBlogNickname.text = doc.data?.get("name").toString()
+                    val info = doc.data?.get("info")
+                    if(info != null){
+                        binding.tvPostBlogBio.text = info.toString()
+                    }
+                }
+        // 이미지 다운로드해서 가져오기
+        var storageRef = storage?.reference?.child("user")
+                ?.child("proPic_${auth.currentUser!!.uid}")
+        storageRef?.downloadUrl
+                ?.addOnSuccessListener { uri ->
+                    Glide.with(activity?.applicationContext!!)
+                            .load(uri)
+                            .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+                            .apply(RequestOptions().centerCrop())
+                            .into(binding.ivPostBlogProfile)
+                }
+
+        //uid별 작성 게시글 불러오기
+        firestore?.collection("postT").whereEqualTo("uid",auth.currentUser!!.uid).get()
+                .addOnSuccessListener { docs->
+                    for(doc in docs){
+                        ModelPostBlog.title = doc.data?.get("title").toString()
+                        //TODO 날짜 부터 추가하기
+                    }
+                }
+
+        photoList = arrayListOf(
                 ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
                 ModelPostBlogPhoto(R.drawable.dummy_hwasung)
         )
 
-        val postList = arrayListOf(
+        postList = arrayListOf(
                 ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("해우재해우재", "2020.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("수원시 탐방", "2021.03.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("용인 옆 수원", "2021.03.40", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("라랄라라라라랄", "2021.01.20", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("수원 왕갈비", "2020.02.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("통닭 여행", "2020.05.14", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("화성 산책", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("용인시 수원시 열기구 체험 나나나나나", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList)
+                ModelPostBlog("해우재해우재", "2020.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList)
         )
 
         // 프로필 먼저 보이기

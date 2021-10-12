@@ -15,7 +15,10 @@ import kotlinx.android.synthetic.main.list_item_feed_course.view.*
 // 여행 피드 - 코스 탭 어댑터
 class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourseAdapter.ViewHolder>() {
     // ArrayList<String> = 코스 이름 배열
-    var items = ArrayList<ArrayList<String>>()
+    var placeNames = ArrayList<ArrayList<String>>() // 코스 장소 이름 배열
+//    var courseDates = ArrayList<ArrayList<String>>() // 코스 시간 배열
+    var postIds = ArrayList<String>()
+    var uids = ArrayList<String>()
 
     // 뷰홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedCourseAdapter.ViewHolder {
@@ -24,25 +27,23 @@ class FeedCourseAdapter(val context : Context) : RecyclerView.Adapter<FeedCourse
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                // 코스 정보 전달
-                // TODO : 서버 연결 되면 코스 ID만 넘기기
+                // postId 전달
                 val intent = Intent(context, FeedCourseDetailActivity::class.java)
-                intent.putExtra("course", items[position])
+                intent.putExtra("postId", postIds[position])
+                intent.putExtra("uid", uids[position])
                 context.startActivity(intent)
-
-                Toast.makeText(parent.context, "${position} 클릭", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     // position 번째 아이템 설정하기
     override fun onBindViewHolder(holder: FeedCourseAdapter.ViewHolder, position: Int) {
-        val item = items[position]
-        holder.setItem(item)
+        val placeName = placeNames[position]
+        holder.setItem(placeName)
     }
 
     // 아이템 갯수 리턴
-    override fun getItemCount() = items.size
+    override fun getItemCount() = placeNames.size
 
     // 코스 생성
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.list_item_feed_course_detail.view.*
 class FeedCourseDetailAdapter() : RecyclerView.Adapter<FeedCourseDetailAdapter.ViewHolder>() {
     var courseName = ArrayList<String>()
 //    var areaName  = ArrayList<String>()
-//    var date  = ArrayList<String>()
+    var courseDate  = ArrayList<String>()
 
     // 뷰홀더 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedCourseDetailAdapter.ViewHolder {
@@ -38,7 +38,7 @@ class FeedCourseDetailAdapter() : RecyclerView.Adapter<FeedCourseDetailAdapter.V
         fun setItem(position: Int) {
             itemView.tvCourseName.text = courseName[position]
 //            itemView.tvAreaName.text = areaName[position]
-//            itemView.tvCourseName.text = date[position]
+            itemView.tvDate.text = courseDate[position]
 
             // 맨 첫 번째, 맨 마지막 아이템은 선 지우기
             if (position == 0) itemView.imgFirst.visibility = View.INVISIBLE

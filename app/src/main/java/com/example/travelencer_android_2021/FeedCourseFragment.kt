@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.FeedCourseAdapter
 import com.example.travelencer_android_2021.databinding.FragmentFeedCourseBinding
+import com.example.travelencer_android_2021.model.ModelFeedPhoto
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
+private const val TAG = "mmm"
 
 // 여행 피드 - 코스 탭
-class FeedCourseFragment : Fragment() {
+class FeedCourseFragment(val keyword : String) : Fragment() {
     private var _binding : FragmentFeedCourseBinding? = null
     private val binding get() = _binding!!
+
+    lateinit var feedCourseAdapter : FeedCourseAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -25,26 +33,65 @@ class FeedCourseFragment : Fragment() {
         val layoutManager = LinearLayoutManager(activity)
         binding.rcFeedCourse.layoutManager = layoutManager
         // 리아시클러뷰에 어댑터 달기
-        val feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }
+        feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }!!
         binding.rcFeedCourse.adapter = feedCourseAdapter
         // divider 추가
         binding.rcFeedCourse.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        val spotNameList1 : ArrayList<String> = arrayListOf("연무대", "화성여차", "서장대", "화성행궁", "공방거리", "재래시장", "화성 박물관", "통닭거리", "플라잉 수원")
-        val spotNameList2 : ArrayList<String> = arrayListOf("광교 호수공원", "수원화성", "화성 행궁", "공방거리")
-        val spotNameList3 : ArrayList<String> = arrayListOf("팔달마을", "수원화성", "행굴동 벽화마을", "지동 벽화마을", "방화 수류청")
-        val spotNameList4 : ArrayList<String> = arrayListOf("노을빛 전망대", "통닭거리", "지동 시장", "수원 화성 박물관", "연무대")
-        val spotNameList5 : ArrayList<String> = arrayListOf("수원 화성 박물관", "아이파크 미술관", "르본 수원 실크로드 호텔", "광교 호수공원")
-        val spotNameList6 : ArrayList<String> = arrayListOf("해우재", "회서문", "화성 행궁", "장안문", "화홍문", "연무대", "수원화성 박물관")
-
-        feedCourseAdapter!!.items.add(spotNameList1)
-        feedCourseAdapter.items.add(spotNameList2)
-        feedCourseAdapter.items.add(spotNameList3)
-        feedCourseAdapter.items.add(spotNameList4)
-        feedCourseAdapter.items.add(spotNameList5)
-        feedCourseAdapter.items.add(spotNameList6)
+        // content 에 keyword 들어가는 게시글 중에서 코스 정보 가져오기
+        // 1, content 에 keyword 들어가는 게시글 찾기
+        val db = Firebase.firestore
+        db.collection("postT")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val map = document.data as HashMap<String, Any>
+                        // content에 keyword 들어가는지 확인
+                        val content : String = map["content"] as String
+                        // 2, keyword 들어가면 해당 postId의 코스 데이터 가져오기
+                        if (content.contains(keyword)) {
+                            // 해당 postId의 코스 데이터 가져오기(시간 오름차순으로)
+                            val postId: String = map["postId"] as String
+                            // uid도 가져오기
+                            val uid : String = map["uid"] as String
+                            getCourse(postId, uid)
+                        }
+                        else continue
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "FeedPhotoFragment2 Error getting documents: ", exception)
+                }
 
         return binding.root
+    }
+
+    // 해당 postId의 코스 데이터 가져오기(시간 오름차순으로)
+    private fun getCourse(postId : String, uid : String) {
+        val db = Firebase.firestore
+        val courseNameList = ArrayList<String>()
+
+        db.collection("postCourseT")
+                .whereEqualTo("postId", postId)
+//                .orderBy("sequence") // 이건 색인 작업이 필요한데 어케하는지 모르겟;; 나중에 추가
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val map = document.data as HashMap<String, Any>
+                        val coursePlaceName: String = map["coursePlaceName"] as String
+                        courseNameList.add(coursePlaceName)
+                    }
+                    // 코스 데이터가 있다면 추가~~
+                    if (!courseNameList.isEmpty()) {
+                        feedCourseAdapter.postIds.add(postId)
+                        feedCourseAdapter.placeNames.add(courseNameList)
+                        feedCourseAdapter.uids.add(uid)
+                        feedCourseAdapter.notifyDataSetChanged()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "getCourse Error getting documents: ", exception)
+                }
     }
 
     override fun onDestroyView() {

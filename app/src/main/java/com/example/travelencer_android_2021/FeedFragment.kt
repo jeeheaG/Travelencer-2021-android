@@ -36,7 +36,7 @@ class FeedFragment : Fragment() {
         val feedAdapter = FeedAdapter(this@FeedFragment)
         // 프레그먼트, 탭 타이틀 넣기
         feedAdapter.addFragment(FeedPhotoFragment(keyword))
-        feedAdapter.addFragment(FeedCourseFragment())
+        feedAdapter.addFragment(FeedCourseFragment(keyword))
         feedAdapter.addFragment(FeedFoodFragment())
         feedAdapter.addFragment(FeedSightsFragment())
         binding.feedViewPager.adapter = feedAdapter

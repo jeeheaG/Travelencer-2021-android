@@ -161,7 +161,8 @@ class AddPlaceActivity : AppCompatActivity() {
             //val photoIntent = Intent(Intent.ACTION_PICK) // 기본 갤러리 앱으로 선택 - 일부 기기에서 사진이 한 장밖에 선택 안 됨
             val photoIntent = Intent(Intent.ACTION_GET_CONTENT) // 구글 갤러리 앱으로 선택
             photoIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI //선택한 사진 uri 를 intent의 data에 저장
-            photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+//            photoIntent.type = MediaStore.Images.Media.CONTENT_TYPE
+            photoIntent.type = "image/*"      // 모든 이미지
             photoIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             addPhotoResultLauncher.launch(photoIntent)
         }
@@ -189,14 +190,18 @@ class AddPlaceActivity : AppCompatActivity() {
             val plcId = "${timestamp}_${locX}_${locY}"
             Log.d("로그 addPlace----locXY", "locX : ${locX}, locY : ${locY}")
             Log.d("로그 addPlace----plcId", "plcId : ${plcId}")
-            val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId)
 
             // 지역명, 시군구명 변수
-            var area1 : String? = ""
-            var area2 : String? = ""
+            var area1 : String = ""
+            var area2 : String = ""
+            var area1Code = -1
+            var area2Code = -1
             try {
                 area1 = if(spinner[0].selectedItem!=null) spinner[0].selectedItem.toString() else "선택안함"   // 지역명
                 area2 = if(spinner[1].selectedItem!=null) spinner[1].selectedItem.toString() else "선택안함"   // 시군구명
+                // TODO : 지역 코드 이거 맞나....
+                area1Code = spinnerSetting.areaCodeArray[0][(spinner[0].selectedItemPosition)].areaCode // 지역 코드
+                area2Code = spinnerSetting.areaCodeArray[1][(spinner[1].selectedItemPosition)].areaCode // 시군구 코드
             }
             catch (e : NullPointerException) {
                 Toast.makeText(applicationContext, "지역을 선택해주세요.", Toast.LENGTH_SHORT).show()
@@ -205,6 +210,7 @@ class AddPlaceActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
             }
 
+            val placeData = PlaceRegisterData(plcName, plcProduce, plcAddress, plcCategory, locX, locY, plcId, area1, area2, area1Code, area2Code)
             postAddPlace(placeData, photoList, timestamp)
 
             //장소명이랑 주소, 장소id, 어디서 왔는지 넘겨주자
@@ -223,11 +229,12 @@ class AddPlaceActivity : AppCompatActivity() {
     }
 
     private fun uriToBitmapRotate(uri: Uri?): Bitmap {
-        val matrix =  Matrix()
-        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
-        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
+//        val matrix =  Matrix()
+//        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
+//        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+//        val bitmap = Bitmap.createBitmap(rowBitmap, 0,0, rowBitmap.width, rowBitmap.height, matrix, true)
 
+        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         return bitmap
     }
 

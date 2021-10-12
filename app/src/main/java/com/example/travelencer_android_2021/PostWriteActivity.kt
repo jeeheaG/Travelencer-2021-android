@@ -201,6 +201,7 @@ class PostWriteActivity : AppCompatActivity() {
                 // 이미지를 한 개만 선택했을 경우
                 if(clipData == null){
                     val uri = imageData.data
+                    uri?.let{ photoList.add(uri) }
                     val bitmap = uriToBitmapRotate(uri)
                     uri?.let{ photoBitmapList.add(bitmap) }
                 }
@@ -208,6 +209,7 @@ class PostWriteActivity : AppCompatActivity() {
                 else{
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
+                        photoList.add(uri)
                         val bitmap = uriToBitmapRotate(uri)
                         uri?.let{ photoBitmapList.add(bitmap) }
                     }

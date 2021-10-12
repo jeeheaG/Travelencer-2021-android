@@ -24,8 +24,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_feed_course_detail.*
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 private const val TAG = "mmm"
+
 
 //뷰바인딩 사용
 
@@ -34,6 +36,10 @@ class PostDetailActivity : AppCompatActivity() {
 
     private lateinit var storage : FirebaseStorage
     private lateinit var storageRef : StorageReference
+
+    var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
+
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +74,22 @@ class PostDetailActivity : AppCompatActivity() {
 //            Log.d(TAG, postPhotoUri.toString())
         }
 
+        firestore?.collection("userT").document(auth.currentUser!!.uid).get()
+            ?.addOnSuccessListener { doc->
+                binding.tvPostDetailNickname.text = doc?.data?.get("name").toString()
+            }
+        // 이미지 다운로드해서 가져오기
+        var storageRef = storage?.reference?.child("user")
+            ?.child("proPic_${auth.currentUser!!.uid}")
+        storageRef?.downloadUrl
+            ?.addOnSuccessListener { uri ->
+                Glide.with(applicationContext)
+                    .load(uri)
+                    .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+                    .apply(RequestOptions().centerCrop())
+                    .into(binding.ivPostDetailProfileImg)
+            }
+        //TODO: 기타 정보 불러오기
         val placeList = arrayListOf(
                 ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시"),
                 ModelPostDetailPlace(R.drawable.ic_food, "삼겹구이", "경기도 용인시"),

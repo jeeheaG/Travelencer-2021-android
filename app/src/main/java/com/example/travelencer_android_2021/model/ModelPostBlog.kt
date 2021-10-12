@@ -1,10 +1,10 @@
 package com.example.travelencer_android_2021.model
 
 class ModelPostBlog(
-        val title: String,
-        val date: String,
-        val icon: Int,
-        val placeName: String,
-        val location: String,
-        val writing: String,
-        val photoList: ArrayList<ModelPostBlogPhoto>)
+        var title: String? = null,
+        var date: String? = null,
+        var icon: Int? = null,
+        var placeName: String? = null,
+        var location: String? = null,
+        var writing: String? = null,
+        var photoList: ArrayList<ModelPostBlogPhoto>? = null){}

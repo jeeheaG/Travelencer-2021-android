@@ -31,10 +31,10 @@ class PostWritePlaceAdapter(private val placeList: ArrayList<ModelCourseSpot>, p
         holder.loc.text = placeList[position].location
 
         // TODO : 여행지 장소 입력 시에 맛집인지 관광지인지 구분하는 데이터도 받아야 하겠네..임시로 true false넣어둠
-        if(true){
+        if(false){
             holder.icon.setImageResource(R.drawable.ic_food)
         }
-        else if(false){
+        else if(true){
             holder.icon.setImageResource(R.drawable.ic_location_yellow)
         }
 

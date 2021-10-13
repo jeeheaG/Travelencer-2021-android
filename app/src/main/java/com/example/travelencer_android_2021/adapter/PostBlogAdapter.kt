@@ -30,7 +30,7 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
     }
 
     override fun onBindViewHolder(holder: PostBlogAdapter.CustomViewHolder, position: Int) {
-        holder.bind(postList[position])
+        holder.bind(postList[position], mContext)
 
         holder.itemView.setOnClickListener{
             val intent = Intent(mContext, PostDetailActivity::class.java)
@@ -44,7 +44,7 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
 
     //뷰홀더
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(post: ModelPostBlog) {
+        fun bind(post: ModelPostBlog, mContext: Context) {
             val title = itemView.findViewById<TextView>(R.id.tvPostBlogTitle)
             val date = itemView.findViewById<TextView>(R.id.tvPostBlogDate)
             val icon = itemView.findViewById<ImageView>(R.id.ivPostDetailPlaceIcon)
@@ -61,7 +61,7 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
             writing.text = post.writing?.substring(0,42).plus("...")
 
             rvPhoto.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-            val postBlogPhotoAdapter = PostBlogPhotoAdapter(post.photoList!!)
+            val postBlogPhotoAdapter = PostBlogPhotoAdapter(post.photoList!!, mContext)
             rvPhoto.adapter = postBlogPhotoAdapter
             rvPhoto.setHasFixedSize(true)
         }

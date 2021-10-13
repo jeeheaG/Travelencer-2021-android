@@ -53,6 +53,7 @@ class PostWriteActivity : AppCompatActivity() {
     lateinit var courseName : ArrayList<String>
     lateinit var courseDate : ArrayList<String>
     var placeIdList = arrayListOf<String>()
+    //TODO: 이름, 위치, 카테고리 리스트로 받아서 각자 저장하고 컬렉션에 저장하기
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

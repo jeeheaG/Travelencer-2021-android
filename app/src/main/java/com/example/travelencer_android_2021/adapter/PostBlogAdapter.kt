@@ -55,13 +55,13 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
 
             title.text = post.title
             date.text = post.date
-            icon.setImageResource(post.icon)
+            icon.setImageResource(post.icon!!)
             placeName.text = post.placeName
             location.text = post.location
-            writing.text = post.writing.substring(0,42).plus("...")
+            writing.text = post.writing?.substring(0,42).plus("...")
 
             rvPhoto.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-            val postBlogPhotoAdapter = PostBlogPhotoAdapter(post.photoList)
+            val postBlogPhotoAdapter = PostBlogPhotoAdapter(post.photoList!!)
             rvPhoto.adapter = postBlogPhotoAdapter
             rvPhoto.setHasFixedSize(true)
         }

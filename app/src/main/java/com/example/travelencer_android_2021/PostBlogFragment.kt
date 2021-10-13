@@ -100,8 +100,8 @@ class PostBlogFragment : Fragment() {
                 }
 
         photoList = arrayListOf(
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung)
+/*                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
+                ModelPostBlogPhoto(R.drawable.dummy_hwasung)*/
         )
 
         postList = arrayListOf(

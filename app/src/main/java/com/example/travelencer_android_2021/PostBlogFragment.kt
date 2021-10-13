@@ -33,7 +33,7 @@ class PostBlogFragment : Fragment() {
     private var _binding: FragmentPostBlogBinding? = null
     private val binding get() = _binding!!
     var ModelPostBlog = ModelPostBlog()
-    var ModelPostBlogPhoto = ModelPostBlogPhoto()
+    //var ModelPostBlogPhoto = ModelPostBlogPhoto()
     var auth = FirebaseAuth.getInstance()
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
     var storage : FirebaseStorage? = FirebaseStorage.getInstance()
@@ -71,13 +71,37 @@ class PostBlogFragment : Fragment() {
                 .addOnSuccessListener { docs->
                     for(doc in docs){
                         ModelPostBlog.title = doc.data?.get("title").toString()
-                        //TODO 날짜 부터 추가하기
+                        var updateDate = doc.data?.get("updateDate").toString()
+                        updateDate = updateDate.slice(IntRange(0,4))+"."+
+                                updateDate.slice(IntRange(4,6))+"."+
+                                updateDate.slice(IntRange(6,8))
+                        ModelPostBlog.date = updateDate
+                        ModelPostBlog.writing = doc.data?.get("content").toString()
+                        var postId = doc.data?.get("postId").toString()
+                        firestore.collection("postPlaceT").whereEqualTo("postId",postId).get()
+                                .addOnSuccessListener { docs2->
+                                    var placeId = ""
+                                    for(doc2 in docs2){
+                                        placeId = doc2.data?.get("placeId").toString()
+                                        break
+                                    }
+                                    //placeId를 가지고 장소 정보 접근 해야 함
+                                    //TODO: 게시물별 장소 테이블에서 이름, 위치, 카테고리 받기
+                                }
+                        firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
+                                .addOnSuccessListener { docs3->
+                                    for (doc3 in docs3){
+                                        photoList.add(ModelPostBlogPhoto(doc3.data?.get("postPhoto").toString()))
+                                    }
+                                    //사진 리스트 어뎁터 연결
+                                    ModelPostBlog.photoList = photoList
+                                }
                     }
                 }
 
         photoList = arrayListOf(
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung)
+                ModelPostBlogPhoto(R.drawable.dummy_haewoojae.toString()),
+                ModelPostBlogPhoto(R.drawable.dummy_hwasung.toString())
         )
 
         postList = arrayListOf(

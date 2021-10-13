@@ -91,7 +91,7 @@ class PostBlogFragment : Fragment() {
                         firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
                                 .addOnSuccessListener { docs3->
                                     for (doc3 in docs3){
-                                        photoList.add(ModelPostBlogPhoto(doc3.data?.get("postPhoto").toString()))
+                                        //photoList.add(ModelPostBlogPhoto(doc3.data?.get("postPhoto").toString()))
                                     }
                                     //사진 리스트 어뎁터 연결
                                     ModelPostBlog.photoList = photoList
@@ -100,8 +100,8 @@ class PostBlogFragment : Fragment() {
                 }
 
         photoList = arrayListOf(
-                ModelPostBlogPhoto(R.drawable.dummy_haewoojae.toString()),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung.toString())
+                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
+                ModelPostBlogPhoto(R.drawable.dummy_hwasung)
         )
 
         postList = arrayListOf(

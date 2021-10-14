@@ -37,8 +37,8 @@ class FeedFragment : Fragment() {
         // 프레그먼트, 탭 타이틀 넣기
         feedAdapter.addFragment(FeedPhotoFragment(keyword))
         feedAdapter.addFragment(FeedCourseFragment(keyword))
-        feedAdapter.addFragment(FeedFoodFragment())
-        feedAdapter.addFragment(FeedSightsFragment())
+        feedAdapter.addFragment(FeedFoodFragment(keyword))
+        feedAdapter.addFragment(FeedSightsFragment(keyword))
         binding.feedViewPager.adapter = feedAdapter
         // 탭레이아웃에 뷰 페이저 달기
         TabLayoutMediator(binding.feedTabLayout, binding.feedViewPager) { tab, position ->

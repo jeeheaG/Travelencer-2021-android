@@ -25,8 +25,12 @@ class PostBlogPhotoAdapter(private val photoList: ArrayList<ModelPostBlogPhoto>,
     }
 
     override fun onBindViewHolder(holder: PostBlogPhotoAdapter.CustomViewHolder, position: Int) {
+
 //        holder.photo.setImageResource(photoList[position].photo)
-        Glide.with(mContext).load(photoList[position].photo).into(holder.photo)
+        Glide.with(mContext)
+                .load(photoList[position].photo)
+                .into(holder.photo)
+
     }
 
     override fun getItemCount(): Int {

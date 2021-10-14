@@ -40,11 +40,13 @@ class PostBlogFragment : Fragment() {
     var photoList = arrayListOf<ModelPostBlogPhoto>()
     var postList = arrayListOf<ModelPostBlog>()
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
+    private lateinit var postAdapter : PostBlogAdapter
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
+        postAdapter = PostBlogAdapter(postList, activity?.applicationContext!!)
 
         firestore?.collection("userT")?.document(auth.currentUser!!.uid).get()
                 .addOnSuccessListener { doc->
@@ -65,6 +67,7 @@ class PostBlogFragment : Fragment() {
                             .apply(RequestOptions().centerCrop())
                             .into(binding.ivPostBlogProfile)
                 }
+        //TODO 어뎁터 선언후 밑에서 notify 어쩌구 해주기
 
         //uid별 작성 게시글 불러오기
         firestore?.collection("postT").whereEqualTo("uid",auth.currentUser!!.uid).get()
@@ -72,42 +75,58 @@ class PostBlogFragment : Fragment() {
                     for(doc in docs){
                         ModelPostBlog.title = doc.data?.get("title").toString()
                         var updateDate = doc.data?.get("updateDate").toString()
-                        updateDate = updateDate.slice(IntRange(0,4))+"."+
-                                updateDate.slice(IntRange(4,6))+"."+
-                                updateDate.slice(IntRange(6,8))
+                        updateDate = updateDate.slice(IntRange(0,3))+"."+
+                                updateDate.slice(IntRange(4,5))+"."+
+                                updateDate.slice(IntRange(6,7))
                         ModelPostBlog.date = updateDate
+                        ModelPostBlog.icon = R.drawable.ic_location_yellow
                         ModelPostBlog.writing = doc.data?.get("content").toString()
                         var postId = doc.data?.get("postId").toString()
                         firestore.collection("postPlaceT").whereEqualTo("postId",postId).get()
                                 .addOnSuccessListener { docs2->
-                                    var placeId = ""
+                                    var placeName = ""
+                                    var placeLoc = ""
                                     for(doc2 in docs2){
-                                        placeId = doc2.data?.get("placeId").toString()
+                                        placeName = doc2.data.get("placeName").toString()
+                                        placeLoc = doc2.data.get("placeLoc").toString()
+                                        ModelPostBlog.placeName = placeName
+                                        ModelPostBlog.location = placeLoc
                                         break
                                     }
-                                    //placeId를 가지고 장소 정보 접근 해야 함
-                                    //TODO: 게시물별 장소 테이블에서 이름, 위치, 카테고리 받기
+                                    firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
+                                            .addOnSuccessListener { docs3->
+                                                for (doc3 in docs3){
+                                                    storageRef?.child("post")?.child(doc3.data?.get("postPhoto").toString())?.downloadUrl
+                                                            ?.addOnSuccessListener { uri->
+                                                                photoList.add(ModelPostBlogPhoto(uri))
+
+                                                            }
+                                                    //스토리지 호출 uri로 바꾸기
+
+                                                }
+                                                postAdapter.notifyDataSetChanged()
+                                                //사진 리스트 어뎁터 연결
+                                                ModelPostBlog.photoList = photoList
+                                                postList.add(ModelPostBlog)
+
+                                            }
+
+                                    //TODO: 사진 안뜨는 거 고치기
                                 }
-                        firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
-                                .addOnSuccessListener { docs3->
-                                    for (doc3 in docs3){
-                                        //photoList.add(ModelPostBlogPhoto(doc3.data?.get("postPhoto").toString()))
-                                    }
-                                    //사진 리스트 어뎁터 연결
-                                    ModelPostBlog.photoList = photoList
-                                }
+
                     }
                 }
 
-        photoList = arrayListOf(
-/*                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung)*/
-        )
+        /*photoList = arrayListOf(
+*//*                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
+                ModelPostBlogPhoto(R.drawable.dummy_hwasung)*//*
 
-        postList = arrayListOf(
+        )*/
+
+        /*postList = arrayListOf(
                 ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
                 ModelPostBlog("해우재해우재", "2020.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList)
-        )
+        )*/
 
         // 프로필 먼저 보이기
         binding.postViewPager.visibility = View.INVISIBLE
@@ -117,7 +136,7 @@ class PostBlogFragment : Fragment() {
         binding.rvPostBlogPostList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.rvPostBlogPostList.setHasFixedSize(true)
 
-        binding.rvPostBlogPostList.adapter = activity?.let { PostBlogAdapter(postList, it) }
+        binding.rvPostBlogPostList.adapter = postAdapter
         // divider 추가
         binding.rvPostBlogPostList.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 

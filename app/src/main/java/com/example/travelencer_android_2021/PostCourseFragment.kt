@@ -1,6 +1,8 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +11,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedCourseAdapter
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
+private const val TAG = "mmm"
 
 // 게시물 - 코스 탭
 class PostCourseFragment : Fragment() {
+    lateinit var feedCourseAdapter : FeedCourseAdapter
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -23,22 +32,65 @@ class PostCourseFragment : Fragment() {
         val layoutManager = LinearLayoutManager(activity)
         rcFeedCourse.layoutManager = layoutManager
         // 리아시클러뷰에 어댑터 달기
-        val feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }
+        feedCourseAdapter = activity?.let { FeedCourseAdapter(it) }!!
         rcFeedCourse.adapter = feedCourseAdapter
         // divider 추가
         rcFeedCourse.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        val spotNameList1 : ArrayList<String> = arrayListOf("연무대", "화성여차", "서장대", "화성행궁", "공방거리", "재래시장", "화성 박물관", "통닭거리", "플라잉 수원")
-        val spotNameList2 : ArrayList<String> = arrayListOf("광교 호수공원", "수원화성", "화성 행궁", "공방거리")
-        val spotNameList3 : ArrayList<String> = arrayListOf("팔달마을", "수원화성", "행굴동 벽화마을", "지동 벽화마을", "방화 수류청")
-        val spotNameList4 : ArrayList<String> = arrayListOf("노을빛 전망대", "통닭거리", "지동 시장", "수원 화성 박물관", "연무대")
-
-        feedCourseAdapter!!.placeNames.add(spotNameList1)
-        feedCourseAdapter.placeNames.add(spotNameList2)
-        feedCourseAdapter.placeNames.add(spotNameList3)
-        feedCourseAdapter.placeNames.add(spotNameList4)
+        // 사용자 정보 받아와서 설정하기
+        val uid : String = (Firebase.auth.uid ?: activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getString("uid", "-1")) as String
+        if (uid != "-1") {
+            // postId 에 uid 들어가는 게시글 중에서 코스 정보 가져오기
+            // 1, postId 에 uid 들어가는 게시글 찾기
+            val db = Firebase.firestore
+            db.collection("postT")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            val map = document.data as HashMap<String, Any>
+                            // postId uid 들어가는지 확인
+                            val postId : String = map["postId"] as String
+                            // 2, keyword 들어가면 해당 postId의 코스 데이터 가져오기
+                            if (postId.contains(uid)) {
+                                getCourse(postId, uid)
+                            }
+                            else continue
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d(TAG, "PostCourseFragment1 Error getting documents: ", exception)
+                    }
+        }
 
         return view
+    }
+
+    // 해당 postId의 코스 데이터 가져오기(시간 오름차순으로)
+    private fun getCourse(postId : String, uid : String) {
+        val db = Firebase.firestore
+        val courseNameList = ArrayList<String>()
+
+        db.collection("postCourseT")
+                .whereEqualTo("postId", postId)
+//                .orderBy("sequence") // 이건 색인 작업이 필요한데 어케하는지 모르겟;; 나중에 추가
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val map = document.data as HashMap<String, Any>
+                        val coursePlaceName: String = map["coursePlaceName"] as String
+                        courseNameList.add(coursePlaceName)
+                    }
+                    // 코스 데이터가 있다면 추가~~
+                    if (!courseNameList.isEmpty()) {
+                        feedCourseAdapter.postIds.add(postId)
+                        feedCourseAdapter.placeNames.add(courseNameList)
+                        feedCourseAdapter.uids.add(uid)
+                        feedCourseAdapter.notifyDataSetChanged()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "PostCourseFragment2 getCourse Error getting documents: ", exception)
+                }
     }
 
 }

@@ -61,10 +61,9 @@ class FeedPhotoFragment(val keyword : String) : Fragment() {
                             storageRef.child("post/$postPhoto").downloadUrl
                                     .addOnSuccessListener { uri ->
                                         feedPhototAdapter.items.add(ModelFeedPhoto(uri.toString(), postId))
+                                        feedPhototAdapter.notifyDataSetChanged()
                                     }.addOnFailureListener { exception ->
                                         Log.d(TAG, "FeedPhotoFragment1 Error getting documents: ", exception)
-                                    }.apply {
-                                        feedPhototAdapter.notifyDataSetChanged()
                                     }
                         }
                         else continue
@@ -73,11 +72,6 @@ class FeedPhotoFragment(val keyword : String) : Fragment() {
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "FeedPhotoFragment2 Error getting documents: ", exception)
                 }
-
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://img.hankyung.com/photo/202107/AA.26990398.1.jpg","1"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://cdn.topstarnews.net/news/photo/202105/7358283_633225_2052.jpeg","2"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://cdn.topstarnews.net/news/photo/202108/14620636_677435_2257.jpeg","3"))
-        feedPhototAdapter.items.add(ModelFeedPhoto("https://cdn.topstarnews.net/news/photo/202103/868032_602354_475.jpeg","4"))
 
         return binding.root
     }

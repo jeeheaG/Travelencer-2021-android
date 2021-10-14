@@ -3,7 +3,6 @@ package com.example.travelencer_android_2021
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -124,7 +123,7 @@ class AddPlaceActivity : AppCompatActivity() {
                     //uri 한 개 꺼내오기
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
-                    val bitmap = uriToBitmapRotate(uri)
+                    val bitmap = uriToBitmap(uri)
                     uri?.let{ photoBitmapList.add(bitmap) }
                     Log.d("로그 addPlaceUri-----","URI : ${uri}")
                 }
@@ -134,7 +133,7 @@ class AddPlaceActivity : AppCompatActivity() {
                     for(i in 0 until clipData.itemCount){
                         val uri = clipData.getItemAt(i).uri
                         photoList.add(uri)
-                        val bitmap = uriToBitmapRotate(uri)
+                        val bitmap = uriToBitmap(uri)
                         uri?.let{ photoBitmapList.add(bitmap) }
                         Log.d("로그 addPlaceUri-----","URI : ${uri}")
                     }
@@ -171,9 +170,9 @@ class AddPlaceActivity : AppCompatActivity() {
         // <다음으로> 클릭
         binding.btnPlaceRegisterNext.setOnClickListener {
             //카테고리 라디오 버튼 선택에 따라 데이터 만듦
-            var categoryChecked: Int = 1
+            var placeCategory: Int = 1
             when(binding.rgPlaceRegisterCategory.checkedRadioButtonId){
-                R.id.rbtnPlaceRegisterCategoryFood -> {categoryChecked = 0}
+                R.id.rbtnPlaceRegisterCategoryFood -> {placeCategory = 0}
                 //R.id.rbtnPlaceRegisterCategorySights -> {radioChecked = 1}
             }
 
@@ -182,7 +181,7 @@ class AddPlaceActivity : AppCompatActivity() {
             val plcName = binding.etPlaceRegisterName.text.toString() ?: ""
             val plcProduce = binding.etPlaceRegisterExplain.text.toString() ?: ""
             val plcAddress = binding.tvPlaceRegisterAddressInput.text.toString() ?: ""
-            val plcCategory = categoryChecked
+            val plcCategory = placeCategory
             //val plcPicture = photoList ?: arrayListOf<Uri>()
             val locX = latitude
             val locY = longitude
@@ -228,7 +227,7 @@ class AddPlaceActivity : AppCompatActivity() {
         }
     }
 
-    private fun uriToBitmapRotate(uri: Uri?): Bitmap {
+    private fun uriToBitmap(uri: Uri?): Bitmap {
 //        val matrix =  Matrix()
 //        matrix.postRotate(90f) //사진이 90도 돌아서 들어가는 현상이 있어 정방향으로 돌려줌
 //        val rowBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)

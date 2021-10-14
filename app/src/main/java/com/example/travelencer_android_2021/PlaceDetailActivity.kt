@@ -152,7 +152,7 @@ class PlaceDetailActivity : AppCompatActivity() {
 
 
     // 프로필 사진 가져오기 - 민영님 코드
-    private fun getRecentPostUserProPic(uid : String, title: String, name: String) {
+    private fun getRecentPostUserProPic(uid : String, postId: String, title: String, name: String) {
         val proPicFile = this?.getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/prifile_img")!!
         if (!proPicFile.isDirectory) proPicFile.mkdir()
 
@@ -161,7 +161,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                 .addOnSuccessListener { uri ->
 
                     // TODO : 프로필사진 더미데이터 넣어뒀음
-                    recentPostList.add(ModelPlaceDetailRecentPost(title, name, uri))
+                    recentPostList.add(ModelPlaceDetailRecentPost(postId, title, name, uri))
 //                Log.d("로그 RecentPost", "postData : ${postData}")
                     Log.d("로그 RecentPost", "noti")
                     recentPostAdapter.notifyDataSetChanged()
@@ -169,7 +169,7 @@ class PlaceDetailActivity : AppCompatActivity() {
     }
 
 
-    private fun getRecentPostUser(uid: String, title: String): String {
+    private fun getRecentPostUser(uid: String, postId: String, title: String): String {
         var name :String = ""
         val document = firebase.collection("userT")
                 .whereEqualTo("uid", uid)
@@ -181,7 +181,7 @@ class PlaceDetailActivity : AppCompatActivity() {
 
 
                 // TODO : 프로필사진 가져오기
-                getRecentPostUserProPic(uid, title, name)
+                getRecentPostUserProPic(postId, uid, title, name)
 //
 //                // TODO : 프로필사진 더미데이터 넣어뒀음
 //                recentPostList.add(ModelPlaceDetailRecentPost(title, name, R.drawable.dummy_haewoojae))
@@ -207,11 +207,12 @@ class PlaceDetailActivity : AppCompatActivity() {
             for (doc in documents){
                 Log.d("로그 RecentPostData", "doc : ${doc}")
                 val map = doc.data as HashMap<String, Any>
+                val postId : String = map["postId"] as String
                 val title : String = map["title"] as String
                 val postUid : String = map["uid"] as String
 
 //                val postUserName = getRecentPostUser(postUid)
-                getRecentPostUser(postUid, title)
+                getRecentPostUser(postUid, postId, title)
 
 //                postData = arrayListOf(title, postUserName)
 //

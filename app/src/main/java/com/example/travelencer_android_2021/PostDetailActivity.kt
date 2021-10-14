@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
@@ -13,18 +14,18 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.adapter.PostDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PostDetailPlaceAdapter
+import com.example.travelencer_android_2021.api.URLtoBitmapTask
 import com.example.travelencer_android_2021.course.CourseMaker
 import com.example.travelencer_android_2021.databinding.ActivityPostDetailBinding
-import com.example.travelencer_android_2021.model.ModelFeedPhoto
-import com.example.travelencer_android_2021.model.ModelPostDetailPlace
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import kotlinx.android.synthetic.main.activity_feed_course_detail.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.net.URL
+
 private const val TAG = "mmm"
 
 
@@ -226,7 +227,7 @@ class PostDetailActivity : AppCompatActivity() {
                     for (document in result) {
                         val map = document.data as HashMap<String, Any>
                         val postPhoto : String = map["postPhoto"] as String
-                        getPhotoUri(postPhoto)
+                        getPhotoBitmap(postPhoto)
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -234,11 +235,15 @@ class PostDetailActivity : AppCompatActivity() {
                 }
     }
 
-    // 사진 uri 가져오기
-    private fun getPhotoUri(postPhoto : String) {
+    // 사진 url 가져와서 Bitmap으로 변환해 넣기
+    private fun getPhotoBitmap(postPhoto : String) {
         storageRef.child("post/$postPhoto").downloadUrl
-                .addOnSuccessListener { uri ->
-                    postDetailPhotoAdapter.photoListUri.add(uri)
+                .addOnSuccessListener { url ->
+                    val bitmapTask = URLtoBitmapTask().apply {
+                        taskUrl = URL("${url}")
+                    }
+                    var bitmap: Bitmap = bitmapTask.execute().get()
+                    postDetailPhotoAdapter.photoListBitmap.add(bitmap)
                     postDetailPhotoAdapter.notifyDataSetChanged()
                 }
     }

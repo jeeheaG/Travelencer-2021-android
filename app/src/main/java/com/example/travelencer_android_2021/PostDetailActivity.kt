@@ -66,12 +66,12 @@ class PostDetailActivity : AppCompatActivity() {
             // 프로필 설정
             setProPic(uid)
 
-//            // 사진 정보 가져오기
-//            val postPhotoList = getPlacePhoto(postId)
-//            Log.d(TAG, postPhotoList.toString())
-//            // 사진 uri 가져오기
-//            val postPhotoUri = getPhotoUri(postPhotoList)
-//            Log.d(TAG, postPhotoUri.toString())
+            // 사진 정보 가져오기
+            val postPhotoList = getPlacePhoto(postId)
+            Log.d(TAG, postPhotoList.toString())
+            // 사진 uri 가져오기
+            val postPhotoUri = getPhotoUri(postPhotoList)
+            Log.d(TAG, postPhotoUri.toString())
         }
 
         firestore?.collection("userT").document(auth.currentUser!!.uid).get()
@@ -173,9 +173,11 @@ class PostDetailActivity : AppCompatActivity() {
                         val title : String = map["title"] as String
                         val startDate : String = map["startDate"] as String
                         val endDate : String = map["endDate"] as String
-                        val updateDate : String = map["updateDate"] as String
+                        var updateDate : String = map["updateDate"] as String
                         val content : String = map["content"] as String
-
+                        updateDate = updateDate.slice(IntRange(0,3))+"."+
+                                updateDate.slice(IntRange(4,5))+"."+
+                                updateDate.slice(IntRange(6,7))
                         // 제목
                         binding.tvPostDetailTitle.text = title
                         // 여행 일자

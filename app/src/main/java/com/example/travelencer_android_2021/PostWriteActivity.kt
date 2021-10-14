@@ -53,14 +53,16 @@ class PostWriteActivity : AppCompatActivity() {
     lateinit var courseName : ArrayList<String>
     lateinit var courseDate : ArrayList<String>
     var placeIdList = arrayListOf<String>()
+    var placeNameList = arrayListOf<String>()
+    var placeLocList = arrayListOf<String>()
     //TODO: 이름, 위치, 카테고리 리스트로 받아서 각자 저장하고 컬렉션에 저장하기
+    //일단 카테고리는 디폴트 관광지로 표시하기
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
-        //placeIdList.clear()
 
         val view = binding.root
         setContentView(view)
@@ -127,6 +129,8 @@ class PostWriteActivity : AppCompatActivity() {
                     val placeLoc = data.getStringExtra(codePlaceLoc).toString()
                     val placeId = data.getStringExtra("placeId").toString()
                     placeIdList.add(placeId) //선택 장소 리스트에 추가
+                    placeNameList.add(placeName)
+                    placeLocList.add(placeLoc)
                     placeList.add(ModelCourseSpot(placeName, placeLoc))
                     binding.rvPostWritePlaceList.adapter = PostWritePlaceAdapter(placeList, this)
                 }
@@ -167,6 +171,8 @@ class PostWriteActivity : AppCompatActivity() {
             for (i in (0 until placeIdList.size)){
                 ModelPostPlaceT.postId = auth?.currentUser?.uid + "_" + timeStamp
                 ModelPostPlaceT.placeId = placeIdList[i]
+                ModelPostPlaceT.placeName = placeNameList[i]
+                ModelPostPlaceT.placeLoc = placeLocList[i]
                 //db 업로드
                 firestore?.collection("postPlaceT").document().set(ModelPostPlaceT)
             }

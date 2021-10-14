@@ -58,7 +58,7 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
             icon.setImageResource(post.icon!!)
             placeName.text = post.placeName
             location.text = post.location
-            writing.text = post.writing?.substring(0,42).plus("...")
+            writing.text = post.writing
 
             rvPhoto.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
             val postBlogPhotoAdapter = PostBlogPhotoAdapter(post.photoList!!, mContext)

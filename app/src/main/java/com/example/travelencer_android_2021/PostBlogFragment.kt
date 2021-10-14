@@ -1,10 +1,15 @@
 package com.example.travelencer_android_2021
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
+import android.net.Uri
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.adapter.FeedAdapter
 import com.example.travelencer_android_2021.adapter.PostBlogAdapter
+import com.example.travelencer_android_2021.api.URLtoBitmapTask
 import com.example.travelencer_android_2021.databinding.FragmentPostBlogBinding
 import com.example.travelencer_android_2021.model.ModelPostBlog
 import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
@@ -29,6 +35,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import kotlinx.android.synthetic.main.fragment_post_blog.view.*
+import java.net.URL
 
 //뷰바인딩 사용
 
@@ -186,8 +193,15 @@ class PostBlogFragment : Fragment() {
                         val map = document.data as HashMap<String, Any>
                         val postPhoto : String = map["postPhoto"] as String
                         storageRef.child("post/$postPhoto").downloadUrl
-                                .addOnSuccessListener { uri ->
-                                    photoList.add(ModelPostBlogPhoto(uri))
+                                .addOnSuccessListener { url ->
+                                    Log.d("로그--", "uri ${url}")
+                                    val bitmapTask = URLtoBitmapTask().apply {
+                                        taskUrl = URL("${url}")
+                                    }
+                                    var bitmap: Bitmap = bitmapTask.execute().get()
+                                    photoList.add(ModelPostBlogPhoto(bitmap))
+//                                    photoList.add(ModelPostBlogPhoto(uri))
+                                    postAdapter.notifyDataSetChanged()
                                 }
                     }
                 }.apply { return photoList }

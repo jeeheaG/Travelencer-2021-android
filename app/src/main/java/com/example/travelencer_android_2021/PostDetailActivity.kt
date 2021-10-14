@@ -80,7 +80,26 @@ class PostDetailActivity : AppCompatActivity() {
             getPlace(postId)
         }
 
-
+//        firestore?.collection("userT").document(auth.currentUser!!.uid).get()
+//            ?.addOnSuccessListener { doc->
+//                binding.tvPostDetailNickname.text = doc?.data?.get("name").toString()
+//            }
+//        // 이미지 다운로드해서 가져오기
+//        var storageRef = storage?.reference?.child("user")
+//            ?.child("proPic_${auth.currentUser!!.uid}")
+//        storageRef?.downloadUrl
+//            ?.addOnSuccessListener { uri ->
+//                Glide.with(applicationContext)
+//                    .load(uri)
+//                    .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+//                    .apply(RequestOptions().centerCrop())
+//                    .into(binding.ivPostDetailProfileImg)
+//            }
+//        //TODO: 기타 정보 불러오기
+//        val placeList = arrayListOf(
+//                ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시"),
+//                ModelPostDetailPlace(R.drawable.ic_food, "삼겹구이", "경기도 용인시"),
+//        )
 
         binding.rvPostDetailPlaceList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvPostDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

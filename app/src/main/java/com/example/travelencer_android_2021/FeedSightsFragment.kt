@@ -12,7 +12,7 @@ import com.example.travelencer_android_2021.databinding.FragmentFeedSightsBindin
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 여행 피드 - 관광지 탭
-class FeedSightsFragment : Fragment() {
+class FeedSightsFragment(val keyword : String) : Fragment() {
     private var _binding : FragmentFeedSightsBinding? = null
     private val binding get() = _binding!!
 

@@ -12,7 +12,7 @@ import com.example.travelencer_android_2021.databinding.FragmentFeedFoodBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 
 // 여행 피드 - 맛집 탭
-class FeedFoodFragment : Fragment() {
+class FeedFoodFragment(val keyword : String) : Fragment() {
     private lateinit var binding : FragmentFeedFoodBinding
 
     override fun onCreateView(

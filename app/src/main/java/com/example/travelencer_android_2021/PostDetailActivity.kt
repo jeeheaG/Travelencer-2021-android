@@ -3,7 +3,6 @@ package com.example.travelencer_android_2021
 import android.content.Intent
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,7 +15,7 @@ import com.example.travelencer_android_2021.adapter.PostDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PostDetailPlaceAdapter
 import com.example.travelencer_android_2021.course.CourseMaker
 import com.example.travelencer_android_2021.databinding.ActivityPostDetailBinding
-import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
+import com.example.travelencer_android_2021.model.ModelFeedPhoto
 import com.example.travelencer_android_2021.model.ModelPostDetailPlace
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -36,10 +35,11 @@ class PostDetailActivity : AppCompatActivity() {
 
     private lateinit var storage : FirebaseStorage
     private lateinit var storageRef : StorageReference
+    private lateinit var postDetailPhotoAdapter : PostDetailPhotoAdapter
+    private lateinit var postDetailPlaceAdapter : PostDetailPlaceAdapter
 
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
-
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +50,13 @@ class PostDetailActivity : AppCompatActivity() {
 
         storage = Firebase.storage
         storageRef = storage.reference
+
+        // PostDetailPhotoAdapter 어댑터 달기
+        postDetailPhotoAdapter = PostDetailPhotoAdapter(applicationContext)
+        binding.rvPostDetailPhotoList.adapter = postDetailPhotoAdapter
+        // PostDetailPlaceAdapter 어댑터 달기
+        postDetailPlaceAdapter = PostDetailPlaceAdapter()
+        binding.rvPostDetailPlaceList.adapter = postDetailPlaceAdapter
 
         val postId = intent.getStringExtra("postId") ?: "오류"
         val uid = intent.getStringExtra("uid").toString()
@@ -66,43 +73,33 @@ class PostDetailActivity : AppCompatActivity() {
             // 프로필 설정
             setProPic(uid)
 
-            // 사진 정보 가져오기
-            val postPhotoList = getPlacePhoto(postId)
-            Log.d(TAG, postPhotoList.toString())
-            // 사진 uri 가져오기
-            val postPhotoUri = getPhotoUri(postPhotoList)
-            Log.d(TAG, postPhotoUri.toString())
+            // 사진 정보 가져오기 + 설정
+            getPlacePhoto(postId)
+
+            // 장소 정보 가져오기 + 설정
+            getPlace(postId)
         }
 
-        firestore?.collection("userT").document(auth.currentUser!!.uid).get()
-            ?.addOnSuccessListener { doc->
-                binding.tvPostDetailNickname.text = doc?.data?.get("name").toString()
-            }
-        // 이미지 다운로드해서 가져오기
-        var storageRef = storage?.reference?.child("user")
-            ?.child("proPic_${auth.currentUser!!.uid}")
-        storageRef?.downloadUrl
-            ?.addOnSuccessListener { uri ->
-                Glide.with(applicationContext)
-                    .load(uri)
-                    .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
-                    .apply(RequestOptions().centerCrop())
-                    .into(binding.ivPostDetailProfileImg)
-            }
-        //TODO: 기타 정보 불러오기
-        val placeList = arrayListOf(
-                ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시"),
-                ModelPostDetailPlace(R.drawable.ic_food, "삼겹구이", "경기도 용인시"),
-                ModelPostDetailPlace(R.drawable.ic_location_yellow, "수원 화성", "경기도 수원시"),
-                ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시")
-        )
-        val dummyImageUrl = ""
-        val photoList = arrayListOf(
-                ModelCasePhotoOnly(dummyImageUrl),
-                ModelCasePhotoOnly(dummyImageUrl),
-                ModelCasePhotoOnly(dummyImageUrl),
-                ModelCasePhotoOnly(dummyImageUrl)
-        )
+//        firestore?.collection("userT").document(auth.currentUser!!.uid).get()
+//            ?.addOnSuccessListener { doc->
+//                binding.tvPostDetailNickname.text = doc?.data?.get("name").toString()
+//            }
+//        // 이미지 다운로드해서 가져오기
+//        var storageRef = storage?.reference?.child("user")
+//            ?.child("proPic_${auth.currentUser!!.uid}")
+//        storageRef?.downloadUrl
+//            ?.addOnSuccessListener { uri ->
+//                Glide.with(applicationContext)
+//                    .load(uri)
+//                    .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
+//                    .apply(RequestOptions().centerCrop())
+//                    .into(binding.ivPostDetailProfileImg)
+//            }
+//        //TODO: 기타 정보 불러오기
+//        val placeList = arrayListOf(
+//                ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시"),
+//                ModelPostDetailPlace(R.drawable.ic_food, "삼겹구이", "경기도 용인시"),
+//        )
 
         binding.rvPostDetailPlaceList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvPostDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -110,8 +107,7 @@ class PostDetailActivity : AppCompatActivity() {
         binding.rvPostDetailPlaceList.setHasFixedSize(true)
         binding.rvPostDetailPhotoList.setHasFixedSize(true)
 
-        binding.rvPostDetailPlaceList.adapter = PostDetailPlaceAdapter(placeList)
-        binding.rvPostDetailPhotoList.adapter = PostDetailPhotoAdapter(photoList, this)
+//        binding.rvPostDetailPlaceList.adapter = PostDetailPlaceAdapter(placeList)
 
         binding.ivPostDetailProfileImg.background = ShapeDrawable(OvalShape())
         binding.ivPostDetailProfileImg.clipToOutline = true //안드로이드 버전 5 롤리팝 이상에서만 적용
@@ -220,11 +216,7 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     // 사진 정보 가져오기 : 사진 이름 반환
-    private fun getPlacePhoto(postId : String) : ArrayList<String> {
-        val postPhotoList = ArrayList<String>()
-
-        Log.d(TAG, postId)
-
+    private fun getPlacePhoto(postId : String) {
         // 사진 이름 가져오기
         val db = Firebase.firestore
         db.collection("postPhotoT")
@@ -234,25 +226,44 @@ class PostDetailActivity : AppCompatActivity() {
                     for (document in result) {
                         val map = document.data as HashMap<String, Any>
                         val postPhoto : String = map["postPhoto"] as String
-                        Log.d(TAG + "하아", postPhoto)
-                        postPhotoList.add(postPhoto)
+                        getPhotoUri(postPhoto)
                     }
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "getPlacePhoto Error getting documents: ", exception)
-                }.apply { return postPhotoList }
+                }
     }
 
     // 사진 uri 가져오기
-    private fun getPhotoUri(postPhotoList : ArrayList<String>) : ArrayList<String> {
-        val postPhotoUri = ArrayList<String>()
+    private fun getPhotoUri(postPhoto : String) {
+        storageRef.child("post/$postPhoto").downloadUrl
+                .addOnSuccessListener { uri ->
+                    postDetailPhotoAdapter.photoListUri.add(uri)
+                    postDetailPhotoAdapter.notifyDataSetChanged()
+                }
+    }
 
-        for (postPhoto in postPhotoList) {
-            storageRef.child("post/$postPhoto").downloadUrl
-                    .addOnSuccessListener { uri ->
-                        postPhotoUri.add(uri.toString())
+    // 장소 정보 가져오기 + 설정
+    private fun getPlace(postId : String) {
+        // 사진 이름 가져오기
+        val db = Firebase.firestore
+        db.collection("postPlaceT")
+                .whereEqualTo("postId", postId)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+//                        val map = document.data as HashMap<String, Any>
+//                        val icon : Long = map["placeCategory"] as Long
+//                        val name: String = map["placeName"] as String
+//                        val location: String = map["placeLoc"] as String
+//                        if (icon == 1L) postDetailPlaceAdapter.placeList.add(ModelPostDetailPlace(R.drawable.ic_location_yellow, name, location))
+//                        else if (icon == 2L) postDetailPlaceAdapter.placeList.add(ModelPostDetailPlace(R.drawable.ic_food, name, location))
+//                        else continue
+//                        postDetailPlaceAdapter.notifyDataSetChanged()
                     }
-        }
-        return postPhotoUri
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(TAG, "getPlacePhoto Error getting documents: ", exception)
+                }
     }
 }

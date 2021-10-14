@@ -73,6 +73,7 @@ class PostBlogFragment : Fragment() {
         firestore?.collection("postT").whereEqualTo("uid",auth.currentUser!!.uid).get()
                 .addOnSuccessListener { docs->
                     for(doc in docs){
+                        ModelPostBlog.uid = auth.currentUser!!.uid // 일단은 현재 유저만 보여줌?
                         ModelPostBlog.title = doc.data?.get("title").toString()
                         var updateDate = doc.data?.get("updateDate").toString()
                         updateDate = updateDate.slice(IntRange(0,3))+"."+
@@ -82,6 +83,7 @@ class PostBlogFragment : Fragment() {
                         ModelPostBlog.icon = R.drawable.ic_location_yellow
                         ModelPostBlog.writing = doc.data?.get("content").toString()
                         var postId = doc.data?.get("postId").toString()
+                        ModelPostBlog.postId = postId
                         firestore.collection("postPlaceT").whereEqualTo("postId",postId).get()
                                 .addOnSuccessListener { docs2->
                                     var placeName = ""
@@ -95,19 +97,21 @@ class PostBlogFragment : Fragment() {
                                     }
                                     firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
                                             .addOnSuccessListener { docs3->
+                                                photoList.clear()
                                                 for (doc3 in docs3){
-                                                    storageRef?.child("post")?.child(doc3.data?.get("postPhoto").toString())?.downloadUrl
+                                                    storage?.reference?.child("post")?.child(doc3.data?.get("postPhoto").toString())?.downloadUrl
                                                             ?.addOnSuccessListener { uri->
                                                                 photoList.add(ModelPostBlogPhoto(uri))
-
+                                                                postAdapter.notifyDataSetChanged()
                                                             }
                                                     //스토리지 호출 uri로 바꾸기
 
                                                 }
-                                                postAdapter.notifyDataSetChanged()
+
                                                 //사진 리스트 어뎁터 연결
                                                 ModelPostBlog.photoList = photoList
                                                 postList.add(ModelPostBlog)
+                                                postAdapter.notifyDataSetChanged()
 
                                             }
 

@@ -33,8 +33,13 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
         holder.bind(postList[position], mContext)
 
         holder.itemView.setOnClickListener{
-            val intent = Intent(mContext, PostDetailActivity::class.java)
-            mContext.startActivity(intent)
+            /*val intent = Intent(mContext, PostDetailActivity::class.java)
+            mContext.startActivity(intent)*/
+            Intent(mContext, PostDetailActivity::class.java).apply {
+                putExtra("postId", postList[position].postId)
+                putExtra("uid", postList[position].uid)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }.run {mContext.startActivity(this)}
         }
     }
 
@@ -64,6 +69,7 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
             val postBlogPhotoAdapter = PostBlogPhotoAdapter(post.photoList!!, mContext)
             rvPhoto.adapter = postBlogPhotoAdapter
             rvPhoto.setHasFixedSize(true)
+            postBlogPhotoAdapter.notifyDataSetChanged()
         }
 
     }

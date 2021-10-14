@@ -23,7 +23,10 @@ import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 
@@ -32,7 +35,6 @@ import kotlinx.android.synthetic.main.fragment_post_blog.view.*
 class PostBlogFragment : Fragment() {
     private var _binding: FragmentPostBlogBinding? = null
     private val binding get() = _binding!!
-    var ModelPostBlog = ModelPostBlog()
     //var ModelPostBlogPhoto = ModelPostBlogPhoto()
     var auth = FirebaseAuth.getInstance()
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -41,14 +43,16 @@ class PostBlogFragment : Fragment() {
     var postList = arrayListOf<ModelPostBlog>()
     private val tabElement = arrayListOf("사진", "코스", "맛집", "관광지")
     private lateinit var postAdapter : PostBlogAdapter
+    private lateinit var storageRef : StorageReference
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
         postAdapter = PostBlogAdapter(postList, activity?.applicationContext!!)
+        storageRef = storage!!.reference
 
-        firestore?.collection("userT")?.document(auth.currentUser!!.uid).get()
+        firestore.collection("userT").document(auth.currentUser!!.uid).get()
                 .addOnSuccessListener { doc->
                     binding.tvPostBlogNickname.text = doc.data?.get("name").toString()
                     val info = doc.data?.get("info")
@@ -57,7 +61,7 @@ class PostBlogFragment : Fragment() {
                     }
                 }
         // 이미지 다운로드해서 가져오기
-        var storageRef = storage?.reference?.child("user")
+        val storageRef = storage?.reference?.child("user")
                 ?.child("proPic_${auth.currentUser!!.uid}")
         storageRef?.downloadUrl
                 ?.addOnSuccessListener { uri ->
@@ -70,67 +74,39 @@ class PostBlogFragment : Fragment() {
         //TODO 어뎁터 선언후 밑에서 notify 어쩌구 해주기
 
         //uid별 작성 게시글 불러오기
-        firestore?.collection("postT").whereEqualTo("uid",auth.currentUser!!.uid).get()
+        var model : ModelPostBlog
+        firestore.collection("postT").whereEqualTo("uid",auth.currentUser!!.uid).get()
                 .addOnSuccessListener { docs->
                     for(doc in docs){
-                        ModelPostBlog.uid = auth.currentUser!!.uid // 일단은 현재 유저만 보여줌?
-                        ModelPostBlog.title = doc.data?.get("title").toString()
-                        var updateDate = doc.data?.get("updateDate").toString()
-                        updateDate = updateDate.slice(IntRange(0,3))+"."+
-                                updateDate.slice(IntRange(4,5))+"."+
-                                updateDate.slice(IntRange(6,7))
-                        ModelPostBlog.date = updateDate
-                        ModelPostBlog.icon = R.drawable.ic_location_yellow
-                        ModelPostBlog.writing = doc.data?.get("content").toString()
-                        var postId = doc.data?.get("postId").toString()
-                        ModelPostBlog.postId = postId
+                        val uid = auth.currentUser!!.uid // 일단은 현재 유저만 보여줌?
+                        val title = doc.data.get("title").toString()
+                        val temp = doc.data.get("updateDate").toString()
+                        val updateDate = temp.slice(IntRange(0,3))+"."+
+                                temp.slice(IntRange(4,5))+"."+
+                                temp.slice(IntRange(6,7))
+                        val icon = R.drawable.ic_location_yellow
+                        val writing = doc.data.get("content").toString()
+                        val postId = doc.data.get("postId").toString()
+                        var placeName = ""
+                        var location = ""
                         firestore.collection("postPlaceT").whereEqualTo("postId",postId).get()
                                 .addOnSuccessListener { docs2->
-                                    var placeName = ""
-                                    var placeLoc = ""
                                     for(doc2 in docs2){
                                         placeName = doc2.data.get("placeName").toString()
-                                        placeLoc = doc2.data.get("placeLoc").toString()
-                                        ModelPostBlog.placeName = placeName
-                                        ModelPostBlog.location = placeLoc
+                                        location = doc2.data.get("placeLoc").toString()
                                         break
                                     }
-                                    firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
-                                            .addOnSuccessListener { docs3->
-                                                photoList.clear()
-                                                for (doc3 in docs3){
-                                                    storage?.reference?.child("post")?.child(doc3.data?.get("postPhoto").toString())?.downloadUrl
-                                                            ?.addOnSuccessListener { uri->
-                                                                photoList.add(ModelPostBlogPhoto(uri))
-                                                                postAdapter.notifyDataSetChanged()
-                                                            }
-                                                    //스토리지 호출 uri로 바꾸기
-
-                                                }
-
-                                                //사진 리스트 어뎁터 연결
-                                                ModelPostBlog.photoList = photoList
-                                                postList.add(ModelPostBlog)
-                                                postAdapter.notifyDataSetChanged()
-
-                                            }
+                                    // 사진 정보 가져오기 + 설정
+                                    photoList = getPlacePhoto(postId)
+                                    model = ModelPostBlog(postId, uid, title, updateDate, icon, placeName, location, writing, photoList)
+                                    postList.add(model)
+                                    postAdapter.notifyDataSetChanged()
 
                                     //TODO: 사진 안뜨는 거 고치기
                                 }
 
                     }
                 }
-
-        /*photoList = arrayListOf(
-*//*                ModelPostBlogPhoto(R.drawable.dummy_haewoojae),
-                ModelPostBlogPhoto(R.drawable.dummy_hwasung)*//*
-
-        )*/
-
-        /*postList = arrayListOf(
-                ModelPostBlog("날 좋은 날 화성 나들이", "2021.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList),
-                ModelPostBlog("해우재해우재", "2020.06.10", R.drawable.ic_location_yellow, "화성행궁","경기도 수원시","오늘은 수원화성에 갔다. 수원 화성의 수원의 대표적인 관광지로 자리 잡고 있는 어쩌구는 이렇게 막 길게 마구잡이로 써도 잘 잘려야 한다.", photoList)
-        )*/
 
         // 프로필 먼저 보이기
         binding.postViewPager.visibility = View.INVISIBLE
@@ -194,6 +170,27 @@ class PostBlogFragment : Fragment() {
         }
 
         return view
+    }
+
+    // 사진 정보 가져오기 : 사진 이름 반환
+    private fun getPlacePhoto(postId : String) : ArrayList<ModelPostBlogPhoto> {
+        val photoList = ArrayList<ModelPostBlogPhoto>()
+
+        // 사진 이름 가져오기
+        val db = Firebase.firestore
+        db.collection("postPhotoT")
+                .whereEqualTo("postId", postId)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val map = document.data as HashMap<String, Any>
+                        val postPhoto : String = map["postPhoto"] as String
+                        storageRef.child("post/$postPhoto").downloadUrl
+                                .addOnSuccessListener { uri ->
+                                    photoList.add(ModelPostBlogPhoto(uri))
+                                }
+                    }
+                }.apply { return photoList }
     }
 
     override fun onDestroyView() {

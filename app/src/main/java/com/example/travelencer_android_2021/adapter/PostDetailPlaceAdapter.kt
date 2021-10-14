@@ -19,7 +19,7 @@ class PostDetailPlaceAdapter(private val placeList: ArrayList<ModelPostDetailPla
     }
 
     override fun onBindViewHolder(holder: PostDetailPlaceAdapter.CustomViewHolder, position: Int) {
-        holder.icon.setImageResource(placeList[position].icon)
+        holder.icon.setImageResource(placeList[position].icon!!)
         holder.name.text = placeList[position].name
         holder.location.text = placeList[position].location
     }

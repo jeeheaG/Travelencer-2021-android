@@ -12,11 +12,15 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.travelencer_android_2021.adapter.PostBlogAdapter
+import com.example.travelencer_android_2021.adapter.PostBlogPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PostDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PostDetailPlaceAdapter
 import com.example.travelencer_android_2021.course.CourseMaker
 import com.example.travelencer_android_2021.databinding.ActivityPostDetailBinding
 import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
+import com.example.travelencer_android_2021.model.ModelPostBlog
+import com.example.travelencer_android_2021.model.ModelPostBlogPhoto
 import com.example.travelencer_android_2021.model.ModelPostDetailPlace
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -40,7 +44,10 @@ class PostDetailActivity : AppCompatActivity() {
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
 
-
+    var photoList = arrayListOf<ModelPostBlogPhoto>()
+    var placeList = arrayListOf<ModelPostDetailPlace>()
+    //var ModelPostDetailPlace = ModelPostDetailPlace()
+    private lateinit var PostDetailPhotoAdapter : PostDetailPhotoAdapter
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +55,7 @@ class PostDetailActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        PostDetailPhotoAdapter = PostDetailPhotoAdapter(photoList,this)
         storage = Firebase.storage
         storageRef = storage.reference
 
@@ -66,43 +74,55 @@ class PostDetailActivity : AppCompatActivity() {
             // 프로필 설정
             setProPic(uid)
 
-            // 사진 정보 가져오기
+            /*// 사진 정보 가져오기
             val postPhotoList = getPlacePhoto(postId)
             Log.d(TAG, postPhotoList.toString())
             // 사진 uri 가져오기
             val postPhotoUri = getPhotoUri(postPhotoList)
-            Log.d(TAG, postPhotoUri.toString())
+            Log.d(TAG, postPhotoUri.toString())*/
         }
 
-        firestore?.collection("userT").document(auth.currentUser!!.uid).get()
-            ?.addOnSuccessListener { doc->
-                binding.tvPostDetailNickname.text = doc?.data?.get("name").toString()
-            }
-        // 이미지 다운로드해서 가져오기
-        var storageRef = storage?.reference?.child("user")
-            ?.child("proPic_${auth.currentUser!!.uid}")
-        storageRef?.downloadUrl
-            ?.addOnSuccessListener { uri ->
-                Glide.with(applicationContext)
-                    .load(uri)
-                    .error(R.drawable.ic_user_gray)                  // 오류 시 이미지
-                    .apply(RequestOptions().centerCrop())
-                    .into(binding.ivPostDetailProfileImg)
-            }
+
         //TODO: 기타 정보 불러오기
         val placeList = arrayListOf(
-                ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시"),
-                ModelPostDetailPlace(R.drawable.ic_food, "삼겹구이", "경기도 용인시"),
                 ModelPostDetailPlace(R.drawable.ic_location_yellow, "수원 화성", "경기도 수원시"),
                 ModelPostDetailPlace(R.drawable.ic_location_yellow, "해우재", "경기도 수원시")
         )
-        val dummyImageUrl = ""
+        /*
+        val dummyImageUrl = Uri.parse("https://postfiles.pstatic.net/MjAyMTEwMTRfNDYg/MDAxNjM0MjE3MzA4MjUz.r0l1GOscNjIqf295t0nz5tzKMlzKXy5VoZWMsBI1Ev0g.wSWQDM7JRdxciFe73vRkTwOdx06AOKxM40bLkRXflTkg.JPEG.sewon225/dummy_haewoojae.jpg?type=w773")
         val photoList = arrayListOf(
-                ModelCasePhotoOnly(dummyImageUrl),
-                ModelCasePhotoOnly(dummyImageUrl),
-                ModelCasePhotoOnly(dummyImageUrl),
-                ModelCasePhotoOnly(dummyImageUrl)
-        )
+                ModelPostBlogPhoto(dummyImageUrl)
+
+        )*/
+        //uid별 작성 게시글 불러오기
+        firestore?.collection("postT").whereEqualTo("uid",uid).get()
+                .addOnSuccessListener { docs->
+                    for(doc in docs){
+                        var postId = doc.data?.get("postId").toString()
+
+                        firestore.collection("postPhotoT").whereEqualTo("postId",postId).get()
+                                .addOnSuccessListener { docs3->
+                                    photoList.clear()
+                                    for (doc3 in docs3){
+                                        storage?.reference?.child("post")?.child(doc3.data?.get("postPhoto").toString())?.downloadUrl
+                                                ?.addOnSuccessListener { uri->
+                                                    photoList.add(ModelPostBlogPhoto(uri))
+                                                    PostDetailPhotoAdapter.notifyDataSetChanged()
+                                                }
+                                        //스토리지 호출 uri로 바꾸기
+
+                                    }
+
+                                    //사진 리스트 어뎁터 연결
+                                    /*ModelPostBlog.photoList = photoList
+                                    postList.add(ModelPostBlog)
+                                    postAdapter.notifyDataSetChanged()*/
+
+
+                                }
+
+                    }
+                }
 
         binding.rvPostDetailPlaceList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvPostDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -111,7 +131,7 @@ class PostDetailActivity : AppCompatActivity() {
         binding.rvPostDetailPhotoList.setHasFixedSize(true)
 
         binding.rvPostDetailPlaceList.adapter = PostDetailPlaceAdapter(placeList)
-        binding.rvPostDetailPhotoList.adapter = PostDetailPhotoAdapter(photoList, this)
+        binding.rvPostDetailPhotoList.adapter = PostDetailPhotoAdapter//PostDetailPhotoAdapter(photoList, this)
 
         binding.ivPostDetailProfileImg.background = ShapeDrawable(OvalShape())
         binding.ivPostDetailProfileImg.clipToOutline = true //안드로이드 버전 5 롤리팝 이상에서만 적용

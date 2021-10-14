@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,7 @@ class PostDetailPhotoAdapter(private val photoList: ArrayList<ModelPostBlogPhoto
     }
 
     override fun getItemCount(): Int {
-        return photoList.size
+        return photoListUri.size
     }
 
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

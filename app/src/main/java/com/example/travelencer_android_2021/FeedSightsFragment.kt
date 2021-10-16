@@ -67,9 +67,6 @@ class FeedSightsFragment(val keyword : String) : Fragment() {
                 Log.w(TAG, "FeedFoodFragment Error getting documents: ", exception)
             }
 
-
-        //feedSightsAdapter.items.add(ModelCourseSpot("방화수류정", "수원시 팔달구"))
-
         return binding.root
     }
 

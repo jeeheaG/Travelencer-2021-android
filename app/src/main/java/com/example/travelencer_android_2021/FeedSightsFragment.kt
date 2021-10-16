@@ -48,7 +48,7 @@ class FeedSightsFragment(val keyword : String) : Fragment() {
                     // content에 keyword 들어가는지 확인
                     val content1 : String = map["placeName"] as String
                     val content2 : String = map["placeLoc"] as String
-                    // keyword 들어가면 feedPhototAdapter에 추가
+                    // keyword 들어가면 feedSightsAdapter에 추가
                     if (content1.contains(keyword) || content2.contains(keyword)) {
                         val placeName : String = map["placeName"] as String
                         val placeLoc : String = map["placeLoc"] as String
@@ -64,7 +64,7 @@ class FeedSightsFragment(val keyword : String) : Fragment() {
                 }
             }
             .addOnFailureListener { exception ->
-                Log.w(TAG, "FeedFoodFragment Error getting documents: ", exception)
+                Log.w(TAG, "FeedSightsFragment Error getting documents: ", exception)
             }
 
         return binding.root

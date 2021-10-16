@@ -1,6 +1,7 @@
 package com.example.travelencer_android_2021
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelencer_android_2021.adapter.FeedSightsAdapter
 import com.example.travelencer_android_2021.databinding.FragmentFeedSightsBinding
 import com.example.travelencer_android_2021.model.ModelCourseSpot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
+private const val TAG = "mmm"  //추가
 
 // 여행 피드 - 관광지 탭
 class FeedSightsFragment(val keyword : String) : Fragment() {
@@ -31,25 +36,41 @@ class FeedSightsFragment(val keyword : String) : Fragment() {
         // divider 추가
         binding.rcFeedSights.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedSightsAdapter.items.add(ModelCourseSpot("방화수류정", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("화성행궁", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("수원화성", "수원시 장안구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("만석공원", "수원시 장안구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("창룡문", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("해우재", "수원시 장안구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("광교 호수공원", "수원시 영통구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("효원공원월화뭔", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("플라잉 수원", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("수원화성박물관", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("장안문", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("수원 시립 아이파크 미술관", "수원시 팔달구"))
+        //추가
+        var db = Firebase.firestore
+        db.collection("postPlaceT")
+            .whereEqualTo("placeCategory", "1") //plcCategory가 1(관광지)인
+            .get()//모든 다큐먼트를 가져와라.
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    //장소명, 주소 띄우기 - plcName, plcAddress
+                    val map = document.data as HashMap<String, Any>
+                    // content에 keyword 들어가는지 확인
+                    val content1 : String = map["placeName"] as String
+                    val content2 : String = map["placeLoc"] as String
+                    // keyword 들어가면 feedSightsAdapter에 추가
+                    if (content1.contains(keyword) || content2.contains(keyword)) {
+                        val placeName : String = map["placeName"] as String
+                        val placeLoc : String = map["placeLoc"] as String
+
+                        if(!placeName.isEmpty()) {
+                            if (!placeLoc.isEmpty()) {
+                                feedSightsAdapter.items.add(ModelCourseSpot(placeName, placeLoc))
+                                feedSightsAdapter.notifyDataSetChanged()
+                            }
+                        }
+                    }
+                    else continue
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "FeedSightsFragment Error getting documents: ", exception)
+            }
 
         return binding.root
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

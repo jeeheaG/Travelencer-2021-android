@@ -41,13 +41,11 @@ class PostWriteActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
     var ModelPostT = ModelPostT()
-    var ModelPostPhotoT = ModelPostPhotoT()
     var ModelCourseT = ModelCourseT()
     var ModelPostPlaceT = ModelPostPlaceT()
     private var storage : FirebaseStorage? = null
     var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
-    var imgFileName = ""
     var photoList = arrayListOf<Uri>()
     var photoBitmapList = arrayListOf<Bitmap>()
     lateinit var courseName : ArrayList<String>
@@ -227,21 +225,18 @@ class PostWriteActivity : AppCompatActivity() {
 
 
         //사진 스토리지 등록 코드
-        fun photoUpload(content : String){
-            imgcnt = 0
-            for (uri in photoList){
-                imgFileName = "postImage_" + timeStamp + "_"+imgcnt+"_.jpg"
+        fun photoUpload(content : String, postId :String){
+            for ((imgcnt, uri) in photoList.withIndex()){
+                val imgFileName = "postImage_" + postId + "_"+imgcnt+"_.jpg"
                 val ref = FirebaseStorage.getInstance().getReference("/post/$imgFileName")
+                Log.d("사진111",imgFileName)
                 ref.putFile(uri).addOnSuccessListener {
                     ref.downloadUrl.addOnSuccessListener {
-                        it.toString()
-                        ModelPostPhotoT.postPhoto = imgFileName
-                        ModelPostPhotoT.postId = auth?.currentUser?.uid + "_" + timeStamp
-                        ModelPostPhotoT.content = content
-                        firestore.collection("postPhotoT").document()?.set(ModelPostPhotoT)
+                        val modelPostPhotoT = ModelPostPhotoT(postId,imgFileName,content)
+                        Log.d("사진222",imgFileName)
+                        firestore.collection("postPhotoT").document()?.set(modelPostPhotoT)
                     }
                 }
-                imgcnt ++
             }
         }
 
@@ -274,14 +269,15 @@ class PostWriteActivity : AppCompatActivity() {
         binding.btnPostWritePost.setOnClickListener {
             //게시글 테이블 업로드
             ModelPostT.uid = auth?.currentUser?.uid
-            ModelPostT.postId = auth?.currentUser?.uid + "_"+timeStamp
+            var postId = auth?.currentUser?.uid + "_"+timeStamp
+            ModelPostT.postId = postId
             ModelPostT.updateDate = timeStamp
             ModelPostT.title = binding.tvPostWriteTitle.text.toString()
             ModelPostT.startDate = binding.tvPostWriteStartDate.text.toString()
             ModelPostT.EndDate = binding.tvPostWriteEndDate.text.toString()
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
-            firestore?.collection("postT")?.document("${auth?.currentUser?.uid + "_"+timeStamp}")?.set(ModelPostT)
-            photoUpload(binding.tvPostWriteWriting.text.toString())
+            firestore?.collection("postT")?.document(postId)?.set(ModelPostT)
+            photoUpload(binding.tvPostWriteWriting.text.toString(),postId)
             courseUpload(courseName, courseDate)
             postPlaceUpload()
             val intent = Intent(this, PostDetailActivity::class.java)

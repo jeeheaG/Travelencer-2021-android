@@ -1,6 +1,8 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedSightsAdapter
 import com.example.travelencer_android_2021.model.ModelCourseSpot
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 // binding 인 됨...
 // 게시물 - 관광지 탭
@@ -31,11 +36,29 @@ class PostSightsFragment : Fragment() {
         // divider 추가
         rcFeedSights.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedSightsAdapter.items.add(ModelCourseSpot("수원화성", "수원시 장안구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("만석공원", "수원시 장안구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("창룡문", "수원시 팔달구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("해우재", "수원시 장안구"))
-        feedSightsAdapter.items.add(ModelCourseSpot("광교 호수공원", "수원시 영통구"))
+        val uid : String = (Firebase.auth.uid ?: activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getString("uid", "-1")) as String
+
+        val db = Firebase.firestore
+        db.collection("postPlaceT")
+                .whereEqualTo("placeCategory", "1") // 관굉지 : 1
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val map = document.data as HashMap<String, Any>
+                        // postId에 uid 들어가면 feedSightsAdapter 추가
+                        val postId : String = map["postId"] as String
+                        if (postId.contains(uid)) {
+                            val placeName : String = map["placeName"] as String
+                            val placeLoc : String = map["placeLoc"] as String
+
+                            if(!placeName.isEmpty() && !placeLoc.isEmpty()) {
+                                feedSightsAdapter.items.add(ModelCourseSpot(placeName, placeLoc))
+                                feedSightsAdapter.notifyDataSetChanged()
+                            }
+                        }
+                        else continue
+                    }
+                }
 
         return view
     }

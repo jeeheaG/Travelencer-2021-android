@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelencer_android_2021.adapter.FeedFoodAdapter
 import com.example.travelencer_android_2021.model.ModelCourseSpot
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 // 게시물 - 맛집 탭
 class PostFoodFragment : Fragment() {
@@ -29,15 +33,29 @@ class PostFoodFragment : Fragment() {
         // divider 추가
         rcFeedFood.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        feedFoodAdapter.items.add(ModelCourseSpot("지아니스나폴리", "수원시 영통구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("좋은 소식", "수원시 영통구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("이나경 송탄 부대찌개", "수원시 팔달구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("평장원", "수원시 팔달구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("을라메히꼬", "수원시 팔달구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("가보정1관", "수원시 팔달구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("슬리핑테이블", "수원시 팔달구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("우판 등심", "수원시 영통구"))
-        feedFoodAdapter.items.add(ModelCourseSpot("윤가 곰탕", "수원시 영통구"))
+        val uid : String = (Firebase.auth.uid ?: activity?.getSharedPreferences("uid", Context.MODE_PRIVATE)!!.getString("uid", "-1")) as String
+
+        val db = Firebase.firestore
+        db.collection("postPlaceT")
+                .whereEqualTo("placeCategory", "0") // 맛집 : 0
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val map = document.data as HashMap<String, Any>
+                        // postId에 uid 들어가면 feedFoodAdapter 추가
+                        val postId : String = map["postId"] as String
+                        if (postId.contains(uid)) {
+                            val placeName : String = map["placeName"] as String
+                            val placeLoc : String = map["placeLoc"] as String
+
+                            if(!placeName.isEmpty() && !placeLoc.isEmpty()) {
+                                feedFoodAdapter.items.add(ModelCourseSpot(placeName, placeLoc))
+                                feedFoodAdapter.notifyDataSetChanged()
+                            }
+                        }
+                        else continue
+                    }
+                }
 
         return view
     }

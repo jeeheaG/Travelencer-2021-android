@@ -65,7 +65,7 @@ class PlaceFilterFragment : Fragment() {
         // preantFragmentManager에 접근해서 현재 placeFilter 프래그먼트 remove, placeMain 프래그먼트 add
 
         binding.btnSearch.setOnClickListener {
-            Toast.makeText(activity, "btnSearch onClicked", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(activity, "btnSearch onClicked", Toast.LENGTH_SHORT).show()
 
             edit?.putBoolean(SP_PLACE_FILTERED, true)
             edit?.apply()

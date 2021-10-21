@@ -17,6 +17,7 @@ import com.example.travelencer_android_2021.adapter.PostDetailPlaceAdapter
 import com.example.travelencer_android_2021.api.URLtoBitmapTask
 import com.example.travelencer_android_2021.course.CourseMaker
 import com.example.travelencer_android_2021.databinding.ActivityPostDetailBinding
+import com.example.travelencer_android_2021.model.ModelPostDetailPlace
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -257,14 +258,16 @@ class PostDetailActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-//                        val map = document.data as HashMap<String, Any>
-//                        val icon : Long = map["placeCategory"] as Long
-//                        val name: String = map["placeName"] as String
-//                        val location: String = map["placeLoc"] as String
-//                        if (icon == 1L) postDetailPlaceAdapter.placeList.add(ModelPostDetailPlace(R.drawable.ic_location_yellow, name, location))
-//                        else if (icon == 2L) postDetailPlaceAdapter.placeList.add(ModelPostDetailPlace(R.drawable.ic_food, name, location))
-//                        else continue
-//                        postDetailPlaceAdapter.notifyDataSetChanged()
+                        val map = document.data as HashMap<String, Any>
+                        val icon : String = map["placeCategory"] as String
+                        val name: String = map["placeName"] as String
+                        val location: String = map["placeLoc"] as String
+                        Log.d(TAG, name)
+                        // 맛집 = 0, 관광지 = 1
+                        if (icon == "0") postDetailPlaceAdapter.placeList.add(ModelPostDetailPlace(R.drawable.ic_food, name, location))
+                        else if (icon == "1") postDetailPlaceAdapter.placeList.add(ModelPostDetailPlace(R.drawable.ic_location_yellow, name, location))
+                        else continue
+                        postDetailPlaceAdapter.notifyDataSetChanged()
                     }
                 }
                 .addOnFailureListener { exception ->

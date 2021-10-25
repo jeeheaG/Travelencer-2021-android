@@ -156,7 +156,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         //북마크 추가
         if(add){
             val bookmarkData = ModelBookmarkT(uid,placeId)
-            val document = firebase.collection("bookmarkT").document(uid).collection(uid).document().set(bookmarkData)
+            val document = firebase.collection("bookmarkT").document().set(bookmarkData)
             document.addOnSuccessListener { documents ->
                 //추가 완
 
@@ -171,7 +171,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         }
         // 북마크 삭제
         else{
-            val document = firebase.collection("bookmarkT").document(uid).collection(uid)
+            val document = firebase.collection("bookmarkT")
                     .whereEqualTo("placeId", placeId)
                     .get()
             document.addOnSuccessListener { documents ->
@@ -197,7 +197,7 @@ class PlaceDetailActivity : AppCompatActivity() {
     // 화면 띄울 때 북마크 값 가져와서 세팅
     private fun getAndSetBookmark(placeId: String) {
         val uid = auth.uid?:""
-        val document = firebase.collection("bookmarkT").document(uid).collection(uid).whereEqualTo("placeId",placeId).get()
+        val document = firebase.collection("bookmarkT").whereEqualTo("placeId",placeId).get()
         document.addOnSuccessListener { documents ->
             // 일치하는 문서 없음 즉 즐겨찾기에 없음
             if(documents.isEmpty){
@@ -413,6 +413,7 @@ class PlaceDetailActivity : AppCompatActivity() {
                             binding.tvPlaceDetailPlaceName.text = item.title
                             binding.tvPlaceDetailPlaceLocation.text = item.addr1 ?: "-"
                             binding.tvPlaceDetailExplain.text = item.overview
+
 
                             // 지도
                             // TODO : 지도 부분 드래그 시 리사이클러뷰 스크롤 작동 개선하기

@@ -11,12 +11,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.travelencer_android_2021.adapter.PlaceDetailPhotoAdapter
 import com.example.travelencer_android_2021.adapter.PlaceDetailRecentPostAdapter
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.ActivityPlaceDetailBinding
+import com.example.travelencer_android_2021.model.ModelBookmarkT
 import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
 import com.example.travelencer_android_2021.model.modelTourApiDetailCommon.ModelTourApiDetailCommon
@@ -28,7 +27,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_place_detail.*
-import kotlinx.android.synthetic.main.fragment_setting.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -47,6 +45,8 @@ class PlaceDetailActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef : StorageReference
     var isTour: Boolean = false // 관광데이터 장소정보면 true 사용자등록 장소정보면 false
+    //TODO : bookmarked 값 서버에서 데이터 받아와서 쓰기
+    var bookmarked = false
 
     var photoList = arrayListOf<ModelCasePhotoOnly>()
     var recentPostList = arrayListOf<ModelPlaceDetailRecentPost>()
@@ -84,19 +84,19 @@ class PlaceDetailActivity : AppCompatActivity() {
         recentPostAdapter = PlaceDetailRecentPostAdapter(recentPostList, applicationContext)
         binding.rvPlaceDetailPhotoList.adapter = photoAdapter
         binding.rvPlaceDetailRecentPostList.adapter = recentPostAdapter
-        
-        //TODO : bookmarked 값 서버에서 데이터 받아와서 쓰기
-        var bookmarked = false
+
+        // 북마크
+        getAndSetBookmark(placeId)
         binding.ivPlaceDetailBookmark.setOnClickListener{
             if(!bookmarked){
-                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_filled)
                 bookmarked = true
-                Toast.makeText(this, "즐겨찾기 되었습니다", Toast.LENGTH_SHORT).show()
+                changeBookmark(placeId, bookmarked)
+//                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_filled)
             }
             else if(bookmarked){
-                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_line)
                 bookmarked = false
-                Toast.makeText(this, "즐겨찾기 해제 되었습니다", Toast.LENGTH_SHORT).show()
+                changeBookmark(placeId, bookmarked)
+//                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_line)
             }
         }
 
@@ -150,6 +150,81 @@ class PlaceDetailActivity : AppCompatActivity() {
 
     }
 
+    //북마크 버튼 누름
+    private fun changeBookmark(placeId: String, add: Boolean) {
+        val uid = auth.uid?:""
+        //북마크 추가
+        if(add){
+            val bookmarkData = ModelBookmarkT(uid,placeId)
+            val document = firebase.collection("bookmarkT").document(uid).collection(uid).document().set(bookmarkData)
+            document.addOnSuccessListener { documents ->
+                //추가 완
+
+                //설정하기
+                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                Toast.makeText(this, "즐겨찾기 되었습니다", Toast.LENGTH_SHORT).show()
+
+            }
+                    .addOnFailureListener {
+                        Log.d("로그 PlaceDetaichangeBookm","추가 실패 . . .")
+                    }
+        }
+        // 북마크 삭제
+        else{
+            val document = firebase.collection("bookmarkT").document(uid).collection(uid)
+                    .whereEqualTo("placeId", placeId)
+                    .get()
+            document.addOnSuccessListener { documents ->
+                //삭제
+                for(doc in documents){
+                    doc.reference.delete()
+                    Log.d("로그 changeBookm", "북마크 삭제 성공")
+                }
+
+                //설정하기
+                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_line)
+                Toast.makeText(this, "즐겨찾기 해제 되었습니다", Toast.LENGTH_SHORT).show()
+
+            }
+                    .addOnFailureListener {
+                        Log.d("로그 PlaceDetaichangeBookm","추가 실패 . . .")
+                    }
+        }
+
+        Log.d("로그 changeBookm","끝")
+    }
+
+    // 화면 띄울 때 북마크 값 가져와서 세팅
+    private fun getAndSetBookmark(placeId: String) {
+        val uid = auth.uid?:""
+        val document = firebase.collection("bookmarkT").document(uid).collection(uid).whereEqualTo("placeId",placeId).get()
+        document.addOnSuccessListener { documents ->
+            // 일치하는 문서 없음 즉 즐겨찾기에 없음
+            if(documents.isEmpty){
+                bookmarked = false
+                Log.d("로그PlaceDetailGetSetBookm", "북마크 placeId : 문서 없음")
+                //설정하기
+                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_line)
+            }
+            else{
+                for(doc in documents){
+                    val map = doc.data as HashMap<String, Any>
+                    val placeId : String = (map["placeId"] ?: "없음") as String
+                    Log.d("로그PlaceDetailGetSetBookm", "북마크 placeId : $placeId")
+                }
+                bookmarked = true
+                //설정하기
+                ivPlaceDetailBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+            }
+
+
+        }
+                .addOnFailureListener {
+                    Log.d("로그 PlaceDetailGetSetBookm","실패 . . .")
+                }
+
+        Log.d("로그 PlaceDetailGetSetBookm","끝")
+    }
 
     // 프로필 사진 가져오기 - 민영님 코드
     private fun getRecentPostUserProPic(uid : String, postId: String, title: String, name: String) {
@@ -263,6 +338,7 @@ class PlaceDetailActivity : AppCompatActivity() {
         Log.d("로그 RecentPost", "postIdList : ${postIdList}")
         return postIdList
     }
+
 
     private fun getAndSetPNC(placeId: String) {
         val document = firebase.collection("pncT").whereEqualTo("placeId", placeId).limit(1).get()

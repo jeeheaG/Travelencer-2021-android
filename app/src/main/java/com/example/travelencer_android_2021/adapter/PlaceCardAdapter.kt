@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.travelencer_android_2021.PlaceDetailActivity
 import com.example.travelencer_android_2021.R
-import com.example.travelencer_android_2021.model.ModelPlaceMainCard
+import com.example.travelencer_android_2021.model.ModelCasePlaceCard
 
-class PlaceMainAdapter(private val placeList: ArrayList<ModelPlaceMainCard>, private val mContext: Context): RecyclerView.Adapter<PlaceMainAdapter.CustomViewHolder>() {
+class PlaceCardAdapter(private val placeList: ArrayList<ModelCasePlaceCard>, private val mContext: Context): RecyclerView.Adapter<PlaceCardAdapter.CustomViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceMainAdapter.CustomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceCardAdapter.CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_place_main, parent, false)
         return CustomViewHolder(view).apply {
 //            Log.d("로그Tour PlaceMainAdapter", "onCreateViewHolder실행")
@@ -26,10 +26,9 @@ class PlaceMainAdapter(private val placeList: ArrayList<ModelPlaceMainCard>, pri
 //            }
             itemView.setOnClickListener {
                 val curPosition: Int = adapterPosition
-                val place: ModelPlaceMainCard = placeList[curPosition]
+                val place: ModelCasePlaceCard = placeList[curPosition]
                 val intent = Intent(mContext, PlaceDetailActivity::class.java)
                 intent.putExtra("contentId", place.contentId)
-                intent.putExtra("isTour", place.isTour)
                 mContext.startActivity(intent)
                 //Toast.makeText(parent.context, "이름:${place.name}, 위치:${place.loc}, 설명:${place.explain}", Toast.LENGTH_SHORT).show()
             }
@@ -37,7 +36,7 @@ class PlaceMainAdapter(private val placeList: ArrayList<ModelPlaceMainCard>, pri
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun onBindViewHolder(holder: PlaceMainAdapter.CustomViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaceCardAdapter.CustomViewHolder, position: Int) {
         //Log.d("로그Tour PlaceMainAdapter", "onBindViewHolder실행")
         Glide.with(mContext).load(placeList[position].img).into(holder.img)
         holder.name.text = placeList[position].name

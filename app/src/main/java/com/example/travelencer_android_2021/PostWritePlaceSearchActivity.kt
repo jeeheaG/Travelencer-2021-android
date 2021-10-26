@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.travelencer_android_2021.adapter.PlaceMainAdapter
 import com.example.travelencer_android_2021.adapter.PostWritePlaceSearchAdapter
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.ActivityPostWritePlaceSearchBinding

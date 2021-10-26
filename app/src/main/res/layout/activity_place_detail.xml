@@ -80,6 +80,7 @@
                 app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailPlaceName"
                 app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceName" />
 
+<!--
             <RatingBar
                 android:id="@+id/rbPlaceDetailRating"
                 android:layout_width="wrap_content"
@@ -91,6 +92,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/tvPlaceDetailPlaceLocation"
                 app:layout_constraintStart_toStartOf="@+id/tvPlaceDetailPlaceLocation"
                 app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceLocation" />
+-->
 
             <TextView
                 android:id="@+id/tvPlaceDetailExplain"
@@ -103,7 +105,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rbPlaceDetailRating" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailPlaceLocation" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clPlaceDetailMapView"
@@ -174,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="수원 화성의 수원의 대표적인 관광지"
+                android:text="-"
                 android:textColor="@color/gray"
                 android:textSize="20sp"
                 android:fontFamily="@font/hcsantteut"
@@ -197,7 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="자리 잡고 있는 어쩌구는 멋진 전경"
+                android:text="-"
                 android:textColor="@color/gray"
                 android:textSize="20sp"
                 android:fontFamily="@font/hcsantteut"

@@ -18,6 +18,7 @@ import com.example.travelencer_android_2021.databinding.ActivityPlaceDetailBindi
 import com.example.travelencer_android_2021.model.ModelBookmarkT
 import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 import com.example.travelencer_android_2021.model.ModelPlaceDetailRecentPost
+import com.example.travelencer_android_2021.model.ModelPlaceMainCard
 import com.example.travelencer_android_2021.model.modelTourApiDetailCommon.ModelTourApiDetailCommon
 import com.example.travelencer_android_2021.model.modelTourApiDetailImage.ModelTourApiDetailImage
 import com.google.firebase.auth.FirebaseAuth
@@ -45,7 +46,6 @@ class PlaceDetailActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef : StorageReference
     var isTour: Boolean = false // 관광데이터 장소정보면 true 사용자등록 장소정보면 false
-    //TODO : bookmarked 값 서버에서 데이터 받아와서 쓰기
     var bookmarked = false
 
     var photoList = arrayListOf<ModelCasePhotoOnly>()
@@ -64,15 +64,11 @@ class PlaceDetailActivity : AppCompatActivity() {
         storage = Firebase.storage
         storageRef = storage.reference
 
-        // 관광데이터 정보일 경우
+        // 넘겨받은 데이터
         var placeId = intent.getStringExtra("contentId") ?: NO_ID
-        // 관광데이터 정보가 아니라 사용자 등록 장소정보인 경우
-        if(placeId == NO_ID){
-            placeId = intent.getStringExtra("placeId") ?: NO_ID
-        }else{
-            isTour = true
-        }
-        Log.d("로그 PlaceDetail", "placeId : ${placeId}")
+        isTour = intent.getBooleanExtra("isTour", true)
+
+        Log.d("로그 PlaceDetail", "placeId : ${placeId} isTour : $isTour")
 
         binding.rvPlaceDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvPlaceDetailRecentPostList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -145,10 +141,19 @@ class PlaceDetailActivity : AppCompatActivity() {
 
         //interceptor설정과 데이터 요청 함수
         TourApiRetrofitClient.tourInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        callTourDetailCommon(placeId, this)
-        callTourDetailImage(placeId, this)
+        if(isTour){
+            //관광공사 데이터일 경우
+            callTourDetailCommon(placeId, this)
+            callTourDetailImage(placeId, this)
+        }
+        else{
+            //firebase 데이터일 경우
+            getPlaceData(placeId, this)
+        }
 
     }
+
+
 
     //북마크 버튼 누름
     private fun changeBookmark(placeId: String, add: Boolean) {
@@ -414,29 +419,8 @@ class PlaceDetailActivity : AppCompatActivity() {
                             binding.tvPlaceDetailPlaceLocation.text = item.addr1 ?: "-"
                             binding.tvPlaceDetailExplain.text = item.overview
 
-
-                            // 지도
-                            // TODO : 지도 부분 드래그 시 리사이클러뷰 스크롤 작동 개선하기
-                            val latitude = item.mapy //lat이 y, long이 x였네
-                            val longitude = item.mapx
-                            val placeName = item.title
-                            val zoomLevel = 1
-                            Log.d("로그 TourDetail", "$latitude, $longitude, $placeName")
-
-                            val mapView = MapView(mContext) //PlaceDetailActivity()?baseContext랑 똑같은 듯. applicationContext는 아닌 것 같고 parent??
-                            val mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longitude)
-
-                            mapView.setMapCenterPoint(mapPoint, false)
-                            mapView.setZoomLevel(zoomLevel, true)
-
-                            val marker = MapPOIItem()
-                            marker.itemName = placeName
-                            marker.mapPoint = mapPoint
-                            marker.markerType = MapPOIItem.MarkerType.BluePin
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-
-                            mapView.addPOIItem(marker)
-                            binding.clPlaceDetailMapView.addView(mapView)
+                            //지도
+                            setMap(item.mapx, item.mapy, item.title, mContext)
 
                             //대표사진
                             val firstImage = item.firstimage
@@ -456,6 +440,31 @@ class PlaceDetailActivity : AppCompatActivity() {
                     }
                 })
     }//요청 함수 끝
+
+    //지도 set
+    private fun setMap(mapx: Double, mapy: Double, title: String, mContext: Context) {
+        // TODO : 지도 부분 드래그 시 리사이클러뷰 스크롤 작동 개선하기
+        val latitude = mapy //lat이 y, long이 x였네
+        val longitude = mapx
+        val placeName = title
+        val zoomLevel = 1
+        Log.d("로그 TourDetail", "$latitude, $longitude, $placeName")
+
+        val mapView = MapView(mContext) //PlaceDetailActivity()?baseContext랑 똑같은 듯. applicationContext는 아닌 것 같고 parent??
+        val mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longitude)
+
+        mapView.setMapCenterPoint(mapPoint, false)
+        mapView.setZoomLevel(zoomLevel, true)
+
+        val marker = MapPOIItem()
+        marker.itemName = placeName
+        marker.mapPoint = mapPoint
+        marker.markerType = MapPOIItem.MarkerType.BluePin
+        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+
+        mapView.addPOIItem(marker)
+        binding.clPlaceDetailMapView.addView(mapView)
+    }
 
 
     // 이미지 데이터 받아오기
@@ -527,6 +536,72 @@ class PlaceDetailActivity : AppCompatActivity() {
                     }
                 })
     }//요청 함수 끝
+
+    private fun getPlaceData(placeId: String, mContext: Context) {
+        firebase.collection("placeT").whereEqualTo("plcId", placeId).get()
+            .addOnSuccessListener { documents->
+                for (doc in documents){
+                    val map = doc.data as HashMap<String, Any>
+
+                    val placeName : String = map["plcName"] as String
+                    val placeProduce : String = map["plcProduce"] as String
+                    val placeAddress : String = map["plcAddress"] as String
+                    val locX = map["locX"] as Double
+                    val locY = map["locY"] as Double
+
+
+                    //뷰에 텍스트 정보 set
+                    binding.tvPlaceDetailPlaceName.text = placeName
+                    binding.tvPlaceDetailPlaceLocation.text = placeAddress ?: "-"
+                    binding.tvPlaceDetailExplain.text = placeProduce
+
+                    //지도 set
+                    setMap(locX.toDouble(), locY.toDouble(), placeName, mContext)
+
+                    //사진 가져옴
+                    var placePhoto = ""
+                    var placePhotoUrl = ""
+                    firebase.collection("placePhotoT").whereEqualTo("placeId", placeId).limit(10).get()
+                        .addOnSuccessListener { documents2->
+                            for (document2 in documents2) {
+                                Log.d("로그--placeDetailPhoto","가져왔다 success")
+                                val map2 = document2.data as HashMap<String, Any>
+                                if(map2["placePhoto"]!=null){
+                                    placePhoto = map2["placePhoto"] as String
+                                }
+                                else{
+                                    placePhoto = "noImage.png"
+                                }
+                                Log.d("로그--placeDetailPhoto","placeName : ${placeName} placePhoto : ${placePhoto}")
+
+                                // 사진 uri 가져오기
+                                Log.d("로그--placeDetailPhoto스토리지", "요청 : place/$placePhoto")
+                                storageRef.child("place/$placePhoto").downloadUrl
+                                    .addOnSuccessListener { uri ->
+                                        placePhotoUrl = uri.toString()
+                                        Log.d("로그--placeDetailPhoto스토리지", " placePhotoUrl : $placePhotoUrl")
+                                        photoList.add(ModelCasePhotoOnly(placePhotoUrl) )
+                                        photoAdapter.notifyDataSetChanged()
+
+
+                                    }.addOnFailureListener { exception ->
+                                        Log.d("로그--placeDetailPhoto스토리지", " error: ", exception)
+                                    }
+                            }
+
+                        }
+                        .addOnFailureListener {
+                        }
+                    //여기까지 사진 가져오기
+
+                }
+
+            }
+            .addOnFailureListener {
+
+            }
+
+    }
 
     fun photoCountUpdate(){
         binding.tvPlaceDetailPhotoNumber.text = "1 / ".plus(photoList.size)

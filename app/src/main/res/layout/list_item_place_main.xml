@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/view_round"
             android:scaleType="centerCrop"
-            android:src="@drawable/dummy_haewoojae"
+            android:src="@drawable/no_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvPlaceMain" />

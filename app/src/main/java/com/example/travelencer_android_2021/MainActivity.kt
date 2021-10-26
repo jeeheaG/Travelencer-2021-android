@@ -86,6 +86,12 @@ class MainActivity : AppCompatActivity() {
             setNavi(R.id.postBlogFragment)
         }
 
+        //이 화면으로 오면 필터 설정이 해제됨
+        val pref = this?.getSharedPreferences("pref", 0)
+        val edit = pref?.edit()
+        edit?.putBoolean("placeFiltered", false)
+        edit?.apply()
+
     }
 
     private fun setNavi(fregmentId : Int) {

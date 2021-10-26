@@ -1,7 +1,5 @@
 package com.example.travelencer_android_2021.data
 
-import android.net.Uri
-
 data class PlaceRegisterData(
         val plcName: String,
         val plcProduce: String, //Explain
@@ -14,13 +12,4 @@ data class PlaceRegisterData(
         val area2: String,
         val area1Code: Int,
         val area2Code: Int
-//        val plcPicture: ArrayList<Uri>,
-//        val plcGood: String,
-//        val plcBad: String,
 )
-
-/*
-data class PlaceRegisterResponse(
-        val code: Int, //resultCode
-        val message: String
-)*/

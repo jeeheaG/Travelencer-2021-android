@@ -1,25 +1,18 @@
 package com.example.travelencer_android_2021
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.travelencer_android_2021.adapter.PlaceMainAdapter
-import com.example.travelencer_android_2021.adapter.PostDetailPlaceAdapter
+import com.example.travelencer_android_2021.adapter.PlaceCardAdapter
 import com.example.travelencer_android_2021.api.TourApiRetrofitClient
 import com.example.travelencer_android_2021.databinding.ActivityBookmarkBinding
-import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 import com.example.travelencer_android_2021.model.ModelCasePlaceCard
 import com.example.travelencer_android_2021.model.modelTourApiDetailCommon.ModelTourApiDetailCommon
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.storage.FirebaseStorage
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
@@ -32,7 +25,7 @@ class BookmarkActivity : AppCompatActivity() {
     var firestore : FirebaseFirestore = FirebaseFirestore.getInstance()
     var storage : FirebaseStorage? = FirebaseStorage.getInstance()
     var placeList = arrayListOf<ModelCasePlaceCard>()
-    private lateinit var placeAdapter: PlaceMainAdapter
+    private lateinit var placeAdapter: PlaceCardAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookmarkBinding.inflate(layoutInflater)
@@ -56,7 +49,7 @@ class BookmarkActivity : AppCompatActivity() {
             ModelCasePlaceCard(dummyImageUrl, "저기공원", "경기도 수원시", dummyContentId)
         )*/
 
-        placeAdapter = PlaceMainAdapter(placeList,this)
+        placeAdapter = PlaceCardAdapter(placeList,this)
 
         binding.rvBookmarkList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvBookmarkList.setHasFixedSize(true)

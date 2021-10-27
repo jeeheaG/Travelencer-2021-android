@@ -10,15 +10,6 @@
     tools:context="com.example.travelencer_android_2021.PlaceFilterFragment"
     >
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:src="@drawable/ic_double_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="10dp"/>
-
     <TextView
         android:id="@+id/tvSearch"
         android:layout_width="wrap_content"

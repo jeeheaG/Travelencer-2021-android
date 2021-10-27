@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,11 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.travelencer_android_2021.PostDetailActivity
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelFeedPhoto
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.list_item_feed_photo.view.*
 
 private const val TAG = "mmm"
@@ -35,7 +39,25 @@ class FeedPhototAdapter : RecyclerView.Adapter<FeedPhototAdapter.ViewHolder>() {
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                Toast.makeText(parent.context, "${items[position].postId} 클릭", Toast.LENGTH_SHORT).show()
+                val db = Firebase.firestore
+                // uid 가져오기
+                db.collection("postT")
+                        .whereEqualTo("postId", items[adapterPosition].postId)
+                        .get()
+                        .addOnSuccessListener { result ->
+                            for (document in result) {
+                                val map = document.data as HashMap<String, Any>
+                                val uid : String = map["uid"] as String
+
+                                val intent = Intent(itemView.context, PostDetailActivity::class.java)
+                                intent.putExtra("postId", items[adapterPosition].postId)
+                                intent.putExtra("uid", uid)
+                                itemView.context.startActivity(intent)
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(itemView.context, "게시글 정보를 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        }
             }
         }
     }

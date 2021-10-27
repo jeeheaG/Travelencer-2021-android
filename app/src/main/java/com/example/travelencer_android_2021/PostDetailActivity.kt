@@ -259,7 +259,7 @@ class PostDetailActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     for (document in result) {
                         val map = document.data as HashMap<String, Any>
-                        val icon : String = map["placeCategory"] as String
+                        val icon : String = map["placeCategory"] as String? ?: "0"
                         val name: String = map["placeName"] as String
                         val location: String = map["placeLoc"] as String
                         Log.d(TAG, name)

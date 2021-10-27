@@ -141,7 +141,7 @@ class PostDetailActivity : AppCompatActivity() {
 
         db.collection("postCourseT")
                 .whereEqualTo("postId", postId)
-//                .orderBy("sequence") // 이건 색인 작업이 필요한데 어케하는지 모르겟;; 나중에 추가
+                .orderBy("sequence")
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {

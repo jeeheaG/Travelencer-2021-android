@@ -50,9 +50,10 @@ class PostSightsFragment : Fragment() {
                         if (postId.contains(uid)) {
                             val placeName : String = map["placeName"] as String
                             val placeLoc : String = map["placeLoc"] as String
+                            val contentId : String = map["placeId"] as String
 
                             if(!placeName.isEmpty() && !placeLoc.isEmpty()) {
-                                feedSightsAdapter.items.add(ModelCourseSpot(placeName, placeLoc))
+                                feedSightsAdapter.items.add(ModelCourseSpot(placeName, placeLoc, contentId))
                                 feedSightsAdapter.notifyDataSetChanged()
                             }
                         }

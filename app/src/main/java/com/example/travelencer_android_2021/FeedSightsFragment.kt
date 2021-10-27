@@ -37,7 +37,7 @@ class FeedSightsFragment(val keyword : String) : Fragment() {
         binding.rcFeedSights.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         //추가
-        var db = Firebase.firestore
+        val db = Firebase.firestore
         db.collection("postPlaceT")
             .whereEqualTo("placeCategory", "1") //plcCategory가 1(관광지)인
             .get()//모든 다큐먼트를 가져와라.
@@ -52,10 +52,11 @@ class FeedSightsFragment(val keyword : String) : Fragment() {
                     if (content1.contains(keyword) || content2.contains(keyword)) {
                         val placeName : String = map["placeName"] as String
                         val placeLoc : String = map["placeLoc"] as String
+                        val contentId : String = map["placeId"] as String
 
-                        if(!placeName.isEmpty()) {
-                            if (!placeLoc.isEmpty()) {
-                                feedSightsAdapter.items.add(ModelCourseSpot(placeName, placeLoc))
+                        if(placeName.isNotEmpty()) {
+                            if (placeLoc.isNotEmpty()) {
+                                feedSightsAdapter.items.add(ModelCourseSpot(placeName, placeLoc, contentId))
                                 feedSightsAdapter.notifyDataSetChanged()
                             }
                         }

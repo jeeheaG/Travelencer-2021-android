@@ -129,7 +129,7 @@ class PostWriteActivity : AppCompatActivity() {
                     placeIdList.add(placeId) //선택 장소 리스트에 추가
                     placeNameList.add(placeName)
                     placeLocList.add(placeLoc)
-                    placeList.add(ModelCourseSpot(placeName, placeLoc))
+                    placeList.add(ModelCourseSpot(placeName, placeLoc, placeId))
                     binding.rvPostWritePlaceList.adapter = PostWritePlaceAdapter(placeList, this)
                 }
             }

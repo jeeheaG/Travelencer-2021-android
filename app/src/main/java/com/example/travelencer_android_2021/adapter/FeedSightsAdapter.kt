@@ -24,11 +24,10 @@ class FeedSightsAdapter : RecyclerView.Adapter<FeedSightsAdapter.ViewHolder>() {
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-//                val intent = Intent(itemView.context, PlaceDetailActivity::class.java)
-//                intent.putExtra("contentId", "125577")
-//                itemView.context.startActivity(intent)
-
-                Toast.makeText(parent.context, "${items[position].name}", Toast.LENGTH_SHORT).show()
+                // 장소 상세로 이동
+                val intent = Intent(itemView.context, PlaceDetailActivity::class.java)
+                intent.putExtra("contentId", items[adapterPosition].contentId)
+                itemView.context.startActivity(intent)
             }
         }
     }

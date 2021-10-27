@@ -1,10 +1,12 @@
 package com.example.travelencer_android_2021.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.travelencer_android_2021.PlaceDetailActivity
 import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelCourseSpot
 import kotlinx.android.synthetic.main.list_item_feed_food.view.*
@@ -21,7 +23,10 @@ class FeedFoodAdapter : RecyclerView.Adapter<FeedFoodAdapter.ViewHolder>() {
 
         return ViewHolder(itemView).apply {
             itemView.setOnClickListener {
-                Toast.makeText(parent.context, "${items[position].name}", Toast.LENGTH_SHORT).show()
+                // 장소 상세로 이동
+                val intent = Intent(itemView.context, PlaceDetailActivity::class.java)
+                intent.putExtra("contentId", items[adapterPosition].contentId)
+                itemView.context.startActivity(intent)
             }
         }
     }

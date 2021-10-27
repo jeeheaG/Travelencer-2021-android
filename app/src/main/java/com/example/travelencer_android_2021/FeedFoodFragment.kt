@@ -39,7 +39,7 @@ class FeedFoodFragment(val keyword : String) : Fragment() {
 
 
         //추가
-        var db = Firebase.firestore
+        val db = Firebase.firestore
         db.collection("postPlaceT")
             .whereEqualTo("placeCategory", "0") //plcCategory가 0(맛집)인
             .get()//모든 다큐먼트를 가져와라.
@@ -53,10 +53,12 @@ class FeedFoodFragment(val keyword : String) : Fragment() {
                     if (content.contains(keyword)) {
                         val placeName : String = map["placeName"] as String
                         val placeLoc : String = map["placeLoc"] as String
+                        val contentId : String = map["placeId"] as String
+
                         //음식점 데이터가 있다면
-                        if(!placeName.isEmpty()) {
-                            if (!placeLoc.isEmpty()) {
-                                feedFoodAdapter.items.add(ModelCourseSpot(placeName, placeLoc))
+                        if(placeName.isNotEmpty()) {
+                            if (placeLoc.isNotEmpty()) {
+                                feedFoodAdapter.items.add(ModelCourseSpot(placeName, placeLoc, contentId))
                                 feedFoodAdapter.notifyDataSetChanged()
                             }
                         }

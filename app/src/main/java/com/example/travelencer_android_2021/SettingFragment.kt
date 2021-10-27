@@ -150,10 +150,6 @@ class SettingFragment : Fragment() {
             startActivity(chatBotIntent)
         }
 
-        // 뒤로가기 이미지 클릭
-        binding.imgBack.setOnClickListener {
-
-        }
 
         // <서비스 이용 약관> 텍스트뷰 클릭
         binding.tvTOS.setOnClickListener {

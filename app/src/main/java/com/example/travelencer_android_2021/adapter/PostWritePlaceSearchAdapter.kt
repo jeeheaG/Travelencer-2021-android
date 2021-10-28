@@ -13,16 +13,16 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.travelencer_android_2021.*
-import com.example.travelencer_android_2021.model.ModelCasePlaceCard
+import com.example.travelencer_android_2021.model.ModelPlaceMainCard
 
-class PostWritePlaceSearchAdapter(private val placeList: ArrayList<ModelCasePlaceCard>, private val mContext: Context, private val launcher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<PostWritePlaceSearchAdapter.CustomViewHolder>() {
+class PostWritePlaceSearchAdapter(private val placeList: ArrayList<ModelPlaceMainCard>, private val mContext: Context, private val launcher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<PostWritePlaceSearchAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostWritePlaceSearchAdapter.CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_place_main, parent, false)
         return CustomViewHolder(view).apply {
             itemView.setOnClickListener {
                 val curPosition: Int = adapterPosition
-                val place: ModelCasePlaceCard = placeList[curPosition]
+                val place: ModelPlaceMainCard = placeList[curPosition]
                 //Toast.makeText(parent.context, "이름:${place.name}, 위치:${place.loc}", Toast.LENGTH_SHORT).show()
 
                 //장소 선택 시 선택한 장소 데이터와 함께 PNC입력 Activity로 이동
@@ -31,6 +31,7 @@ class PostWritePlaceSearchAdapter(private val placeList: ArrayList<ModelCasePlac
                 intent.putExtra("placeLoc", place.loc)
                 intent.putExtra("contentId", place.contentId)
                 intent.putExtra("from", "search")
+                intent.putExtra("isTour", place.isTour)
                 launcher.launch(intent)
             }
         }

@@ -45,14 +45,12 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"/>
 
-    <TextView
+    <WebView
+        android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:fontFamily="@font/hcsantteut"
-        android:textSize="15sp"
-        android:textColor="@color/black"
-        android:text="개인정보 보호정책을 이렇게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게
-길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </WebView>
 
 </LinearLayout>

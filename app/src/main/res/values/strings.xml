@@ -5,4 +5,14 @@
 
     <string name="find_password_text"><u>비밀번호를 잊어버리셨나요?</u></string>
     <string name="register_text"><u>회원이 아니신가요?</u></string>
+
+    <!--서비스 이용약관-->
+    <string name="tos_text">
+    </string>
+    <!--개인정보 보호정책-->
+    <string name="pp_text">
+        <xmp>
+
+        </xmp>
+    </string>
 </resources>

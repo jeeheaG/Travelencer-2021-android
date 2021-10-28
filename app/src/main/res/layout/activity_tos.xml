@@ -53,7 +53,6 @@
         android:fontFamily="@font/hcsantteut"
         android:textSize="15sp"
         android:textColor="@color/black"
-        android:text="서비스 아용 약관을 이렇게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게
-길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게 길게"/>
+        android:text="@string/tos_text"/>
 
 </LinearLayout>

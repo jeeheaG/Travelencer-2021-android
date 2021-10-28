@@ -38,11 +38,15 @@ class PlaceMainAdapter(private val placeList: ArrayList<ModelPlaceMainCard>, pri
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: PlaceMainAdapter.CustomViewHolder, position: Int) {
+        val strLen1 = 10
+        val strLen2 = 20
         //Log.d("로그Tour PlaceMainAdapter", "onBindViewHolder실행")
         Glide.with(mContext).load(placeList[position].img).into(holder.img)
-        holder.name.text = placeList[position].name
-        holder.loc.text = if(placeList[position].loc.length>20){
-            placeList[position].loc.substring(0,20).plus("...") //20자 이상이면 문자열 자르고 ...붙이기
+        holder.name.text = if(placeList[position].name.length>strLen1){
+            placeList[position].name.substring(0,strLen1).plus("...") //10자 이상이면 문자열 자르고 ...붙이기
+        } else placeList[position].name
+        holder.loc.text = if(placeList[position].loc.length>strLen2){
+            placeList[position].loc.substring(0,strLen2).plus("...") //20자 이상이면 문자열 자르고 ...붙이기
         } else placeList[position].loc
 
         holder.img.clipToOutline = true //안드로이드 버전 5 (롤리팝) 이상부터 적용

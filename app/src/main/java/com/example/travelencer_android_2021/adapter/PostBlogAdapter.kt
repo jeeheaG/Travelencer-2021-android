@@ -2,6 +2,7 @@ package com.example.travelencer_android_2021.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,11 +59,23 @@ class PostBlogAdapter(private val postList: ArrayList<ModelPostBlog>, private va
             val writing = itemView.findViewById<TextView>(R.id.tvPostBlogWriting)
             val rvPhoto = itemView.findViewById<RecyclerView>(R.id.rvPostBlogPhotoList)
 
+            val strLen = 10
+
             title.text = post.title
             date.text = post.date
             icon.setImageResource(post.icon!!)
-            placeName.text = post.placeName
-            location.text = post.location
+//            placeName.text = post.placeName
+//            location.text = post.location
+            if(post.placeName!=null){
+                placeName.text = if(post.placeName!!.length>strLen){
+                    post.placeName!!.substring(0,strLen).plus("...") //10자 이상이면 문자열 자르고 ...붙이기
+                } else post.placeName
+            }
+            if(post.location!=null){
+                location.text = if(post.location!!.length>strLen){
+                    post.location!!.substring(0,strLen).plus("...") //10자 이상이면 문자열 자르고 ...붙이기
+                } else post.location
+            }
             writing.text = post.writing
 
             rvPhoto.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)

@@ -20,9 +20,14 @@ class PostDetailPlaceAdapter() : RecyclerView.Adapter<PostDetailPlaceAdapter.Cus
     }
 
     override fun onBindViewHolder(holder: PostDetailPlaceAdapter.CustomViewHolder, position: Int) {
+        val strLen = 10
         holder.icon.setImageResource(placeList[position].icon)
-        holder.name.text = placeList[position].name
-        holder.location.text = placeList[position].location
+        holder.name.text = if(placeList[position].name.length>strLen){
+            placeList[position].name.substring(0,strLen).plus("...") //10자 이상이면 문자열 자르고 ...붙이기
+        } else placeList[position].name
+        holder.location.text = if(placeList[position].location.length>strLen){
+            placeList[position].location.substring(0,strLen).plus("...") //10자 이상이면 문자열 자르고 ...붙이기
+        } else placeList[position].location
     }
 
     override fun getItemCount(): Int {

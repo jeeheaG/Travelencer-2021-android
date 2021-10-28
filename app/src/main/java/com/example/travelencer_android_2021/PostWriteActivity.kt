@@ -166,6 +166,7 @@ class PostWriteActivity : AppCompatActivity() {
 
         //장소 DB 저장하는 함수
         fun postPlaceUpload(){
+            Log.d("로그--postPlaceUpload 실행","ㅇㅇ")
             for (i in (0 until placeIdList.size)){
                 ModelPostPlaceT.postId = auth?.currentUser?.uid + "_" + timeStamp
                 ModelPostPlaceT.placeId = placeIdList[i]
@@ -267,6 +268,7 @@ class PostWriteActivity : AppCompatActivity() {
 
         // <등록 하기> 버튼 클릭
         binding.btnPostWritePost.setOnClickListener {
+            Log.d("로그 게시글 등록버튼", "누름")
             //게시글 테이블 업로드
             ModelPostT.uid = auth?.currentUser?.uid
             var postId = auth?.currentUser?.uid + "_"+timeStamp
@@ -278,12 +280,14 @@ class PostWriteActivity : AppCompatActivity() {
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
             firestore?.collection("postT")?.document(postId)?.set(ModelPostT)
             photoUpload(binding.tvPostWriteWriting.text.toString(),postId)
-            courseUpload(courseName, courseDate)
+            courseUpload(courseName, courseDate) //TODO : 코스 입력 안해서 여기서 오류나면 postPlaceUpload로 실행 안됨
             postPlaceUpload()
+            Log.d("로그 게시글 등록 작업 실행 완", "ㅇㅇ")
             val intent = Intent(this, PostDetailActivity::class.java)
             startActivity(intent)
             finish()
         }
+
 
 
         binding.ivBack.setOnClickListener{

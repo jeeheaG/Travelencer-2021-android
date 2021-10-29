@@ -32,9 +32,9 @@ class PPActivity : AppCompatActivity() {
         mWebSettings.setSupportZoom(true) // Zoom사용여부
         mWebSettings.javaScriptCanOpenWindowsAutomatically = false // 자바스크립트가 window.open()사용할수있는지 여부
         mWebSettings.loadWithOverviewMode = true // 메타태그 허용 여부
-        mWebSettings.builtInZoomControls = false // 화면 확대 축소 허용 여부
+        mWebSettings.builtInZoomControls = true // 화면 확대 축소 허용 여부
         mWebSettings.domStorageEnabled = true // 로컬저장소 허용 여부
-        mWebView.loadUrl("file:///android_asset/ppa.html") // 웹뷰 사이트 주소 및 시작
+        mWebView.loadUrl("file:///android_asset/tos.html") // 웹뷰 사이트 주소 및 시작
 
     }
 }

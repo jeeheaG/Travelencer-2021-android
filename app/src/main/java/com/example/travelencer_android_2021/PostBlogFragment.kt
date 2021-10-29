@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -35,6 +36,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 import kotlinx.android.synthetic.main.fragment_post_blog.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.net.URL
 
 //뷰바인딩 사용
@@ -52,12 +57,22 @@ class PostBlogFragment : Fragment() {
     private lateinit var postAdapter : PostBlogAdapter
     private lateinit var storageRef : StorageReference
 
+    lateinit var naviActivity: NaviActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // 2. Context를 액티비티로 형변환해서 할당
+        naviActivity = context as NaviActivity
+    }
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPostBlogBinding.inflate(inflater, container, false)
         val view = binding.root
         postAdapter = PostBlogAdapter(postList, activity?.applicationContext!!)
         storageRef = storage!!.reference
+
+
+        showLoadingDialog(naviActivity)
 
         firestore.collection("userT").document(auth.currentUser!!.uid).get()
                 .addOnSuccessListener { doc->
@@ -210,6 +225,14 @@ class PostBlogFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun showLoadingDialog(context: Context) {
+        val dialog = LoadingDialog(context)
+        CoroutineScope(Dispatchers.Main).launch {
+            dialog.show()
+            delay(3000)
+            dialog.dismiss()
+        }
     }
 
 }

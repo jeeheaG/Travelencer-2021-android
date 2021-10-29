@@ -28,6 +28,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_setting.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -63,6 +67,7 @@ class PostWriteActivity : AppCompatActivity() {
         binding = ActivityPostWriteBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
+
 
         val view = binding.root
         setContentView(view)
@@ -310,6 +315,8 @@ class PostWriteActivity : AppCompatActivity() {
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         return bitmap
     }
+
+
 
 
 }

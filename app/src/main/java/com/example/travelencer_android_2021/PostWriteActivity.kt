@@ -48,8 +48,10 @@ class PostWriteActivity : AppCompatActivity() {
     var imgcnt = 0 // 이미지 추가할때마다 카운트 증가, 파일 여러개인거 대비
     var photoList = arrayListOf<Uri>()
     var photoBitmapList = arrayListOf<Bitmap>()
-    lateinit var courseName : ArrayList<String>
-    lateinit var courseDate : ArrayList<String>
+    //lateinit var courseName : ArrayList<String>
+    var courseName = arrayListOf<String>()
+    //lateinit var courseDate : ArrayList<String>
+    var courseDate = arrayListOf<String>()
     var placeIdList = arrayListOf<String>()
     var placeNameList = arrayListOf<String>()
     var placeLocList = arrayListOf<String>()
@@ -280,7 +282,10 @@ class PostWriteActivity : AppCompatActivity() {
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
             firestore?.collection("postT")?.document(postId)?.set(ModelPostT)
             photoUpload(binding.tvPostWriteWriting.text.toString(),postId)
-            courseUpload(courseName, courseDate) //TODO : 코스 입력 안해서 여기서 오류나면 postPlaceUpload로 실행 안됨
+            if(courseName.isNotEmpty() && courseDate.isNotEmpty()){
+                courseUpload(courseName, courseDate)
+            }
+             //TODO : 코스 입력 안해서 여기서 오류나면 postPlaceUpload로 실행 안됨
             postPlaceUpload()
             Log.d("로그 게시글 등록 작업 실행 완", "ㅇㅇ")
             val intent = Intent(this, PostDetailActivity::class.java)

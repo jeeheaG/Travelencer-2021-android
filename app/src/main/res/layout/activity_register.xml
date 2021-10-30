@@ -145,8 +145,20 @@
             android:checked="false"
             android:textSize="15sp"
             android:fontFamily="@font/hcsantteut"
-            android:text="서비스 이용 약관 및 개인정보 보호정책 동의"
-            android:layout_marginBottom="20dp"/>
+            android:text="서비스 이용 약관 및 개인정보 보호정책 동의" />
+
+        <TextView
+            android:id="@+id/checkTOS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="서비스 이용 약관 내용 보기"/>
+        <TextView
+            android:id="@+id/checkPP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인 정보 정책 내용 보기"
+            android:layout_marginBottom="20dp">
+        </TextView>
 
         <Button
             android:id="@+id/btnRegister"

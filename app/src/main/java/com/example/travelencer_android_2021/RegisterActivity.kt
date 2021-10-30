@@ -1,5 +1,6 @@
 package com.example.travelencer_android_2021
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -40,6 +41,18 @@ class RegisterActivity : AppCompatActivity() {
         // 뒤로가기 이미지 클릭
         imgBack.setOnClickListener {
             finish()
+        }
+        
+        // TOS 내용 확인 클릭
+        checkTOS.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, TOSActivity::class.java)
+            startActivity(intent)
+        }
+
+        // PP 내용 확인 클릭
+        checkPP.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, PPActivity::class.java)
+            startActivity(intent)
         }
 
         // <이메일 확인> 버튼 클릭

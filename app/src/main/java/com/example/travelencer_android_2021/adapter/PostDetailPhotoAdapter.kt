@@ -13,8 +13,8 @@ import com.example.travelencer_android_2021.R
 import com.example.travelencer_android_2021.model.ModelCasePhotoOnly
 
 class PostDetailPhotoAdapter(private val mContext: Context) : RecyclerView.Adapter<PostDetailPhotoAdapter.CustomViewHolder>() {
-//    var photoListUri = ArrayList<Uri>()
-    var photoListBitmap = ArrayList<Bitmap>()
+    var photoListUri = ArrayList<Uri>()
+//    var photoListBitmap = ArrayList<Bitmap>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostDetailPhotoAdapter.CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_post_detail_photo, parent, false)
@@ -24,12 +24,12 @@ class PostDetailPhotoAdapter(private val mContext: Context) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: PostDetailPhotoAdapter.CustomViewHolder, position: Int) {
-//        Glide.with(mContext).load(photoListUri[position]).into(holder.photo)
-        holder.photo.setImageBitmap(photoListBitmap[position])
+        Glide.with(mContext).load(photoListUri[position]).into(holder.photo)
+//        holder.photo.setImageBitmap(photoListBitmap[position])
     }
 
     override fun getItemCount(): Int {
-        return photoListBitmap.size
+        return photoListUri.size
     }
 
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

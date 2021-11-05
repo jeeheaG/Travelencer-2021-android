@@ -210,12 +210,12 @@ class PostBlogFragment : Fragment() {
                         storageRef.child("post/$postPhoto").downloadUrl
                                 .addOnSuccessListener { url ->
                                     Log.d("로그--", "uri ${url}")
-                                    val bitmapTask = URLtoBitmapTask().apply {
-                                        taskUrl = URL("${url}")
-                                    }
-                                    var bitmap: Bitmap = bitmapTask.execute().get()
-                                    photoList.add(ModelPostBlogPhoto(bitmap))
-//                                    photoList.add(ModelPostBlogPhoto(uri))
+//                                    val bitmapTask = URLtoBitmapTask().apply {
+//                                        taskUrl = URL("${url}")
+//                                    }
+//                                    var bitmap: Bitmap = bitmapTask.execute().get()
+//                                    photoList.add(ModelPostBlogPhoto(bitmap))
+                                    photoList.add(ModelPostBlogPhoto(url))
                                     postAdapter.notifyDataSetChanged()
                                 }
                     }

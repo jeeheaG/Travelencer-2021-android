@@ -17,6 +17,7 @@ import com.example.travelencer_android_2021.adapter.PostDetailPlaceAdapter
 import com.example.travelencer_android_2021.api.URLtoBitmapTask
 import com.example.travelencer_android_2021.course.CourseMaker
 import com.example.travelencer_android_2021.databinding.ActivityPostDetailBinding
+import com.example.travelencer_android_2021.model.ModelFeedPhoto
 import com.example.travelencer_android_2021.model.ModelPostDetailPlace
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -228,7 +229,14 @@ class PostDetailActivity : AppCompatActivity() {
                     for (document in result) {
                         val map = document.data as HashMap<String, Any>
                         val postPhoto : String = map["postPhoto"] as String
-                        getPhotoBitmap(postPhoto)
+
+                        // 사진 uri 가져오기
+                        storageRef.child("post/$postPhoto").downloadUrl
+                                .addOnSuccessListener { url ->
+                                    postDetailPhotoAdapter.photoListUri.add(url)
+                                    postDetailPhotoAdapter.notifyDataSetChanged()
+                                }
+//                        getPhotoBitmap(postPhoto)
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -237,17 +245,17 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     // 사진 url 가져와서 Bitmap으로 변환해 넣기
-    private fun getPhotoBitmap(postPhoto : String) {
-        storageRef.child("post/$postPhoto").downloadUrl
-                .addOnSuccessListener { url ->
-                    val bitmapTask = URLtoBitmapTask().apply {
-                        taskUrl = URL("${url}")
-                    }
-                    var bitmap: Bitmap = bitmapTask.execute().get()
-                    postDetailPhotoAdapter.photoListBitmap.add(bitmap)
-                    postDetailPhotoAdapter.notifyDataSetChanged()
-                }
-    }
+//    private fun getPhotoBitmap(postPhoto : String) {
+//        storageRef.child("post/$postPhoto").downloadUrl
+//                .addOnSuccessListener { url ->
+//                    val bitmapTask = URLtoBitmapTask().apply {
+//                        taskUrl = URL("${url}")
+//                    }
+//                    var bitmap: Bitmap = bitmapTask.execute().get()
+//                    postDetailPhotoAdapter.photoListBitmap.add(bitmap)
+//                    postDetailPhotoAdapter.notifyDataSetChanged()
+//                }
+//    }
 
     // 장소 정보 가져오기 + 설정
     private fun getPlace(postId : String) {

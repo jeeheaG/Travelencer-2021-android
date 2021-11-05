@@ -5,7 +5,7 @@ import android.net.Uri
 
 class ModelPostBlogPhoto (
 
-//        var photo: Uri? = null
+        var photo: Uri? = null
 
-        var photo: Bitmap? = null
+//        var photo: Bitmap? = null
         ){}

@@ -146,8 +146,11 @@ class SettingFragment : Fragment() {
 
         // <챗봇 연결> 버튼 클릭
         binding.btnChatBot.setOnClickListener {
-            val chatBotIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://bot.dialogflow.com/b403c3aa-6dbe-4c9a-83a5-6ce39e60148c"))
-            startActivity(chatBotIntent)
+            Toast.makeText(activity, "지금은 챗봇 기능을 지원하지 않습니다.", Toast.LENGTH_LONG).show()
+
+            //지금은 지원하지 않는 기능으로 바뀌어서 뺌.
+            /*val chatBotIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://bot.dialogflow.com/b403c3aa-6dbe-4c9a-83a5-6ce39e60148c"))
+            startActivity(chatBotIntent)*/
         }
 
 

@@ -123,12 +123,6 @@ class PostDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //TODO : 현재 게시물 정보를 가지고 수정페이지로 이동하도록 만들기
-        binding.btnPostDetailEdit.setOnClickListener {
-            val intent = Intent(this, PostWriteActivity::class.java)
-            startActivity(intent)
-        }
-
         binding.ivBack.setOnClickListener{
             finish()
         }

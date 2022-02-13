@@ -5,7 +5,9 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +15,7 @@ import android.util.Log
 import android.view.Display
 import com.example.travelencer_android_2021.course.CourseMaker
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -32,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -216,7 +220,13 @@ class PostWriteActivity : AppCompatActivity() {
                     val uri = imageData.data
                     uri?.let{ photoList.add(uri) }
                     val bitmap = uriToBitmapRotate(uri)
-                    uri?.let{ photoBitmapList.add(bitmap) }
+                    uri?.let{
+                        // 사진 회전 정보 가져오기
+                        val orientation = getOrientationOfImage(uri).toFloat()
+                        // 이미지 회전하기
+                        val newBitmap = getRotatedBitmap(bitmap, orientation)
+                        photoBitmapList.add(newBitmap!!)
+                    }
                 }
                 //이미지를 여러개 선택했을 경우
                 else{
@@ -224,7 +234,13 @@ class PostWriteActivity : AppCompatActivity() {
                         val uri = clipData.getItemAt(i).uri
                         photoList.add(uri)
                         val bitmap = uriToBitmapRotate(uri)
-                        uri?.let{ photoBitmapList.add(bitmap) }
+                        uri?.let{
+                            // 사진 회전 정보 가져오기
+                            val orientation = getOrientationOfImage(uri).toFloat()
+                            // 이미지 회전하기
+                            val newBitmap = getRotatedBitmap(bitmap, orientation)
+                            photoBitmapList.add(newBitmap!!)
+                        }
                     }
                 }
                 binding.rvPostWritePhotoList.adapter = PhotoBitmapAdapter(photoBitmapList, this)
@@ -314,6 +330,41 @@ class PostWriteActivity : AppCompatActivity() {
 
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
         return bitmap
+    }
+
+    // 이미지 회전 정보 가져오기
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getOrientationOfImage(uri: Uri): Int {
+        // uri -> inputStream
+        val inputStream = contentResolver.openInputStream(uri)
+        val exif: ExifInterface? = try {
+            ExifInterface(inputStream!!)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return -1
+        }
+        inputStream.close()
+
+        // 회전된 각도 알아내기
+        val orientation = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        if (orientation != -1) {
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> return 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> return 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> return 270
+            }
+        }
+        return 0
+    }
+
+    // 이미지 회전하기
+    @Throws(Exception::class)
+    private fun getRotatedBitmap(bitmap: Bitmap?, degrees: Float): Bitmap? {
+        if (bitmap == null) return null
+        if (degrees == 0F) return bitmap
+        val m = Matrix()
+        m.setRotate(degrees, bitmap.width.toFloat() / 2, bitmap.height.toFloat() / 2)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
     }
 
 

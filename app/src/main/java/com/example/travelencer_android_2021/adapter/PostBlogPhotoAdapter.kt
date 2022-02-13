@@ -21,7 +21,7 @@ class PostBlogPhotoAdapter(private val photoList: ArrayList<ModelPostBlogPhoto>,
             itemView.setOnClickListener{
                 val curPosition: Int = adapterPosition
                 val photo: ModelPostBlogPhoto = photoList[curPosition]
-                Toast.makeText(parent.context, "${curPosition} Photo ${photo.photo} is clicked", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(parent.context, "${curPosition} Photo ${photo.photo} is clicked", Toast.LENGTH_SHORT).show()
             }
         }
     }

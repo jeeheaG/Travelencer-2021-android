@@ -105,7 +105,7 @@ class PostDetailActivity : AppCompatActivity() {
 //        )
 
         binding.rvPostDetailPlaceList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvPostDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvPostDetailPhotoList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         binding.rvPostDetailPlaceList.setHasFixedSize(true)
         binding.rvPostDetailPhotoList.setHasFixedSize(true)

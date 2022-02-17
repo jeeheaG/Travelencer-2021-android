@@ -133,8 +133,9 @@ class PostBlogFragment : Fragment() {
                                 }
 
                     }
+                    // 로딩 3초 더 보이고 끝
                     CoroutineScope(Dispatchers.Main).launch {
-                        delay(3000)
+                        delay(3000) // 사진 로딩에 시간 걸려서 3초 추가
                         dialog.dismiss()
                     }
                 }

@@ -293,15 +293,15 @@ class PostWriteActivity : AppCompatActivity() {
         binding.btnPostWritePost.setOnClickListener {
             Log.d("로그 게시글 등록버튼", "누름")
             //게시글 테이블 업로드
-            ModelPostT.uid = auth?.currentUser?.uid
-            var postId = auth?.currentUser?.uid + "_"+timeStamp
+            ModelPostT.uid = auth.currentUser?.uid
+            val postId = auth.currentUser?.uid + "_"+timeStamp
             ModelPostT.postId = postId
             ModelPostT.updateDate = timeStamp
             ModelPostT.title = binding.tvPostWriteTitle.text.toString()
             ModelPostT.startDate = binding.tvPostWriteStartDate.text.toString()
             ModelPostT.EndDate = binding.tvPostWriteEndDate.text.toString()
             ModelPostT.content = binding.tvPostWriteWriting.text.toString()
-            firestore?.collection("postT")?.document(postId)?.set(ModelPostT)
+            firestore.collection("postT").document(postId).set(ModelPostT)
             photoUpload(binding.tvPostWriteWriting.text.toString(),postId)
             if(courseName.isNotEmpty() && courseDate.isNotEmpty()){
                 courseUpload(courseName, courseDate)

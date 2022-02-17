@@ -72,7 +72,12 @@ class PostBlogFragment : Fragment() {
         storageRef = storage!!.reference
 
 
-        showLoadingDialog(naviActivity)
+//        showLoadingDialog(naviActivity)
+        // 로딩 시작
+        val dialog = LoadingDialog(naviActivity)
+        CoroutineScope(Dispatchers.Main).launch {
+            dialog.show()
+        }
 
         firestore.collection("userT").document(auth.currentUser!!.uid).get()
                 .addOnSuccessListener { doc->
@@ -128,6 +133,7 @@ class PostBlogFragment : Fragment() {
                                 }
 
                     }
+                    dialog.dismiss()
                 }
 
         // 프로필 먼저 보이기

@@ -310,6 +310,8 @@ class PostWriteActivity : AppCompatActivity() {
             postPlaceUpload()
             Log.d("로그 게시글 등록 작업 실행 완", "ㅇㅇ")
             val intent = Intent(this, PostDetailActivity::class.java)
+            intent.putExtra("postId", postId)
+            intent.putExtra("uid", auth.currentUser!!.uid)
             startActivity(intent)
             finish()
         }

@@ -87,7 +87,7 @@ class PostBlogFragment : Fragment() {
                         binding.tvPostBlogBio.text = info.toString()
                     }
                 }
-        // 이미지 다운로드해서 가져오기
+        // 프로필 이미지 다운로드해서 가져오기
         val storageRef = storage?.reference?.child("user")
                 ?.child("proPic_${auth.currentUser!!.uid}")
         storageRef?.downloadUrl
@@ -133,7 +133,10 @@ class PostBlogFragment : Fragment() {
                                 }
 
                     }
-                    dialog.dismiss()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(3000)
+                        dialog.dismiss()
+                    }
                 }
 
         // 프로필 먼저 보이기

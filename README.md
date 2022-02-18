@@ -6,6 +6,7 @@
 
 * 사용 기술 스택🛠
     (이 안에 스택 사진 이나 아이콘 넣으면 좋을 듯)
+    <img src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=Android&logoColor=white"/>&nbsp<img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=Firebase&logoColor=white"/>
 
 * 팀원 소개 (여기에 맡은 역할 및 구현한 기능 넣는게 어떤지)
     + 박지혜 : 팀장, FE

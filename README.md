@@ -39,3 +39,6 @@ ps.일단 내가 예전에 썼던건 이정도 였음
 https://gist.github.com/ihoneymon/652be052a0727ad59601
 (마크다운문법)
 
+![표지 png](https://user-images.githubusercontent.com/61150378/194211788-cf3cdcb2-3662-45cd-9743-71787e53391a.png)
+
+
